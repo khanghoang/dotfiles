@@ -1,1 +1,0 @@
-/Users/khoangtrieu/.yadr/vimrc
