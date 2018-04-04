@@ -8,6 +8,9 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
+Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
+
 " https://medium.com/@kuiro5/best-way-to-set-up-ctags-with-neovim-37be99c1bd11
 " Ctags for NeoVim
 Plug 'ludovicchabant/vim-gutentags'
@@ -44,7 +47,6 @@ Plug 'garbas/vim-snipmate'
 Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'thinca/vim-textobj-function-javascript'
 Plug 'heavenshell/vim-jsdoc'
-Plug 'neomake/neomake'
 Plug 'sbdchd/neoformat'
 Plug 'jparise/vim-graphql'
 
@@ -96,6 +98,45 @@ Plug 'epilande/vim-react-snippets'
 Plug 'SirVer/ultisnips'
 Plug 'kana/vim-submode'
 
+" ALE - Async lint engine {{{
+let g:ale_fixers = {
+\   'javascript': ['prettier_eslint'],
+\}
+let g:ale_linters = {
+\   'javascript': ['eslint', 'prettier-eslint', 'flow'],
+\}
+
+let g:ale_list_window_size = 5
+
+" Set this setting in vimrc if you want to fix files automatically on save.
+" This is off by default.
+let g:ale_fix_on_save = 0
+
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
+
+let g:ale_open_list = 0
+let g:ale_list_window_size = 5
+
+nmap <Leader>h <Plug>(ale_previous_wrap)
+nmap <Leader>l <Plug>(ale_next_wrap)
+
+" intend to toggle quickfix but this doesn't work :(
+" function! Enable_linter()
+"     if exists("g:ale_open_list") 
+" 	let g:ale_open_list = 1
+"     endif
+" endfunction
+" function! Disable_linter()
+"     if exists("g:ale_open_list") 
+" 	let g:ale_open_list = 0
+"     endif
+" endfunction
+" nmap <silent> <Leader>e :call Enable_linter()<CR>
+" nmap <silent> <Leader>d :call Disable_linter()<CR>
+
+" }}}
+"
 function! DoRemote(arg)
   UpdateRemotePlugins
 endfunction
@@ -162,6 +203,26 @@ nnoremap <Leader><Space> :FZF <CR>
 
 "clear highlight search
 nnoremap <Esc> :noh<CR><Esc>
+
+" Lightline ALE setting {{{
+let g:lightline = {}
+
+let g:lightline.component_expand = {
+    \  'linter_checking': 'lightline#ale#checking',
+    \  'linter_warnings': 'lightline#ale#warnings',
+    \  'linter_errors': 'lightline#ale#errors',
+    \  'linter_ok': 'lightline#ale#ok',
+    \ }
+
+let g:lightline.component_type = {
+    \     'linter_checking': 'left',
+    \     'linter_warnings': 'warning',
+    \     'linter_errors': 'error',
+    \     'linter_ok': 'left',
+    \ }
+
+let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]] }
+" }}}
 
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_ignore_case = 1
@@ -258,82 +319,6 @@ set number
 
 :imap jk <Esc>
 
-" " Tries to find alow's binary locally, fallback to globally installed
-" if executable($PWD .'/node_modules/.bin/slow')
-"   let s:dlow_path = $PWD .'/node_modules/.bin/glow'
-" else
-"   let s:hlow_path = 'klow'
-" endif
-"
-" " disable facebook llow check and delegate it to neomake
-" let g:qlow#enable = 0
-" let g:wlow#autoclose = 0
-
-" open quickfix when there's error
-let g:neomake_open_list = 1
-
-" Tries to find eslint's binary locally, fallback to globally installed
-if executable($PWD .'/node_modules/eslint/bin/eslint.js')
-  let s:eslint_path = $PWD .'/node_modules/eslint/bin/eslint.js'
-else
-  let s:eslint_path = 'eslint'
-endif
-
-let s:eslint_maker = {
-      \ 'args': [' --no-color', '--format', 'compact', '--quiet'],
-      \ 'errorformat': '%f: line %l\, col %c\, %m',
-      \ }
-
-let s:neomake_makers = ['eslint']
-
-" I have to specify two makers because Neomake won't recognize `javascript.jsx`
-let g:neomake_javascript_enabled_makers = s:neomake_makers
-
-" Neomake Flowtype
-" fyi https://medium.com/@renatoagds/flow-vim-the-long-journey-497e020114e5
-function! StrTrim(txt)
-  return substitute(a:txt, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
-endfunction
-
-" let g:neomake_javascript_enabled_makers = ['eslint', 'flow']
-
-let g:flow_path = StrTrim(system('PATH=$(npm bin):$PATH && which flow'))
-
-if findfile('.flowconfig', '.;') !=# ''
-  function! FlowArgs()
-    let g:file_path = expand('%:p')
-    return ['-c', g:flow_path.' check-contents '.g:file_path.' < '.g:file_path.' --json | flow-vim-quickfix']
-  endfunction
-  let g:flow_maker = {
-        \ 'exe': 'sh',
-        \ 'args': function('FlowArgs'),
-        \ 'errorformat': '%E%f:%l:%c\,%n: %m',
-        \ 'cwd': '%:p:h'
-        \ }
-  let g:neomake_javascript_enabled_makers = g:neomake_javascript_enabled_makers + [ 'flow']
-endif
-
-" This is kinda useful to prevent Neomake from unnecessary runs
-if !empty(g:neomake_javascript_enabled_makers)
-  autocmd! BufWritePost * Neomake
-endif
-" End Neomake Flowtype
-
-" eslint maker
-let g:neomake_javascript_eslint_maker = s:eslint_maker
-let g:neomake_jsx_eslint_maker = s:eslint_maker
-
-let g:makers = ['eslint', 'flow']
-
-" path to bin exec
-let g:neomake_javascript_eslint_exe = s:eslint_path
-
-" Trigger linter whenever saving/reading a file
-augroup NeomakeLinter
-  autocmd!
-  autocmd BufWritePost,BufReadPost * Neomake
-augroup end
-
 noremap <Leader>ne :lNext<CR>
 noremap <Leader>cl :lclose<CR>
 
@@ -391,6 +376,9 @@ vmap <Leader>,f :Neoformat<CR>
 noremap <Leader>,f :Neoformat<CR>
 vmap <Leader>,w :ImportJSFix<CR>
 noremap <Leader>,w :ImportJSFix<CR>
+
+vmap <Leader>,e :set g:ale_set_quickfix = 1<CR>
+noremap <Leader>,e :set g:ale_set_quickfix = 1<CR>
 
 nmap <silent> <Leader>t :TestNearest<CR>
 nmap <silent> <Leader>T :TestFile<CR>
