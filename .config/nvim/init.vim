@@ -113,9 +113,9 @@ let g:ale_list_window_size = 5
 let g:ale_fix_on_save = 0
 
 let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
+let g:ale_set_quickfix = 1
 
-let g:ale_open_list = 0
+let g:ale_open_list = 1
 let g:ale_list_window_size = 5
 
 nmap <Leader>h <Plug>(ale_previous_wrap)
@@ -152,7 +152,7 @@ Plug 'frankier/neovim-colors-solarized-truecolor-only'
 " Plug 'lifepillar/vim-solarized8'
 
 " auto reload
-autocmd! bufwritepost init.vim source %
+autocmd! bufwritepost init.vim so %
 
 
 call plug#end()
