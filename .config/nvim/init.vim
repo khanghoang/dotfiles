@@ -113,9 +113,9 @@ let g:ale_list_window_size = 5
 let g:ale_fix_on_save = 0
 
 let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
+let g:ale_set_quickfix = 0
 
-let g:ale_open_list = 1
+let g:ale_open_list = 0
 let g:ale_list_window_size = 5
 
 nmap <Leader>h <Plug>(ale_previous_wrap)
@@ -125,24 +125,25 @@ nmap <Leader>l <Plug>(ale_next_wrap)
 " function! Enable_linter()
 "     if exists("g:ale_open_list") 
 " 	let g:ale_open_list = 1
+" 	:so %
 "     endif
 " endfunction
 " function! Disable_linter()
 "     if exists("g:ale_open_list") 
 " 	let g:ale_open_list = 0
+" 	:so %
 "     endif
 " endfunction
 " nmap <silent> <Leader>e :call Enable_linter()<CR>
 " nmap <silent> <Leader>d :call Disable_linter()<CR>
-
 " }}}
-"
+
 function! DoRemote(arg)
   UpdateRemotePlugins
 endfunction
 Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
 let g:deoplete#enable_at_startup = 1
-Plug 'carlitux/deoplete-ternjs'
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 Plug 'tpope/vim-surround'
@@ -321,12 +322,6 @@ set number
 
 noremap <Leader>ne :lNext<CR>
 noremap <Leader>cl :lclose<CR>
-
-" Neo snippets
-" Plugin key-mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " For conceal markers.
 if has('conceal')
