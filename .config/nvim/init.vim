@@ -8,6 +8,9 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
+" NERDTree + Ag
+Plug 'taiansu/nerdtree-ag'
+
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 
