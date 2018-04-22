@@ -59,7 +59,6 @@ Plug 'janko-m/vim-test'
 Plug 'christoomey/vim-tmux-runner'
 let test#strategy = "neoterm"
 
-" Plug 'flowtype/vim-flow'
 Plug 'Galooshi/vim-import-js'
 
 Plug 'vim-scripts/git-time-lapse'
@@ -141,13 +140,14 @@ nmap <Leader>l <Plug>(ale_next_wrap)
 " nmap <silent> <Leader>d :call Disable_linter()<CR>
 " }}}
 
-function! DoRemote(arg)
-  UpdateRemotePlugins
-endfunction
-Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
 let g:deoplete#enable_at_startup = 1
+
 Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'wokalski/autocomplete-flow'
+
+" You will also need the following for function argument completion:
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
 
 Plug 'tpope/vim-surround'
 
@@ -280,10 +280,10 @@ set smartindent
 set autoindent
 set nowrap
 set noexpandtab
-set softtabstop=4
+set softtabstop=2
 set nosmarttab
 set formatoptions+=n
-set shiftwidth=4
+set shiftwidth=2
 " set encoding=utf-8
 set virtualedit=all
 set expandtab
