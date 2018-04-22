@@ -123,23 +123,6 @@ let g:ale_list_window_size = 5
 nmap <Leader>h <Plug>(ale_previous_wrap)
 nmap <Leader>l <Plug>(ale_next_wrap)
 
-" intend to toggle quickfix but this doesn't work :(
-" function! Enable_linter()
-"     if exists("g:ale_open_list") 
-" 	let g:ale_open_list = 1
-" 	:so %
-"     endif
-" endfunction
-" function! Disable_linter()
-"     if exists("g:ale_open_list") 
-" 	let g:ale_open_list = 0
-" 	:so %
-"     endif
-" endfunction
-" nmap <silent> <Leader>e :call Enable_linter()<CR>
-" nmap <silent> <Leader>d :call Disable_linter()<CR>
-" }}}
-
 let g:deoplete#enable_at_startup = 1
 
 Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
