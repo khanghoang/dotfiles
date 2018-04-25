@@ -41,8 +41,8 @@ Plug 'szw/vim-tags'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'Shougo/neosnippet-snippets'
 Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
 Plug 'skwp/vim-html-escape'
 Plug 'justinmk/vim-sneak'
 Plug 'honza/vim-snippets'
@@ -134,9 +134,7 @@ Plug 'Shougo/neosnippet-snippets'
 
 Plug 'tpope/vim-surround'
 
-" Plug 'altercation/vim-colors-solarized'
 Plug 'frankier/neovim-colors-solarized-truecolor-only'
-" Plug 'lifepillar/vim-solarized8'
 
 " auto reload
 autocmd! bufwritepost init.vim so %
@@ -180,13 +178,6 @@ noremap ^ 0
 
 nnoremap gA :Ag! <cword><CR>
 nnoremap <Leader><Space> :FZF <CR>
-" nnoremap <Leader>t :FZF <CR>
-
-" let g:move_map_modifier = "C"
-" vmap <C-[> <Plug>MoveBlockUp
-" nmap <C-[> <Plug>MoveLineUp
-" vmap <C-]> <Plug>MoveBlockDown
-" nmap <C-]> <Plug>MoveLineDown
 
 "clear highlight search
 nnoremap <Esc> :noh<CR><Esc>
@@ -244,11 +235,6 @@ au TermOpen *neoterm* :tnoremap <buffer> <C-l> <C-\><C-n><C-w>l
 
 "jsx highlight
 let g:jsx_ext_required = 0
-
-" Ctrl-w + e shall enable checking
-" Ctrl-w + f shall toggle mode
-" noremap <C-w>e :SyntasticCheck<CR>
-" noremap <C-w>f :SyntasticToggleMode<CR>
 
 nnoremap <F3> :NumbersToggle<CR>
 
@@ -338,7 +324,6 @@ let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 let g:neoformat_enabled_javascript = ['prettier']
 autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ none\ --tab-width\ 4\ --jsx-bracket-same-line\ true
 let g:neoformat_try_formatprg = 1
-" autocmd BufWritePre *.js Neoformat
 
 " ==== NERD tree
 " Open the project tree and expose current file in the nerdtree with Ctrl-\
@@ -368,11 +353,15 @@ nmap <silent> <Leader>T :TestFile<CR>
 map <leader><C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 " enable mouse
-:set mouse=a
+set mouse=a
 
 set nobackup
 set nowritebackup
 set noswapfile
+
+" open neovim config in another window
+" use ZZ to close it after changing
+nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 
 " multiple-cursors
 " Called once right before you start selecting multiple cursors
