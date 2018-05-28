@@ -11,12 +11,11 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " NERDTree + Ag
 Plug 'taiansu/nerdtree-ag'
 
-Plug 'w0rp/ale'
-Plug 'maximbaz/lightline-ale'
-
 " https://medium.com/@kuiro5/best-way-to-set-up-ctags-with-neovim-37be99c1bd11
 " Ctags for NeoVim
 Plug 'ludovicchabant/vim-gutentags'
+Plug 'xolox/vim-easytags'
+Plug 'xolox/vim-misc'
 
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-haml'
@@ -31,7 +30,8 @@ Plug 'leshill/vim-json'
 Plug 'rking/ag.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-fugitive'
@@ -53,8 +53,12 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'sbdchd/neoformat'
 Plug 'jparise/vim-graphql'
 
+Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
+
 " vim-test config
 " make test commands execute using neoterm
+Plug 'kassio/neoterm'
 Plug 'janko-m/vim-test'
 Plug 'christoomey/vim-tmux-runner'
 let test#strategy = "neoterm"
@@ -65,8 +69,6 @@ Plug 'vim-scripts/git-time-lapse'
 
 "Comment out stuffs
 Plug 'tomtom/tcomment_vim'
-
-Plug 'kassio/neoterm'
 
 Plug 'mhinz/vim-startify'
 Plug 'romainl/flattened'
@@ -199,7 +201,7 @@ let g:lightline.component_type = {
     \     'linter_ok': 'left',
     \ }
 
-let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]] }
+let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]], 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ] }
 " }}}
 
 let g:deoplete#enable_at_startup = 1
@@ -220,7 +222,7 @@ imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
 
-let g:neoterm_position = 'horizontal'
+let g:neoterm_size = '80v'
 let g:neoterm_automap_keys = ',tt'
 " Useful maps
 " hide/close terminal

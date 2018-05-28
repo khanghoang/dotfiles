@@ -38,6 +38,7 @@ for config_file ($HOME/.yadr/zsh/*.zsh) source $config_file
 
 export ps1='$(f_notifyme)'$ps1}
 
+# git extra commands https://github.com/unixorn/git-extra-commands
 plugins=(zsh-autosuggestions)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="#333"
 
