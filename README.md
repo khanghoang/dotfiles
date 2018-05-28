@@ -3,6 +3,9 @@ Dear future me,
 It seems like you have problem with dotfiles again, don't you? No worry, we have it all the time.  
 Here is the list of things that you need to do to save your time and productivity.  
 
+## [NEW] Follow this blog
+https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
+
 ## On old machine.
 #### Give permission to `backup.sh`
 ```
