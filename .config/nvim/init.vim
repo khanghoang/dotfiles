@@ -162,7 +162,7 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 map <Leader>nt :NERDTreeToggle<CR>
-map <Leader>gd :TernDef<CR>
+map <Leader>gf :ImportJSGoto<CR>
 map <Leader>gs :TernDefSplit<CR>
 map <Leader>gc :Gstatus<CR>
 
