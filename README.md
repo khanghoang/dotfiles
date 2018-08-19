@@ -6,6 +6,9 @@ Here is the list of things that you need to do to save your time and productivit
 ## Alfred theme
 https://www.alfredapp.com/extras/theme/wmXBE8FfEe/
 
+## Fonts
+https://www.dropbox.com/home/fonts
+
 ## [NEW] Follow this blog
 https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
 
