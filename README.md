@@ -12,6 +12,9 @@ https://www.dropbox.com/home/fonts
 ## [NEW] Follow this blog
 https://developer.atlassian.com/blog/2016/02/best-way-to-store-dotfiles-git-bare-repo/
 
+## Install brew `z`
+https://gist.github.com/mischah/8149239
+
 ## On old machine.
 #### Give permission to `backup.sh`
 ```
