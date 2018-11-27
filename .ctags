@@ -87,9 +87,8 @@
 --exclude=tags
 --exclude=node_modules
 --exclude=bower_components
---exclude=test
---exclude=tests
 --exclude=dist
+--exclude=build
 
 --langdef=typescript
 --langmap=typescript:.ts
