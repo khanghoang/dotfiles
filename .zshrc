@@ -10,7 +10,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
-for config_file ($HOME/.yadr/zsh/*.zsh) source $config_file
+# for config_file ($HOME/.yadr/zsh/*.zsh) source $config_file
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -18,6 +18,7 @@ export NVM_DIR="$HOME/.nvm"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
+export PATH="$PATH:$HOME/Library/Python/2.7/bin"
 
 alias 'zalora'='cd ~/Documents/zalora'
 alias 'sandbox'='cd ~/Documents/sandbox'
@@ -28,6 +29,9 @@ alias 'gif'='givegif'
 alias 'gs'='git status -s'
 alias 'gc'='git commit'
 alias 'rn'='react-native'
+
+# vim mode in bash
+set -o vi
 
 source ~/antigen.zsh
 
@@ -74,3 +78,9 @@ alias config='/usr/bin/git --git-dir=/Users/khoangtrieu/.cfg/ --work-tree=/Users
 
 export PATH=$PATH:/Users/khoangtrieu/opensource/depot_tools
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Move next only if `homebrew` is installed
+if command -v brew >/dev/null 2>&1; then
+  # Load rupa's z if installed
+  [ -f $(brew --prefix)/etc/profile.d/z.sh ] && source $(brew --prefix)/etc/profile.d/z.sh
+fi
