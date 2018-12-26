@@ -29,10 +29,7 @@ alias 'gif'='givegif'
 alias 'gs'='git status -s'
 alias 'gc'='git commit'
 alias 'rn'='react-native'
-
-# vim mode in bash
-set -o vi
-
+alias 'fck'='tldr'
 source ~/antigen.zsh
 
 # Load the oh-my-zsh's library.
@@ -55,6 +52,9 @@ antigen bundle zsh-users/zsh-syntax-highlighting
 
 # Tell Antigen that you're done.
 antigen apply
+
+# vim mode in bash
+set -o vi
 
 function f_notifyme {
   LAST_EXIT_CODE=$?
