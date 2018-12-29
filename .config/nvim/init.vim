@@ -292,6 +292,10 @@ if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 
+""" Language Client starts
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 
@@ -323,6 +327,8 @@ autocmd FileType javascript nnoremap <buffer>
 " <leader>f list all the references
 autocmd FileType javascript nnoremap <buffer>
   \ <leader>f :call LanguageClient_textDocument_references()<cr>
+
+""" Language Client ends
 
 
 " Git time lapse
