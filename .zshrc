@@ -56,6 +56,9 @@ antigen apply
 # vim mode in bash
 set -o vi
 
+# fzf config move up/down by Ctrl-D/Ctrl-U
+export FZF_DEFAULT_OPTS='--bind ctrl-d:down,ctrl-u:up'
+
 function f_notifyme {
   LAST_EXIT_CODE=$?
   CMD=$(fc -ln -1)
