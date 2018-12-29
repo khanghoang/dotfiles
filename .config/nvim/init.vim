@@ -34,6 +34,7 @@ Plug 'christoomey/vim-tmux-navigator'
 " Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
 Plug 'terryma/vim-multiple-cursors'
+Plug 'tpope/vim-fugitive'
 Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
 Plug 'szw/vim-tags'
@@ -140,6 +141,11 @@ Plug 'frankier/neovim-colors-solarized-truecolor-only'
 " auto reload
 autocmd! bufwritepost init.vim so %
 
+" LanguageClient plugin
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
 call plug#end()
 
@@ -296,10 +302,34 @@ set number
 noremap <Leader>ne :lNext<CR>
 noremap <Leader>cl :lclose<CR>
 
+noremap <Leader>h :bp<CR>
+map <Leader>h :bp<CR>
+noremap <Leader>l :bn<CR>
+map <Leader>l :bn<CR>
+
 " For conceal markers.
 if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
+
+" Automatically start language servers.
+let g:LanguageClient_autoStart = 1
+
+let g:LanguageClient_serverCommands = {
+    \ 'javascript.jsx': ['javascript-typescript-stdio'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ }
+
+" <leader>ld to go to definition
+autocmd FileType jsx nnoremap <buffer>
+  \ <leader>ld :call LanguageClient_textDocument_definition()<cr>
+" <leader>lh for type info under cursor
+autocmd FileType jsx nnoremap <buffer>
+  \ <leader>lh :call LanguageClient_textDocument_hover()<cr>
+" <leader>lr to rename variable under cursor
+autocmd FileType jsx nnoremap <buffer>
+  \ <leader>lr :call LanguageClient_textDocument_rename()<cr>
+
 
 " Git time lapse
 map <leader>gt :call TimeLapse() <cr> 
@@ -351,17 +381,7 @@ nmap <silent> <Leader>t :TestNearest<CR>
 nmap <silent> <Leader>T :TestFile<CR>
 
 " ctags open in vertical split
-" map <leader><C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-
-" go to next error
-vmap <Leader>,n :ALENext<CR>
-noremap <Leader>,n :ALENext<CR>
-vmap <Leader>,v :ALEPrevious<CR>
-noremap <Leader>,v :ALEPrevious<CR>
-
-" create file under current folder
-map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-nnoremap <leader>s :exe 'Ag!' expand('<cword>')<cr>
+map <leader><C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
 " enable mouse
 set mouse=a
