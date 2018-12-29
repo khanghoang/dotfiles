@@ -414,7 +414,7 @@ function! Multiple_cursors_after()
     endif
 endfunction
 
-" SuperTab like snippets behavior.
+" Deoplete SuperTab like snippets behavior.
 let g:UltiSnipsExpandTrigger = 1
 let g:UltiSnipsListSnippets = 1
 inoremap <expr><tab>
@@ -428,3 +428,6 @@ inoremap <expr><s-tab>
 imap <C-k>     <Plug>(neosnippet_expand_or_jump)
 smap <C-k>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" open vertical on the right 
+set splitright
