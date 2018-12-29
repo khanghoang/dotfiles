@@ -315,15 +315,21 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript': ['javascript-typescript-stdio'],
     \ }
 
-" <leader>ld to go to definition
-autocmd FileType jsx nnoremap <buffer>
-  \ <leader>ld :call LanguageClient_textDocument_definition()<cr>
-" <leader>lh for type info under cursor
-autocmd FileType jsx nnoremap <buffer>
-  \ <leader>lh :call LanguageClient_textDocument_hover()<cr>
-" <leader>lr to rename variable under cursor
-autocmd FileType jsx nnoremap <buffer>
-  \ <leader>lr :call LanguageClient_textDocument_rename()<cr>
+" <leader>d to go to definition
+autocmd FileType javascript nnoremap <buffer>
+  \ <leader>d :call LanguageClient_textDocument_definition()<cr>
+" <leader>t for "type" info under cursor
+autocmd FileType javascript nnoremap <buffer>
+  \ <leader>t :call LanguageClient_textDocument_hover()<cr>
+" <leader>r to rename variable under cursor
+autocmd FileType javascript nnoremap <buffer>
+  \ <leader>r :call LanguageClient_textDocument_rename()<cr>
+" <leader>s list symbols
+autocmd FileType javascript nnoremap <buffer>
+  \ <leader>s :call LanguageClient_textDocument_documentSymbol()<cr>
+" <leader>f list all the references
+autocmd FileType javascript nnoremap <buffer>
+  \ <leader>f :call LanguageClient_textDocument_references()<cr>
 
 
 " Git time lapse
@@ -387,7 +393,7 @@ noremap <Leader>,v :ALEPrevious<CR>
 
 " create file under current folder	
 map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>	
-nnoremap <leader>s :exe 'Ag!' expand('<cword>')<cr>
+nnoremap <leader>,s :exe 'Ag!' expand('<cword>')<cr>
 
 " enable mouse
 set mouse=a
