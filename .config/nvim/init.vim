@@ -377,6 +377,7 @@ nmap <silent> <Leader>T :TestFile<CR>
 
 " ctags open in vertical split
 map <leader><C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+map <C-\> :vsp <CR>:exec("call LanguageClient_textDocument_definition()")<CR>
 
 " go to next error	
 vmap <Leader>,n :ALENext<CR>	
