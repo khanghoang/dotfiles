@@ -25,7 +25,6 @@ Plug 'tpope/vim-endwise'
 Plug 'godlygeek/tabular'
 Plug 'pangloss/vim-javascript', { 'for': '*javascript*' }
 Plug 'mxw/vim-jsx', { 'for': '*javascript*' }
-Plug 'ternjs/tern_for_vim', { 'for': '*javascript*' }
 Plug 'leshill/vim-json'
 Plug 'rking/ag.vim'
 Plug 'vim-ruby/vim-ruby'
@@ -127,7 +126,6 @@ nmap <Leader>l <Plug>(ale_next_wrap)
 
 let g:deoplete#enable_at_startup = 1
 
-Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
 Plug 'wokalski/autocomplete-flow'
 
 " You will also need the following for function argument completion:
@@ -168,7 +166,6 @@ map <C-l> <C-w>l
 
 map <Leader>nt :NERDTreeToggle<CR>
 map <Leader>gf :ImportJSGoto<CR>
-map <Leader>gs :TernDefSplit<CR>
 map <Leader>gc :Gstatus<CR>
 
 nnoremap <Leader><Leader> <C-^>
@@ -215,22 +212,8 @@ let g:deoplete#enable_smart_case = 1
 let g:deoplete#enable_camel_case = 1
 let g:deoplete#disable_auto_complete = 0
 
-" deoplete tab-complete
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" <TAB>: completion.
-" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
-" SuperTab like snippets behavior.
-imap <expr><TAB>
- \ pumvisible() ? "\<C-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
-
 let g:neoterm_size = '80v'
-let g:neoterm_automap_keys = ',tt'
+let g:neoterm_automap_keys = ',,t'
 " Useful maps
 " hide/close terminal
 nnoremap <Leader>tg :call neoterm#toggle()<cr>
@@ -430,3 +413,18 @@ function! Multiple_cursors_after()
 	   let g:deoplete#disable_auto_complete = 0
     endif
 endfunction
+
+" SuperTab like snippets behavior.
+let g:UltiSnipsExpandTrigger = 1
+let g:UltiSnipsListSnippets = 1
+inoremap <expr><tab>
+ \ pumvisible() ? "\<c-n>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
+inoremap <expr><s-tab>
+ \ pumvisible() ? "\<c-p>" :
+ \ neosnippet#expandable_or_jumpable() ?
+ \    "\<Plug>(neosnippet_expand_or_jump)" : "\<s-tab>"
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
