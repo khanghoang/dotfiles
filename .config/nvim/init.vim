@@ -318,15 +318,23 @@ let g:LanguageClient_serverCommands = {
 " <leader>d to go to definition
 autocmd FileType javascript nnoremap <buffer>
   \ <leader>d :call LanguageClient_textDocument_definition()<cr>
+
+" <leader>d to go to definition in another panel
+autocmd FileType javascript nnoremap <buffer>
+  \ <leader>,d :vsp <CR>:exec(":call LanguageClient_textDocument_definition()")<CR>
+
 " <leader>t for "type" info under cursor
 autocmd FileType javascript nnoremap <buffer>
   \ <leader>t :call LanguageClient_textDocument_hover()<cr>
+
 " <leader>r to rename variable under cursor
 autocmd FileType javascript nnoremap <buffer>
   \ <leader>r :call LanguageClient_textDocument_rename()<cr>
+
 " <leader>s list symbols
 autocmd FileType javascript nnoremap <buffer>
   \ <leader>s :call LanguageClient_textDocument_documentSymbol()<cr>
+
 " <leader>f list all the references
 autocmd FileType javascript nnoremap <buffer>
   \ <leader>f :call LanguageClient_textDocument_references()<cr>
