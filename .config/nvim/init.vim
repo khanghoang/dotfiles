@@ -302,11 +302,6 @@ set number
 noremap <Leader>ne :lNext<CR>
 noremap <Leader>cl :lclose<CR>
 
-noremap <Leader>h :bp<CR>
-map <Leader>h :bp<CR>
-noremap <Leader>l :bn<CR>
-map <Leader>l :bn<CR>
-
 " For conceal markers.
 if has('conceal')
   set conceallevel=2 concealcursor=niv
@@ -382,6 +377,16 @@ nmap <silent> <Leader>T :TestFile<CR>
 
 " ctags open in vertical split
 map <leader><C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+" go to next error	
+vmap <Leader>,n :ALENext<CR>	
+noremap <Leader>,n :ALENext<CR>	
+vmap <Leader>,v :ALEPrevious<CR>	
+noremap <Leader>,v :ALEPrevious<CR>	
+
+" create file under current folder	
+map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>	
+nnoremap <leader>s :exe 'Ag!' expand('<cword>')<cr>
 
 " enable mouse
 set mouse=a
