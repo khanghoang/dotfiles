@@ -421,8 +421,9 @@ function! Multiple_cursors_after()
 endfunction
 
 " Deoplete SuperTab like snippets behavior.
-let g:UltiSnipsExpandTrigger = 1
-let g:UltiSnipsListSnippets = 1
+let g:UltiSnipsExpandTrigger = "\<tab>"
+let g:UltiSnipsListSnippets = "\<tab>"
+
 inoremap <expr><tab>
  \ pumvisible() ? "\<c-n>" :
  \ neosnippet#expandable_or_jumpable() ?
@@ -437,3 +438,47 @@ xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " open vertical on the right 
 set splitright
+
+" Fuzzy search NERDTreeBookmarks
+function! s:open_bookmark_file(line)
+  let parser = split(a:line)
+  let path = parser[0]
+  let linenumber = 0
+  execute "edit +" . linenumber . " " . path
+endfunction
+
+command! -bang -nargs=* FuzzySearchBookmark
+      \ call fzf#vim#ag(<q-args>,
+      \   {
+      \      'source': "cat ~/.NERDTreeBookmarks | awk '{print $2}' | sed 's#~#'\"$HOME\"'#g'",
+      \      'options': '--no-hscroll --no-multi --ansi --prompt "Bookmark >>> " --preview "bat {}"',
+      \      'down':    '50%',
+      \      'sink': function('s:open_bookmark_file')
+      \   },
+      \   <bang>0
+      \ )
+
+nnoremap <Leader>,b :FuzzySearchBookmark <CR>
+
+" Fuzzy search and checkout git branches
+function! s:open_branch_fzf(line)
+  let parser = split(a:line)
+  let branch = parser[0];
+  if branch ==? '*'
+    let branch = parser[1]
+  endif
+  execute '!git checkout ' . branch
+endfunction
+
+command! -bang -nargs=* GCheckout
+      \ call fzf#vim#ag(<q-args>,
+      \   {
+      \      'source': 'git branch -v',
+      \      'options': '--no-hscroll --no-multi --delimiter="\t" -n 2 --ansi --prompt "Branch >>> " --preview "git log -200 --pretty=format:%s $(echo {+2..} |  sed \"s/$/../\" )"',
+      \      'down':    '40%',
+      \      'sink': function('s:open_branch_fzf')
+      \   },
+      \   <bang>0
+      \ )
+
+nnoremap <Leader>,c :GCheckout <CR>
