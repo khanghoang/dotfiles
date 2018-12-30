@@ -421,8 +421,7 @@ function! Multiple_cursors_after()
 endfunction
 
 " Deoplete SuperTab like snippets behavior.
-let g:UltiSnipsExpandTrigger = "\<tab>"
-let g:UltiSnipsListSnippets = "\<tab>"
+let g:UltiSnipsExpandTrigger = "<c-k>"
 
 inoremap <expr><tab>
  \ pumvisible() ? "\<c-n>" :
