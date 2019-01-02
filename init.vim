@@ -10,6 +10,9 @@ Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
+" UndoTree
+Plug 'mbbill/undotree'
+
 " NERDTree + Ag
 Plug 'taiansu/nerdtree-ag'
 
@@ -35,7 +38,6 @@ Plug 'christoomey/vim-tmux-navigator'
 " Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'tpope/vim-fugitive'
 Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
 Plug 'szw/vim-tags'
@@ -483,3 +485,16 @@ command! -bang -nargs=* GCheckout
       \ )
 
 nnoremap <Leader>,c :GCheckout <CR>
+
+" Gitgutter shortcuts
+nmap <Leader>ha <Plug>GitGutterNextStageHunk
+nmap <Leader>hu <Plug>GitGutterUndoHunk
+nmap hd <Plug>GitGutterNextHunk
+nmap hu <Plug>GitGutterPrevHunk
+
+" Git gutter modified/added/removed signs
+let g:gitgutter_sign_added = '|'
+let g:gitgutter_sign_modified = '|'
+let g:gitgutter_sign_removed = '|'
+let g:gitgutter_sign_removed_first_line = '|'
+let g:gitgutter_sign_modified_removed = '|'

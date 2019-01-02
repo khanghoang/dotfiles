@@ -119,11 +119,13 @@ antigen bundle brew-cask
 antigen bundle git
 antigen bundle heroku
 antigen bundle pip
+antigen bundle pip3
 antigen bundle nvm
 antigen bundle npm
-antigen bundle nvm
 antigen bundle command-not-found
-antigen bundle robbyrussell/oh-my-zsh plugins/z
+antigen bundle robbyrussell/oh-my-zsh
+antigen bundle z
+antigen bundle hlissner/zsh-autopair
 
 # nicoulaj's moar completion files for zsh -- not sure why disabled.
 # antigen bundle zsh-users/zsh-completions src
@@ -196,11 +198,8 @@ DISABLE_AUTO_TITLE="true"
 alias vi='nvim'
 alias cat='bat'
 
-alias config='/usr/bin/git --git-dir=/Users/khoangtrieu/.cfg/ --work-tree=/Users/khoangtrieu'
-alias config='/usr/bin/git --git-dir=/Users/khoangtrieu/.cfg/ --work-tree=/Users/khoangtrieu'
-
-export PATH=$PATH:/Users/khoangtrieu/opensource/depot_tools
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# change the color of auto-suggestions
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
 
 # Move next only if `homebrew` is installed
 if command -v brew >/dev/null 2>&1; then
