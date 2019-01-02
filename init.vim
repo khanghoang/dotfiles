@@ -492,6 +492,9 @@ nmap <Leader>hu <Plug>GitGutterUndoHunk
 nmap hd <Plug>GitGutterNextHunk
 nmap hu <Plug>GitGutterPrevHunk
 
+" suppress ctags version warning (since universal-ctags)
+let g:easytags_suppress_ctags_warning = 1
+
 " Git gutter modified/added/removed signs
 let g:gitgutter_sign_added = '|'
 let g:gitgutter_sign_modified = '|'
