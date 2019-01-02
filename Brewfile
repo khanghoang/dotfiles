@@ -6,6 +6,7 @@ brew "universal-ctags/universal-ctags/universal-ctags", args: ['HEAD']
 brew "tree"
 brew "ghi"
 brew "git"
+brew "newsboat"
 brew "heroku"
 brew "heroku-node"
 brew "htop"
