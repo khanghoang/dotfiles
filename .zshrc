@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/khanghoang/.oh-my-zsh"
+export ZSH="/Users/khoangtrieu/.oh-my-zsh"
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -63,7 +63,7 @@ export ZSH="/Users/khanghoang/.oh-my-zsh"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
-)
+ )
 
 source $ZSH/oh-my-zsh.sh
 
@@ -116,6 +116,7 @@ antigen bundle brew
 antigen bundle brew-cask
 
 # Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle robbyrussell/oh-my-zsh
 antigen bundle git
 antigen bundle heroku
 antigen bundle pip
@@ -123,7 +124,6 @@ antigen bundle pip3
 antigen bundle nvm
 antigen bundle npm
 antigen bundle command-not-found
-antigen bundle robbyrussell/oh-my-zsh
 antigen bundle z
 antigen bundle hlissner/zsh-autopair
 

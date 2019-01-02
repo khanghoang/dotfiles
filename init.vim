@@ -1,5 +1,3 @@
-" This file supposes to be in .config/nvim/init.vim
-
 " set termguicolors
 call plug#begin()
 
@@ -307,6 +305,9 @@ let g:LanguageClient_serverCommands = {
     \ 'javascript.jsx': ['javascript-typescript-stdio'],
     \ 'javascript': ['javascript-typescript-stdio'],
     \ }
+
+" Let ALE do it job
+let g:LanguageClient_diagnosticsEnable = 0
 
 " <leader>d to go to definition
 autocmd FileType javascript nnoremap <buffer>
