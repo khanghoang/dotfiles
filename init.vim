@@ -1,3 +1,5 @@
+" This file supposes to be in .config/nvim/init.vim
+
 " set termguicolors
 call plug#begin()
 
