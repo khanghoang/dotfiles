@@ -1,7 +1,6 @@
 brew "fd"
 brew "fx"
 brew "bat"
-brew "ctags"
 brew "diff-so-fancy"
 brew "universal-ctags/universal-ctags/universal-ctags", args: ['HEAD']
 brew "tree"
