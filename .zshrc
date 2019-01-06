@@ -181,6 +181,9 @@ export PATH="$PATH:$HOME/Library/Python/2.7/bin"
 # fzf config move up/down by Ctrl-D/Ctrl-U
 export FZF_DEFAULT_OPTS='--bind ctrl-d:down,ctrl-u:up'
 
+# Recent git branches
+alias grb='git branch | fzf | xargs git checkout'
+
 function f_notifyme {
   LAST_EXIT_CODE=$?
   CMD=$(fc -ln -1)

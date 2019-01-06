@@ -477,8 +477,8 @@ endfunction
 command! -bang -nargs=* GCheckout
       \ call fzf#vim#ag(<q-args>,
       \   {
-      \      'source': 'git branch -v',
-      \      'options': '--no-hscroll --no-multi --delimiter="\t" -n 2 --ansi --prompt "Branch >>> " --preview "git log -200 --pretty=format:%s $(echo {+2..} |  sed \"s/$/../\" )"',
+      \      'source': 'git branch',
+      \      'options': '--no-hscroll --no-multi --ansi --prompt "Branch >>> " --preview "git log -200 --pretty=format:%s $(echo {+2..} |  sed \"s/$/../\" )"',
       \      'down':    '40%',
       \      'sink': function('s:open_branch_fzf')
       \   },
@@ -492,6 +492,7 @@ nmap <Leader>ha <Plug>GitGutterNextStageHunk
 nmap <Leader>hu <Plug>GitGutterUndoHunk
 nmap hd <Plug>GitGutterNextHunk
 nmap hu <Plug>GitGutterPrevHunk
+nmap hp <Plug>GitGutterPreviewHunk
 
 " suppress ctags version warning (since universal-ctags)
 let g:easytags_suppress_ctags_warning = 1
