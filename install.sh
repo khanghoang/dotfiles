@@ -7,3 +7,6 @@ brew bundle
 pip3 install neovim --upgrade
 
 brew install --HEAD universal-ctags/universal-ctags/universal-ctags
+
+# install zgen
+git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"

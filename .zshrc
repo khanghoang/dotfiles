@@ -1,101 +1,3 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
-export ZSH="/Users/khoangtrieu/.oh-my-zsh"
-
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
-
-# Set list of themes to load
-# Setting this variable when ZSH_THEME=random
-# cause zsh load theme from this variable instead of
-# looking in ~/.oh-my-zsh/themes/
-# An empty array have no effect
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
- )
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
 # Move next only if `homebrew` is installed
 if command -v brew >/dev/null 2>&1; then
 	# Load rupa's z if installed
@@ -104,57 +6,53 @@ fi
 
 alias vi=nvim
 
-source ~/antigen.zsh
+# load zgen
+source "${HOME}/.zgen/zgen.zsh"
 
-local b="antigen bundle"
+# if the init scipt doesn't exist
+if ! zgen saved; then
 
-# Load the oh-my-zsh's library.
-antigen use oh-my-zsh
+  # Load the oh-my-zsh's library.
+  zgen oh-my-zsh
 
-# homebrew  - autocomplete on `brew install`
-antigen bundle brew
-antigen bundle brew-cask
+  # Bundles from the default repo (robbyrussell's oh-my-zsh).
+  zgen oh-my-zsh plugins/git
+  zgen oh-my-zsh plugins/heroku
+  zgen oh-my-zsh plugins/pip
+  zgen oh-my-zsh plugins/nvm
+  zgen oh-my-zsh plugins/npm
+  zgen oh-my-zsh plugins/command-not-found
 
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle robbyrussell/oh-my-zsh
-antigen bundle git
-antigen bundle heroku
-antigen bundle pip
-antigen bundle pip3
-antigen bundle nvm
-antigen bundle npm
-antigen bundle command-not-found
-antigen bundle z
-antigen bundle hlissner/zsh-autopair
+  # homebrew  - autocomplete on `brew install`
+  zgen load brew
+  zgen load brew-cask
 
-# nicoulaj's moar completion files for zsh -- not sure why disabled.
-# antigen bundle zsh-users/zsh-completions src
+  zgen load z
+  zgen load hlissner/zsh-autopair
 
-# Syntax highlighting on the readline
-antigen bundle zsh-users/zsh-syntax-highlighting
+  # nicoulaj's moar completion files for zsh -- not sure why disabled.
+  # zgen load zsh-users/zsh-completions src
 
-# history search
-antigen bundle zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
+  # Syntax highlighting on the readline
+  zgen load zsh-users/zsh-syntax-highlighting
 
-# suggestions
-antigen bundle tarruda/zsh-autosuggestions
+  # history search
+  zgen load zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
 
-# colors for all files!
-antigen bundle trapd00r/zsh-syntax-highlighting-filetypes
+  # suggestions
+  zgen load tarruda/zsh-autosuggestions
 
-# dont set a theme, because pure does it all
-antigen bundle mafredri/zsh-async
-antigen bundle sindresorhus/pure
+  # colors for all files!
+  zgen load trapd00r/zsh-syntax-highlighting-filetypes
 
-# Syntax highlighting bundle.
-antigen bundle zsh-users/zsh-syntax-highlighting
+  # dont set a theme, because pure does it all
+  zgen load mafredri/zsh-async
+  zgen load sindresorhus/pure
 
-# Tell Antigen that you're done.
-antigen apply
+  # Tell Antigen that you're done.
+  zgen save
 
-# tabtab source for electron-forge package
-# uninstall by removing these lines or running `tabtab uninstall electron-forge`
-[[ -f /Users/khanghoang/code/gittag/packages/election-app/node_modules/tabtab/.completions/electron-forge.zsh ]] && . /Users/khanghoang/code/gittag/packages/election-app/node_modules/tabtab/.completions/electron-forge.zsh
+fi
 
 # set Vim mode for bash
 set -o vi
@@ -192,8 +90,6 @@ function f_notifyme {
 }
 
 export ps1='$(f_notifyme)'$ps1}
-
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # https://superuser.com/questions/292652/change-iterm2-window-and-tab-titles-in-zsh/292660#292660
 DISABLE_AUTO_TITLE="true"
