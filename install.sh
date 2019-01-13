@@ -10,3 +10,8 @@ brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
 # install zgen
 git clone https://github.com/tarjoilija/zgen.git "${HOME}/.zgen"
+
+yarn global add jsonlint
+yarn global add eslint
+yarn global add prettier-eslint
+yarn global add flow

@@ -110,6 +110,8 @@ let g:ale_fixers = {
 \}
 let g:ale_linters = {
 \   'javascript': ['eslint', 'prettier-eslint', 'flow'],
+\   'json': ['jsonlint'],
+\   'zsh': ['shellcheck']
 \}
 
 let g:ale_list_window_size = 5
