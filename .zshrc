@@ -6,17 +6,6 @@ if ! zgen saved; then
 
   # Load the oh-my-zsh's library.
   zgen oh-my-zsh
-  # Bundles from the default repo (robbyrussell's oh-my-zsh).
-  zgen oh-my-zsh plugins/git
-  zgen oh-my-zsh plugins/heroku
-  zgen oh-my-zsh plugins/pip
-  # zgen oh-my-zsh plugins/nvm
-  zgen oh-my-zsh plugins/npm
-  zgen oh-my-zsh plugins/command-not-found
-
-  # homebrew  - autocomplete on `brew install`
-  zgen load brew
-  zgen load brew-cask
 
   zgen load z
   zgen load hlissner/zsh-autopair
@@ -40,6 +29,9 @@ if ! zgen saved; then
   zgen load mafredri/zsh-async
   zgen load sindresorhus/pure
 
+  # notify for long running commands
+  zgen load marzocchi/zsh-notify
+
   # Tell Antigen that you're done.
   zgen save
 
@@ -54,7 +46,7 @@ nvm() {
 }
 
 # load fzf
-# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # set default editor
 export EDITOR=nvim
@@ -69,15 +61,6 @@ export FZF_DEFAULT_OPTS='--bind ctrl-d:down,ctrl-u:up'
 
 # Recent git branches
 alias grb='git branch | fzf | xargs git checkout'
-
-function f_notifyme {
-  LAST_EXIT_CODE=$?
-  CMD=$(fc -ln -1)
-  # No point in waiting for the command to complete
-  notifyme "$cmd" "$last_exit_code" &
-}
-
-export ps1='$(f_notifyme)'$ps1}
 
 # https://superuser.com/questions/292652/change-iterm2-window-and-tab-titles-in-zsh/292660#292660
 export DISABLE_AUTO_TITLE="true"

@@ -1,3 +1,4 @@
+# run this by `brew bundle`
 brew "fd"
 brew "fx"
 brew "bat"
@@ -23,6 +24,8 @@ brew "yarn"
 brew "z"
 brew "zsh"
 brew "zsh-autosuggestions"
+brew "shellcheck"
+brew "terminal-notifier"
 
 # mkcert is a simple tool for making locally-trusted development certificates
 brew "mkcert"
