@@ -1,0 +1,5 @@
+bind main R !git rebase -i %(commit)^
+bind diff R !git rebase -i %(commit)^
+
+bind generic 0 !git checkout %(commit)
+bind generic 9 !@sh -c "echo %(commit) | pbcopy"
