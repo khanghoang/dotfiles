@@ -74,6 +74,7 @@ Plug 'tomtom/tcomment_vim'
 Plug 'mhinz/vim-startify'
 Plug 'romainl/flattened'
 Plug 'Yggdroot/indentLine'
+let g:indentLine_char = '│'
 
 Plug 'bootleq/vim-textobj-rubysymbol'
 Plug 'coderifous/textobj-word-column.vim'

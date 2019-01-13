@@ -1,11 +1,3 @@
-# Move next only if `homebrew` is installed
-if command -v brew >/dev/null 2>&1; then
-	# Load rupa's z if installed
-	[ -f $(brew --prefix)/etc/profile.d/z.sh ] && source $(brew --prefix)/etc/profile.d/z.sh
-fi
-
-alias vi=nvim
-
 # load zgen
 source "${HOME}/.zgen/zgen.zsh"
 
@@ -14,12 +6,11 @@ if ! zgen saved; then
 
   # Load the oh-my-zsh's library.
   zgen oh-my-zsh
-
   # Bundles from the default repo (robbyrussell's oh-my-zsh).
   zgen oh-my-zsh plugins/git
   zgen oh-my-zsh plugins/heroku
   zgen oh-my-zsh plugins/pip
-  zgen oh-my-zsh plugins/nvm
+  # zgen oh-my-zsh plugins/nvm
   zgen oh-my-zsh plugins/npm
   zgen oh-my-zsh plugins/command-not-found
 
@@ -54,23 +45,20 @@ if ! zgen saved; then
 
 fi
 
-# set Vim mode for bash
-set -o vi
+# lazy load nvm since it will take 1-2 seconds for nvm to fully loaded
+nvm() {
+  unset -f nvm
+  export NVM_DIR=~/.nvm
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+  nvm "$@"
+}
 
-# fzf config move up/down by Ctrl-D/Ctrl-U
-export FZF_DEFAULT_OPTS='--bind ctrl-d:down,ctrl-u:up'
+# load fzf
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# set default editor
 export EDITOR=nvim
 export VISUAL=nvim
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# Customize to your needs...
-# for config_file ($HOME/.yadr/zsh/*.zsh) source $config_file
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
@@ -92,13 +80,13 @@ function f_notifyme {
 export ps1='$(f_notifyme)'$ps1}
 
 # https://superuser.com/questions/292652/change-iterm2-window-and-tab-titles-in-zsh/292660#292660
-DISABLE_AUTO_TITLE="true"
+export DISABLE_AUTO_TITLE="true"
 
 alias vi='nvim'
 alias cat='bat'
 
 # change the color of auto-suggestions
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
 
 # Move next only if `homebrew` is installed
 if command -v brew >/dev/null 2>&1; then
