@@ -24,6 +24,10 @@ brew "z"
 brew "zsh"
 brew "zsh-autosuggestions"
 
+# mkcert is a simple tool for making locally-trusted development certificates
+brew "mkcert"
+brew "nss"
+
 tap "homebrew/cask-fonts"
 tap "homebrew/cask"
 cask "font-roboto-mono"
