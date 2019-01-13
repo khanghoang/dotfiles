@@ -15,3 +15,5 @@ yarn global add jsonlint
 yarn global add eslint
 yarn global add prettier-eslint
 yarn global add flow
+yarn global add write-good
+yarn global add alex

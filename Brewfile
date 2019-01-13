@@ -36,3 +36,7 @@ tap "homebrew/cask"
 cask "font-roboto-mono"
 cask "font-roboto-mono-for-powerline"
 cask "font-source-code-pro"
+
+# text linter
+tap "ValeLint/vale"
+brew "vale"

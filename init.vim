@@ -115,7 +115,8 @@ let g:ale_fixers = {
 let g:ale_linters = {
 \   'javascript': ['eslint', 'prettier-eslint', 'flow'],
 \   'json': ['jsonlint'],
-\   'zsh': ['shellcheck']
+\   'zsh': ['shellcheck'],
+\   'markdown': ['vale', 'writegood', 'alex']
 \}
 
 let g:ale_list_window_size = 5
@@ -526,4 +527,3 @@ vnoremap <Leader>g y:TigGrep<Space><C-R>"<CR>
 nnoremap <Leader>cg :<C-u>:TigGrep<Space><C-R><C-W><CR>
 " open tig blame with current file
 nnoremap <Leader>b :Gblame<CR>
-
