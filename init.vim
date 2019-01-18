@@ -497,10 +497,10 @@ nnoremap <Leader>,c :GCheckout <CR>
 
 " Gitgutter shortcuts
 nmap <Leader>ha <Plug>GitGutterNextStageHunk
-nmap <Leader>hu <Plug>GitGutterUndoHunk
-nmap hd <Plug>GitGutterNextHunk
-nmap hu <Plug>GitGutterPrevHunk
-nmap hp <Plug>GitGutterPreviewHunk
+nmap <Leader>ho <Plug>GitGutterUndoHunk
+nmap <Leader>hd <Plug>GitGutterNextHunk
+nmap <Leader>hu <Plug>GitGutterPrevHunk
+nmap <Leader>hp <Plug>GitGutterPreviewHunk
 
 " suppress ctags version warning (since universal-ctags)
 let g:easytags_suppress_ctags_warning = 1
@@ -514,9 +514,9 @@ let g:gitgutter_sign_modified_removed = '│'
 
 " Vim Tig keymap
 " open tig with current file
-nnoremap <Leader>T :TigOpenCurrentFile<CR>
+nnoremap <Leader>,T :TigOpenCurrentFile<CR>
 " open tig with Project root path
-nnoremap <Leader>t :TigOpenProjectRootDir<CR>
+nnoremap <Leader>,t :TigOpenProjectRootDir<CR>
 " open tig grep
 nnoremap <Leader>g :TigGrep<CR>
 " resume from last grep
