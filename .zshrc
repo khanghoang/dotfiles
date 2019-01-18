@@ -16,6 +16,9 @@ if ! zgen saved; then
   # Syntax highlighting on the readline
   zgen load zsh-users/zsh-syntax-highlighting
 
+  # Utils functions for git
+  zgen load wfxr/forgit
+
   # history search
   zgen load zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
 
