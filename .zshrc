@@ -40,6 +40,8 @@ if ! zgen saved; then
 
 fi
 
+set -o vi
+
 # lazy load nvm since it will take 1-2 seconds for nvm to fully loaded
 nvm() {
   unset -f nvm
@@ -63,7 +65,7 @@ export PATH="$PATH:$HOME/Library/Python/2.7/bin"
 export FZF_DEFAULT_OPTS='--bind ctrl-d:down,ctrl-u:up'
 
 # Recent git branches
-alias grb='git branch | fzf | xargs git checkout'
+alias grb='git branch --sort=-committerdate | fzf | xargs git checkout'
 
 # https://superuser.com/questions/292652/change-iterm2-window-and-tab-titles-in-zsh/292660#292660
 export DISABLE_AUTO_TITLE="true"
