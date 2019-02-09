@@ -400,8 +400,11 @@ map <C-\> :vsp <CR>:exec("call LanguageClient_textDocument_definition()")<CR>
 " go to next error	
 vmap <Leader>,n :ALENext<CR>	
 noremap <Leader>,n :ALENext<CR>	
-vmap <Leader>,v :ALEPrevious<CR>	
-noremap <Leader>,v :ALEPrevious<CR>	
+vmap <Leader>,b :ALEPrevious<CR>	
+noremap <Leader>,b :ALEPrevious<CR>	
+
+let g:ale_sign_error = '→'
+let g:ale_sign_warning = '→' 
 
 " create file under current folder	
 map <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>	
