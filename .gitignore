@@ -1,3 +1,6 @@
+# run `git config --global core.excludesfile ~/.gitignore`
+tags
+
 **/tags
 **/tags.lock
 **/tags.temp
