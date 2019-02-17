@@ -40,3 +40,6 @@ cask "font-source-code-pro"
 # text linter
 tap "ValeLint/vale"
 brew "vale"
+
+# key mapper
+cask "karabiner-elements"
