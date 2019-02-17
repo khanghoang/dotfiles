@@ -366,7 +366,7 @@ let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
 " neo format for arettier
 let g:neoformat_enabled_javascript = ['prettier']
-autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ none\ --tab-width\ 4\ --jsx-bracket-same-line\ true
+autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ none\ --tab-width\ 2\ --jsx-bracket-same-line\ true
 let g:neoformat_try_formatprg = 1
 
 " ==== NERD tree
