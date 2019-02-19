@@ -1,0 +1,40 @@
+{
+  "windows": [
+    {
+      "panes": [
+        {
+          "shell_command": "", 
+          "focus": "true"
+        }, 
+        {
+          "shell_command": "babel-node ./node_modules/.bin/webpack --config webpack.button.render.config.js --progress --watch"
+        }, 
+        {
+          "shell_command": "yarn dev"
+        }
+      ], 
+      "start_directory": "/Users/khoangtrieu/PYPL/paypal-checkout", 
+      "layout": "3415,212x50,0,0{105x50,0,0,0,106x50,106,0[106x25,106,0,1,106x24,106,26,2]}", 
+      "focus": "true", 
+      "window_name": "RUNNING", 
+      "options": {
+        "automatic-rename": "off"
+      }
+    }, 
+    {
+      "panes": [
+        {
+          "shell_command": "nvim", 
+          "focus": "true"
+        }
+      ], 
+      "start_directory": "/Users/khoangtrieu/PYPL/paypal-checkout", 
+      "layout": "ade0,212x50,0,0,3", 
+      "options": {
+        "automatic-rename": "off"
+      }, 
+      "window_name": "CODE"
+    }
+  ], 
+  "session_name": "checkoutjs"
+}

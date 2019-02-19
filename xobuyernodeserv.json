@@ -1,0 +1,37 @@
+{
+  "windows": [
+    {
+      "panes": [
+        {
+          "shell_command": "", 
+          "focus": "true"
+        }, 
+        {
+          "shell_command": "npm run start"
+        }
+      ], 
+      "start_directory": "/Users/khoangtrieu/PYPL/xobuyernodeserv", 
+      "layout": "b42b,212x50,0,0{105x50,0,0,5,106x50,106,0[106x25,106,0,6,106x24,106,26,7]}", 
+      "focus": "true", 
+      "window_name": "RUNNING", 
+      "options": {
+        "automatic-rename": "off"
+      }
+    }, 
+    {
+      "panes": [
+        {
+          "shell_command": "nvim", 
+          "focus": "true"
+        }
+      ], 
+      "start_directory": "/Users/khoangtrieu/PYPL/xobuyernodeserv", 
+      "layout": "ade5,212x50,0,0,8", 
+      "options": {
+        "automatic-rename": "off"
+      }, 
+      "window_name": "CODE"
+    }
+  ], 
+  "session_name": "xobuyernodeserv"
+}
