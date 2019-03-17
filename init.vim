@@ -19,7 +19,7 @@ Plug 'taiansu/nerdtree-ag'
 " Plug 'ludovicchabant/vim-gutentags'
 " Plug 'xolox/vim-easytags'
 Plug 'xolox/vim-misc'
-
+Plug 'heavenshell/vim-jsdoc'
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-bundler'
