@@ -51,6 +51,8 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'sbdchd/neoformat'
 Plug 'jparise/vim-graphql'
 
+Plug 'w0rp/ale'
+Plug 'maximbaz/lightline-ale'
 Plug 'neoclide/coc.nvim', { 'do': 'yarn install'  }
 
 " vim-test config
@@ -159,18 +161,6 @@ nnoremap <Leader><Space> :FZF <CR>
 
 "clear highlight search
 nnoremap <Esc> :noh<CR><Esc>
-
-" Add diagnostic info for https://github.com/itchyny/lightline.vim
-let g:lightline = {
-      \ 'colorscheme': 'wombat',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'cocstatus': 'coc#status'
-      \ },
-      \ }
 
 let g:neoterm_size = '80v'
 let g:neoterm_automap_keys = ',,t'
@@ -451,3 +441,60 @@ nmap <leader>r <Plug>(coc-references)
 " Use <c-k> for trigger completion.
 inoremap <silent><expr> <c-k> coc#refresh()
 " }} COC
+
+" {{ ALE - Async lint engine
+let g:ale_fixers = {
+\   'javascript': ['prettier_eslint'],
+\}
+let g:ale_linters = {
+\   'javascript': ['eslint', 'prettier-eslint', 'flow'],
+\   'json': ['jsonlint'],
+\   'zsh': ['shellcheck'],
+\   'markdown': ['vale', 'writegood', 'alex']
+\}
+
+let g:ale_list_window_size = 5
+
+" Set this setting in vimrc if you want to fix files automatically on save.
+" This is off by default.
+let g:ale_fix_on_save = 0
+
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 0
+
+let g:ale_open_list = 0
+let g:ale_list_window_size = 5
+
+nmap <Leader>h <Plug>(ale_previous_wrap)
+nmap <Leader>l <Plug>(ale_next_wrap)
+
+" go to next error	
+vmap <Leader>,n :ALENext<CR>	
+noremap <Leader>,n :ALENext<CR>	
+vmap <Leader>,b :ALEPrevious<CR>	
+noremap <Leader>,b :ALEPrevious<CR>	
+
+vmap <Leader>,e :set g:ale_set_quickfix = 1<CR>
+noremap <Leader>,e :set g:ale_set_quickfix = 1<CR>
+
+" Lightline ALE setting {{{
+let g:lightline = {}
+
+let g:lightline.component_expand = {
+    \  'linter_checking': 'lightline#ale#checking',
+    \  'linter_warnings': 'lightline#ale#warnings',
+    \  'linter_errors': 'lightline#ale#errors',
+    \  'linter_ok': 'lightline#ale#ok',
+    \ }
+
+let g:lightline.component_type = {
+    \     'linter_checking': 'left',
+    \     'linter_warnings': 'warning',
+    \     'linter_errors': 'error',
+    \     'linter_ok': 'left',
+    \ }
+
+let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]], 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ] }
+" }}}
+
+" }} ALE
