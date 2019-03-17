@@ -16,8 +16,8 @@ Plug 'taiansu/nerdtree-ag'
 
 " https://medium.com/@kuiro5/best-way-to-set-up-ctags-with-neovim-37be99c1bd11
 " Ctags for NeoVim
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'xolox/vim-easytags'
+" Plug 'ludovicchabant/vim-gutentags'
+" Plug 'xolox/vim-easytags'
 Plug 'xolox/vim-misc'
 
 Plug 'junegunn/fzf.vim'
@@ -32,8 +32,6 @@ Plug 'leshill/vim-json'
 Plug 'rking/ag.vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'christoomey/vim-tmux-navigator'
-" Plug 'vim-airline/vim-airline'
-" Plug 'vim-airline/vim-airline-themes'
 Plug 'itchyny/lightline.vim'
 Plug 'terryma/vim-multiple-cursors'
 Plug 'wellle/targets.vim'
@@ -41,7 +39,6 @@ Plug 'majutsushi/tagbar'
 Plug 'szw/vim-tags'
 Plug 'airblade/vim-gitgutter'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'skwp/vim-html-escape'
@@ -54,8 +51,7 @@ Plug 'heavenshell/vim-jsdoc'
 Plug 'sbdchd/neoformat'
 Plug 'jparise/vim-graphql'
 
-Plug 'w0rp/ale'
-Plug 'maximbaz/lightline-ale'
+Plug 'neoclide/coc.nvim', { 'do': 'yarn install'  }
 
 " vim-test config
 " make test commands execute using neoterm
@@ -108,36 +104,6 @@ Plug 'kana/vim-submode'
 Plug 'rbgrouleff/bclose.vim'
 Plug 'iberianpig/tig-explorer.vim'
 
-" ALE - Async lint engine {{{
-let g:ale_fixers = {
-\   'javascript': ['prettier_eslint'],
-\}
-let g:ale_linters = {
-\   'javascript': ['eslint', 'prettier-eslint', 'flow'],
-\   'json': ['jsonlint'],
-\   'zsh': ['shellcheck'],
-\   'markdown': ['vale', 'writegood', 'alex']
-\}
-
-let g:ale_list_window_size = 5
-
-" Set this setting in vimrc if you want to fix files automatically on save.
-" This is off by default.
-let g:ale_fix_on_save = 0
-
-let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
-
-let g:ale_open_list = 0
-let g:ale_list_window_size = 5
-
-nmap <Leader>h <Plug>(ale_previous_wrap)
-nmap <Leader>l <Plug>(ale_next_wrap)
-
-let g:deoplete#enable_at_startup = 1
-
-Plug 'wokalski/autocomplete-flow'
-
 " You will also need the following for function argument completion:
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
@@ -149,13 +115,11 @@ Plug 'frankier/neovim-colors-solarized-truecolor-only'
 " auto reload
 autocmd! bufwritepost init.vim so %
 
-" LanguageClient plugin
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-
 call plug#end()
+
+" ------
+" Configuration starts here
+" ------
 
 if (has("termguicolors"))
   set termguicolors
@@ -196,31 +160,17 @@ nnoremap <Leader><Space> :FZF <CR>
 "clear highlight search
 nnoremap <Esc> :noh<CR><Esc>
 
-" Lightline ALE setting {{{
-let g:lightline = {}
-
-let g:lightline.component_expand = {
-    \  'linter_checking': 'lightline#ale#checking',
-    \  'linter_warnings': 'lightline#ale#warnings',
-    \  'linter_errors': 'lightline#ale#errors',
-    \  'linter_ok': 'lightline#ale#ok',
-    \ }
-
-let g:lightline.component_type = {
-    \     'linter_checking': 'left',
-    \     'linter_warnings': 'warning',
-    \     'linter_errors': 'error',
-    \     'linter_ok': 'left',
-    \ }
-
-let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ]], 'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ] }
-" }}}
-
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_ignore_case = 1
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#enable_camel_case = 1
-let g:deoplete#disable_auto_complete = 0
+" Add diagnostic info for https://github.com/itchyny/lightline.vim
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+      \ },
+      \ 'component_function': {
+      \   'cocstatus': 'coc#status'
+      \ },
+      \ }
 
 let g:neoterm_size = '80v'
 let g:neoterm_automap_keys = ',,t'
@@ -261,10 +211,17 @@ set expandtab
 set smartcase
 
 " Code folding
-set foldmethod=indent   
+" zc — close the fold (where your cursor is positioned)
+" zM — close all folds on current buffer
+" zo — open the fold (where your cursor is positioned)
+" zR — open all folds on current buffer
+" zj — cursor is moved to next fold
+" zk — cursor is moved to previous fold
+set foldmethod=syntax   
 set foldnestmax=10
+set foldcolumn=1
 set nofoldenable
-set foldlevel=2
+set foldlevel=99
 let javaScript_fold=1 
 
 " Font
@@ -302,48 +259,6 @@ if has('conceal')
   set conceallevel=2 concealcursor=niv
 endif
 
-""" Language Client starts
-" Required for operations modifying multiple buffers like rename.
-set hidden
-
-" Automatically start language servers.
-let g:LanguageClient_autoStart = 1
-
-let g:LanguageClient_serverCommands = {
-    \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ }
-
-" Let ALE do it job
-let g:LanguageClient_diagnosticsEnable = 0
-
-" <leader>d to go to definition
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>d :call LanguageClient_textDocument_definition()<cr>
-
-" <leader>d to go to definition in another panel
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>,d :vsp <CR>:exec(":call LanguageClient_textDocument_definition()")<CR>
-
-" <leader>t for "type" info under cursor
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>t :call LanguageClient_textDocument_hover()<cr>
-
-" <leader>r to rename variable under cursor
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>r :call LanguageClient_textDocument_rename()<cr>
-
-" <leader>s list symbols
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>s :call LanguageClient_textDocument_documentSymbol()<cr>
-
-" <leader>f list all the references
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>f :call LanguageClient_textDocument_references()<cr>
-
-""" Language Client ends
-
-
 " Git time lapse
 map <leader>gt :call TimeLapse() <cr> 
 
@@ -366,7 +281,7 @@ let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
 " neo format for arettier
 let g:neoformat_enabled_javascript = ['prettier']
-autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ none\ --tab-width\ 2\ --jsx-bracket-same-line\ true
+autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ none\ --tab-width\ 4\ --jsx-bracket-same-line\ true
 let g:neoformat_try_formatprg = 1
 
 " ==== NERD tree
@@ -387,21 +302,12 @@ noremap <Leader>,f :Neoformat<CR>
 vmap <Leader>,w :ImportJSFix<CR>
 noremap <Leader>,w :ImportJSFix<CR>
 
-vmap <Leader>,e :set g:ale_set_quickfix = 1<CR>
-noremap <Leader>,e :set g:ale_set_quickfix = 1<CR>
-
 nmap <silent> <Leader>t :TestNearest<CR>
 nmap <silent> <Leader>T :TestFile<CR>
 
 " ctags open in vertical split
 map <leader><C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 map <C-\> :vsp <CR>:exec("call LanguageClient_textDocument_definition()")<CR>
-
-" go to next error	
-vmap <Leader>,n :ALENext<CR>	
-noremap <Leader>,n :ALENext<CR>	
-vmap <Leader>,b :ALEPrevious<CR>	
-noremap <Leader>,b :ALEPrevious<CR>	
 
 let g:ale_sign_error = '→'
 let g:ale_sign_warning = '→' 
@@ -435,21 +341,6 @@ function! Multiple_cursors_after()
 	   let g:deoplete#disable_auto_complete = 0
     endif
 endfunction
-
-" Deoplete SuperTab like snippets behavior.
-let g:UltiSnipsExpandTrigger = "<c-k>"
-
-inoremap <expr><tab>
- \ pumvisible() ? "\<c-n>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<tab>"
-inoremap <expr><s-tab>
- \ pumvisible() ? "\<c-p>" :
- \ neosnippet#expandable_or_jumpable() ?
- \    "\<Plug>(neosnippet_expand_or_jump)" : "\<s-tab>"
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 " open vertical on the right 
 set splitright
@@ -498,6 +389,10 @@ command! -bang -nargs=* GCheckout
 
 nnoremap <Leader>,c :GCheckout <CR>
 
+" suppress ctags version warning (since universal-ctags)
+let g:easytags_suppress_ctags_warning = 1
+
+" {{ Gitgutter
 " Gitgutter shortcuts
 nmap <Leader>ha <Plug>GitGutterNextStageHunk
 nmap <Leader>ho <Plug>GitGutterUndoHunk
@@ -505,17 +400,15 @@ nmap <Leader>hd <Plug>GitGutterNextHunk
 nmap <Leader>hu <Plug>GitGutterPrevHunk
 nmap <Leader>hp <Plug>GitGutterPreviewHunk
 
-" suppress ctags version warning (since universal-ctags)
-let g:easytags_suppress_ctags_warning = 1
-
 " Git gutter modified/added/removed signs
 let g:gitgutter_sign_added = '│'
 let g:gitgutter_sign_modified = '│'
 let g:gitgutter_sign_removed = '│'
 let g:gitgutter_sign_removed_first_line = '│'
 let g:gitgutter_sign_modified_removed = '│'
+" }} Gitgutter
 
-" Vim Tig keymap
+" {{ Vim Tig keymap
 " open tig with current file
 nnoremap <Leader>,T :TigOpenCurrentFile<CR>
 " open tig with Project root path
@@ -530,3 +423,31 @@ vnoremap <Leader>g y:TigGrep<Space><C-R>"<CR>
 nnoremap <Leader>cg :<C-u>:TigGrep<Space><C-R><C-W><CR>
 " open tig blame with current file
 nnoremap <Leader>b :Gblame<CR>
+" }} Vim Tig keymap
+
+" {{ COC
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Required for operations modifying multiple buffers like rename.
+set hidden
+
+" Remap keys for gotos
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>d <Plug>(coc-definition)
+nmap <leader>y <Plug>(coc-type-definition)
+nmap <leader>gi <Plug>(coc-implementation)
+nmap <leader>r <Plug>(coc-references)
+
+" Use <c-k> for trigger completion.
+inoremap <silent><expr> <c-k> coc#refresh()
+" }} COC
