@@ -498,3 +498,10 @@ let g:lightline.active = { 'right': [[ 'linter_checking', 'linter_errors', 'lint
 " }}}
 
 " }} ALE
+
+" {{ Move 1 line or a block of code up or down
+nnoremap U   :<C-u>silent! move-2<CR>==
+nnoremap D   :<C-u>silent! move+<CR>==
+xnoremap U   :<C-u>silent! '<,'>move-2<CR>gv=gv
+xnoremap D   :<C-u>silent! '<,'>move'>+<CR>gv=gv
+" }} Move 1 line or a block of code up or down
