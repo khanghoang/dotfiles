@@ -24,6 +24,8 @@
   recent-branches = !git for-each-ref --count=15 --sort=-committerdate refs/heads/ --format='%(refname:short)'
   b = !git for-each-ref --sort='-authordate' --format='%(authordate)%09%(objectname:short)%09%(refname)' refs/heads | sed -e 's-refs/heads/--'
 
+  # just do a `git pr 123` and it creates a `pr-123` branch that you can run and test
+  pr = "!f() { git fetch upstream pull/\"$1\"/head:pr-\"$1\"; git checkout pr-\"$1\"; }; f"
 
   # branch
   b = branch -v                     # branch (verbose)
