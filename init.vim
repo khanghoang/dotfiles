@@ -100,6 +100,8 @@ Plug 'epilande/vim-react-snippets'
 
 " Ultisnips
 Plug 'SirVer/ultisnips'
+Plug 'jhkersul/vim-jest-snippets'
+
 Plug 'kana/vim-submode'
 
 " Tig in vim
@@ -296,8 +298,7 @@ nmap <silent> <Leader>t :TestNearest<CR>
 nmap <silent> <Leader>T :TestFile<CR>
 
 " ctags open in vertical split
-map <leader><C-\> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-map <C-\> :vsp <CR>:exec("call LanguageClient_textDocument_definition()")<CR>
+map <leader>,d :vsp <CR> <Plug>(coc-definition)
 
 let g:ale_sign_error = '→'
 let g:ale_sign_warning = '→' 
@@ -416,6 +417,21 @@ nnoremap <Leader>b :Gblame<CR>
 " }} Vim Tig keymap
 
 " {{ COC
+" if hidden is not set, TextEdit might fail.
+set hidden
+
+" Better display for messages
+set cmdheight=2
+
+" Smaller updatetime for CursorHold & CursorHoldI
+set updatetime=300
+
+" don't give |ins-completion-menu| messages.
+set shortmess+=c
+
+" always show signcolumns
+set signcolumn=yes
+
 " Use K for show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 
@@ -440,6 +456,24 @@ nmap <leader>r <Plug>(coc-references)
 
 " Use <c-k> for trigger completion.
 inoremap <silent><expr> <c-k> coc#refresh()
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
 " }} COC
 
 " {{ ALE - Async lint engine
@@ -505,3 +539,19 @@ nnoremap D   :<C-u>silent! move+<CR>==
 xnoremap U   :<C-u>silent! '<,'>move-2<CR>gv=gv
 xnoremap D   :<C-u>silent! '<,'>move'>+<CR>gv=gv
 " }} Move 1 line or a block of code up or down
+
+" " {{ coc-snippets
+" Use <C-l> to trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+" Use <C-j> to select text for visual text of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+" Use <C-j> to jump to forward placeholder, which is default
+let g:coc_snippet_next = '<c-j>'
+" Use <C-k> to jump to backward placeholder, which is default
+let g:coc_snippet_prev = '<c-k>'
+
+let g:UltiSnipsExpandTrigger = '<F3>'
+" }}
+"
+vmap <Leader>,a :Buffers<CR>
+noremap <Leader>,a :Buffers<CR>
