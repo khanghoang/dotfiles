@@ -1,6 +1,7 @@
 # run this by `brew bundle`
 brew "fd"
 brew "fx"
+brew "fzf"
 brew "bat"
 brew "diff-so-fancy"
 brew "universal-ctags/universal-ctags/universal-ctags", args: ['HEAD']
