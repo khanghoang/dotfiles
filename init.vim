@@ -159,7 +159,7 @@ noremap ^ 0
 :set ignorecase
 
 nnoremap gA :Ag! <cword><CR>
-nnoremap <Leader><Space> :FZF <CR>
+nnoremap <Leader><Space> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclude-standard --others --cached'})) <CR>
 
 "clear highlight search
 nnoremap <Esc> :noh<CR><Esc>
