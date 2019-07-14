@@ -16,6 +16,11 @@ link() {
 }
 
 link ~/dotfiles/.tigrc ~/.tigrc
+link ~/dotfiles/.ctags ~/.ctags
+link ~/dotfiles/.newsboat ~/.newsboat
+link ~/dotfiles/.gitignore ~/.gitignore
+link ~/dotfiles/.gitignore ~/.gitignore
+link ~/dotfiles/.ctags ~/.ctags
 link ~/dotfiles/.tmux.conf ~/.tmux.conf
 link ~/dotfiles/.zshrc ~/.zshrc
 link ~/dotfiles/.gitconfig ~/.gitconfig
