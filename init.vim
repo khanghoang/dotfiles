@@ -387,8 +387,8 @@ let g:easytags_suppress_ctags_warning = 1
 " Gitgutter shortcuts
 nmap <Leader>ha <Plug>GitGutterNextStageHunk
 nmap <Leader>ho <Plug>GitGutterUndoHunk
-nmap <Leader>hd <Plug>GitGutterNextHunk
-nmap <Leader>hu <Plug>GitGutterPrevHunk
+nmap <Leader>,d <Plug>GitGutterNextHunk
+nmap <Leader>,u <Plug>GitGutterPrevHunk
 nmap <Leader>hp <Plug>GitGutterPreviewHunk
 
 " Git gutter modified/added/removed signs
