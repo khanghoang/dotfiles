@@ -553,5 +553,4 @@ let g:coc_snippet_prev = '<c-k>'
 let g:UltiSnipsExpandTrigger = '<F3>'
 " }}
 "
-vmap <Leader>,a :Buffers<CR>
-noremap <Leader>,a :Buffers<CR>
+noremap ; :GFiles?<CR>
