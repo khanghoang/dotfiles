@@ -7,6 +7,8 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'leafgarland/typescript-vim'
+" Plug 'MaxMEllon/vim-jsx-pretty'
 
 " UndoTree
 Plug 'mbbill/undotree'
@@ -555,3 +557,6 @@ let g:UltiSnipsExpandTrigger = '<F3>'
 "
 vmap <Leader>,a :Buffers<CR>
 noremap <Leader>,a :Buffers<CR>
+noremap <TAB><TAB> :ccl<CR>
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
