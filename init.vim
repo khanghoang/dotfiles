@@ -57,6 +57,9 @@ Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 Plug 'neoclide/coc.nvim', { 'do': 'yarn install'  }
 
+" Distract free writing
+Plug 'junegunn/goyo.vim'
+
 " vim-test config
 " make test commands execute using neoterm
 Plug 'kassio/neoterm'
@@ -561,3 +564,16 @@ noremap <TAB><TAB> :ccl<CR>
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 noremap ; :GFiles?<CR>
+
+nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
+
+" Goyo command, call it by `:Writemode` and `:Codemode`
+:command Writemode setlocal spell | Goyo 70
+:command Codemode Goyo! 70
+
+" highlight line number
+set cursorline
+" set the whole current line
+highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+" set color for number in the gutter
+highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff
