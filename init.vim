@@ -16,6 +16,9 @@ Plug 'mbbill/undotree'
 " NERDTree + Ag
 Plug 'taiansu/nerdtree-ag'
 
+" Typescript
+Plug 'leafgarland/typescript-vim'
+
 " https://medium.com/@kuiro5/best-way-to-set-up-ctags-with-neovim-37be99c1bd11
 " Ctags for NeoVim
 " Plug 'ludovicchabant/vim-gutentags'
@@ -40,7 +43,7 @@ Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
 Plug 'szw/vim-tags'
 Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'skwp/vim-html-escape'
@@ -304,6 +307,7 @@ nmap <silent> <Leader>T :TestFile<CR>
 
 " ctags open in vertical split
 map <leader>,d :vsp <CR> <Plug>(coc-definition)
+map <leader>,h <Plug>(coc-diagnostic-next)
 
 let g:ale_sign_error = '→'
 let g:ale_sign_warning = '→' 
@@ -558,8 +562,8 @@ let g:coc_snippet_prev = '<c-k>'
 let g:UltiSnipsExpandTrigger = '<F3>'
 " }}
 "
-vmap <Leader>,a :Buffers<CR>
-noremap <Leader>,a :Buffers<CR>
+vmap <Leader>,b :Buffers<CR>
+noremap <Leader>,b :Buffers<CR>
 noremap <TAB><TAB> :ccl<CR>
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
@@ -577,3 +581,27 @@ set cursorline
 highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 " set color for number in the gutter
 highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff
+
+" https://github.com/majutsushi/tagbar/wiki#typescript
+let g:tagbar_type_typescript = {                                                  
+  \ 'ctagsbin' : 'tstags',                                                        
+  \ 'ctagsargs' : '-f-',                                                           
+  \ 'kinds': [                                                                     
+    \ 'e:enums:0:1',                                                               
+    \ 'f:function:0:1',                                                            
+    \ 't:typealias:0:1',                                                           
+    \ 'M:Module:0:1',                                                              
+    \ 'I:import:0:1',                                                              
+    \ 'i:interface:0:1',                                                           
+    \ 'C:class:0:1',                                                               
+    \ 'm:method:0:1',                                                              
+    \ 'p:property:0:1',                                                            
+    \ 'v:variable:0:1',                                                            
+    \ 'c:const:0:1',                                                              
+  \ ],                                                                            
+  \ 'sort' : 0                                                                    
+\ }   
+
+nmap <c-p> :TagbarToggle<CR>
+
+let g:coc_node_args = ['--nolazy', '--inspect-brk=9229']
