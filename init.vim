@@ -94,6 +94,9 @@ Plug 'whatyouhide/vim-lengthmatters'
 Plug 'Shougo/neosnippet.vim'
 Plug 'epilande/vim-es2015-snippets'
 
+" The donkey vim starting screen
+Plug 'mhinz/vim-startify'
+
 " React code snippets
 Plug 'epilande/vim-react-snippets'
 
