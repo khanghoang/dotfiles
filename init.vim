@@ -13,6 +13,9 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " UndoTree
 Plug 'mbbill/undotree'
 
+" Smooth scroll
+Plug 'yuttie/comfortable-motion.vim'
+
 " NERDTree + Ag
 Plug 'taiansu/nerdtree-ag'
 
@@ -30,12 +33,10 @@ Plug 'tpope/vim-haml'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
-Plug 'godlygeek/tabular'
 Plug 'pangloss/vim-javascript', { 'for': '*javascript*' }
 Plug 'mxw/vim-jsx', { 'for': '*javascript*' }
 Plug 'leshill/vim-json'
 Plug 'rking/ag.vim'
-Plug 'vim-ruby/vim-ruby'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'itchyny/lightline.vim'
 Plug 'terryma/vim-multiple-cursors'
@@ -43,7 +44,6 @@ Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
 Plug 'szw/vim-tags'
 Plug 'airblade/vim-gitgutter'
-" Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'skwp/vim-html-escape'
@@ -77,19 +77,10 @@ Plug 'vim-scripts/git-time-lapse'
 "Comment out stuffs
 Plug 'tomtom/tcomment_vim'
 
-Plug 'mhinz/vim-startify'
 Plug 'romainl/flattened'
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = '│'
 
-Plug 'bootleq/vim-textobj-rubysymbol'
-Plug 'coderifous/textobj-word-column.vim'
-Plug 'kana/vim-textobj-datetime'
-Plug 'kana/vim-textobj-entire'
-Plug 'kana/vim-textobj-function'
-Plug 'kana/vim-textobj-user'
-Plug 'lucapette/vim-textobj-underscore'
-Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'mhartington/oceanic-next'
 
 Plug 'jiangmiao/auto-pairs'
@@ -582,26 +573,34 @@ highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
 " set color for number in the gutter
 highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff
 
+" Vim tagbar config {{
 " https://github.com/majutsushi/tagbar/wiki#typescript
 let g:tagbar_type_typescript = {                                                  
-  \ 'ctagsbin' : 'tstags',                                                        
-  \ 'ctagsargs' : '-f-',                                                           
-  \ 'kinds': [                                                                     
-    \ 'e:enums:0:1',                                                               
-    \ 'f:function:0:1',                                                            
-    \ 't:typealias:0:1',                                                           
-    \ 'M:Module:0:1',                                                              
-    \ 'I:import:0:1',                                                              
-    \ 'i:interface:0:1',                                                           
-    \ 'C:class:0:1',                                                               
-    \ 'm:method:0:1',                                                              
-    \ 'p:property:0:1',                                                            
-    \ 'v:variable:0:1',                                                            
-    \ 'c:const:0:1',                                                              
-  \ ],                                                                            
-  \ 'sort' : 0                                                                    
-\ }   
+      \ 'ctagsbin' : 'tstags',                                                        
+      \ 'ctagsargs' : '-f-',                                                           
+      \ 'kinds': [                                                                     
+      \ 'e:enums:0:1',                                                               
+      \ 'f:function:0:1',                                                            
+      \ 't:typealias:0:1',                                                           
+      \ 'M:Module:0:1',                                                              
+      \ 'I:import:0:1',                                                              
+      \ 'i:interface:0:1',                                                           
+      \ 'C:class:0:1',                                                               
+      \ 'm:method:0:1',                                                              
+      \ 'p:property:0:1',                                                            
+      \ 'v:variable:0:1',                                                            
+      \ 'c:const:0:1',                                                              
+      \ ],                                                                            
+      \ 'sort' : 0                                                                    
+      \ }   
 
 nmap <c-p> :TagbarToggle<CR>
+" }}
 
-let g:coc_node_args = ['--nolazy', '--inspect-brk=9229']
+" Debug neovim nodejs plugins
+" let g:coc_node_args = ['--nolazy', '--inspect-brk=9229']
+
+" Vim smooth scroll config {{
+let g:comfortable_motion_friction = 10.0
+let g:comfortable_motion_air_drag = 10.0
+" }}
