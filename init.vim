@@ -32,6 +32,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-haml'
 Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-endwise'
 Plug 'pangloss/vim-javascript', { 'for': '*javascript*' }
 Plug 'mxw/vim-jsx', { 'for': '*javascript*' }
