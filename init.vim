@@ -7,12 +7,20 @@ Plug 'Lokaltog/vim-easymotion'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'leafgarland/typescript-vim'
+" Plug 'MaxMEllon/vim-jsx-pretty'
 
 " UndoTree
 Plug 'mbbill/undotree'
 
+" Smooth scroll
+Plug 'yuttie/comfortable-motion.vim'
+
 " NERDTree + Ag
 Plug 'taiansu/nerdtree-ag'
+
+" Typescript
+Plug 'leafgarland/typescript-vim'
 
 " https://medium.com/@kuiro5/best-way-to-set-up-ctags-with-neovim-37be99c1bd11
 " Ctags for NeoVim
@@ -26,12 +34,10 @@ Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-endwise'
-Plug 'godlygeek/tabular'
 Plug 'pangloss/vim-javascript', { 'for': '*javascript*' }
 Plug 'mxw/vim-jsx', { 'for': '*javascript*' }
 Plug 'leshill/vim-json'
 Plug 'rking/ag.vim'
-Plug 'vim-ruby/vim-ruby'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'itchyny/lightline.vim'
 Plug 'terryma/vim-multiple-cursors'
@@ -39,7 +45,6 @@ Plug 'wellle/targets.vim'
 Plug 'majutsushi/tagbar'
 Plug 'szw/vim-tags'
 Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim'
 Plug 'Shougo/neosnippet'
 Plug 'Shougo/neosnippet-snippets'
 Plug 'skwp/vim-html-escape'
@@ -56,6 +61,9 @@ Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
 Plug 'neoclide/coc.nvim', { 'do': 'yarn install'  }
 
+" Distract free writing
+Plug 'junegunn/goyo.vim'
+
 " vim-test config
 " make test commands execute using neoterm
 Plug 'kassio/neoterm'
@@ -70,19 +78,10 @@ Plug 'vim-scripts/git-time-lapse'
 "Comment out stuffs
 Plug 'tomtom/tcomment_vim'
 
-Plug 'mhinz/vim-startify'
 Plug 'romainl/flattened'
 Plug 'Yggdroot/indentLine'
 let g:indentLine_char = '│'
 
-Plug 'bootleq/vim-textobj-rubysymbol'
-Plug 'coderifous/textobj-word-column.vim'
-Plug 'kana/vim-textobj-datetime'
-Plug 'kana/vim-textobj-entire'
-Plug 'kana/vim-textobj-function'
-Plug 'kana/vim-textobj-user'
-Plug 'lucapette/vim-textobj-underscore'
-Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'mhartington/oceanic-next'
 
 Plug 'jiangmiao/auto-pairs'
@@ -95,6 +94,9 @@ Plug 'whatyouhide/vim-lengthmatters'
 " ES2015 code snippets (Optional)
 Plug 'Shougo/neosnippet.vim'
 Plug 'epilande/vim-es2015-snippets'
+
+" The donkey vim starting screen
+Plug 'mhinz/vim-startify'
 
 " React code snippets
 Plug 'epilande/vim-react-snippets'
@@ -300,6 +302,7 @@ nmap <silent> <Leader>T :TestFile<CR>
 
 " ctags open in vertical split
 map <leader>,d :vsp <CR> <Plug>(coc-definition)
+map <leader>,h <Plug>(coc-diagnostic-next)
 
 let g:ale_sign_error = '→'
 let g:ale_sign_warning = '→' 
@@ -554,4 +557,54 @@ let g:coc_snippet_prev = '<c-k>'
 let g:UltiSnipsExpandTrigger = '<F3>'
 " }}
 "
+vmap <Leader>,b :Buffers<CR>
+noremap <Leader>,b :Buffers<CR>
+noremap <TAB><TAB> :ccl<CR>
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 noremap ; :GFiles?<CR>
+
+nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
+
+" Goyo command, call it by `:Writemode` and `:Codemode`
+:command Writemode setlocal spell | Goyo 70
+:command Codemode Goyo! 70
+
+" highlight line number
+set cursorline
+" set the whole current line
+highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+" set color for number in the gutter
+highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff
+
+" Vim tagbar config {{
+" https://github.com/majutsushi/tagbar/wiki#typescript
+let g:tagbar_type_typescript = {                                                  
+      \ 'ctagsbin' : 'tstags',                                                        
+      \ 'ctagsargs' : '-f-',                                                           
+      \ 'kinds': [                                                                     
+      \ 'e:enums:0:1',                                                               
+      \ 'f:function:0:1',                                                            
+      \ 't:typealias:0:1',                                                           
+      \ 'M:Module:0:1',                                                              
+      \ 'I:import:0:1',                                                              
+      \ 'i:interface:0:1',                                                           
+      \ 'C:class:0:1',                                                               
+      \ 'm:method:0:1',                                                              
+      \ 'p:property:0:1',                                                            
+      \ 'v:variable:0:1',                                                            
+      \ 'c:const:0:1',                                                              
+      \ ],                                                                            
+      \ 'sort' : 0                                                                    
+      \ }   
+
+nmap <c-p> :TagbarToggle<CR>
+" }}
+
+" Debug neovim nodejs plugins
+" let g:coc_node_args = ['--nolazy', '--inspect-brk=9229']
+
+" Vim smooth scroll config {{
+let g:comfortable_motion_friction = 10.0
+let g:comfortable_motion_air_drag = 10.0
+" }}
