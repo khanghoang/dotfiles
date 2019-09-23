@@ -1,6 +1,10 @@
 " set termguicolors
 call plug#begin()
 
+Plug 'meain/vim-package-info', { 'do': 'npm install' }
+Plug 'yardnsm/vim-import-cost', { 'do': 'npm install' }
+Plug 'majutsushi/tagbar'
+
 Plug 'neovim/node-host'
 Plug 'moll/vim-node'
 Plug 'Lokaltog/vim-easymotion'
@@ -9,6 +13,9 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Plug 'leafgarland/typescript-vim'
 " Plug 'MaxMEllon/vim-jsx-pretty'
+
+" Writemode
+Plug 'junegunn/goyo.vim'
 
 " UndoTree
 Plug 'mbbill/undotree'
@@ -25,7 +32,7 @@ Plug 'leafgarland/typescript-vim'
 " https://medium.com/@kuiro5/best-way-to-set-up-ctags-with-neovim-37be99c1bd11
 " Ctags for NeoVim
 " Plug 'ludovicchabant/vim-gutentags'
-" Plug 'xolox/vim-easytags'
+Plug 'xolox/vim-easytags'
 Plug 'xolox/vim-misc'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'junegunn/fzf.vim'
@@ -361,6 +368,27 @@ command! -bang -nargs=* FuzzySearchBookmark
 
 nnoremap <Leader>,b :FuzzySearchBookmark <CR>
 
+" Fuzzy search current changed file
+function! s:open_git_change(line)
+  let parser = split(a:line)
+  let path = parser[0]
+  let linenumber = 0
+  execute "edit +" . linenumber . " " . path
+endfunction
+
+command! -bang -nargs=* FuzzySearchGitChanges
+      \ call fzf#vim#ag(<q-args>,
+      \   {
+      \      'source': "git status | grep modified | awk '{print $2}' | sed 's#~#'\"$HOME\"'#g'",
+      \      'options': '--no-hscroll --no-multi --ansi --prompt "Change >>> " --preview "bat {}"',
+      \      'down':    '50%',
+      \      'sink': function('s:open_git_change')
+      \   },
+      \   <bang>0
+      \ )
+
+nnoremap \ :FuzzySearchGitChanges <CR>
+
 " Fuzzy search and checkout git branches
 function! s:open_branch_fzf(line)
   let parser = split(a:line)
@@ -394,6 +422,29 @@ nmap <Leader>ho <Plug>GitGutterUndoHunk
 nmap <Leader>,d <Plug>GitGutterNextHunk
 nmap <Leader>,u <Plug>GitGutterPrevHunk
 nmap <Leader>hp <Plug>GitGutterPreviewHunk
+
+function! NextHunkAllBuffers()
+  let line = line('.')
+  GitGutterNextHunk
+  if line('.') != line
+    return
+  endif
+
+  let bufnr = bufnr('')
+  while 1
+    bnext
+    if bufnr('') == bufnr
+      return
+    endif
+    if !empty(GitGutterGetHunks())
+      normal! 1G
+      GitGutterNextHunk
+      return
+    endif
+  endwhile
+endfunction
+
+" nmap <silent> <TAB> :call NextHunkAllBuffers()<CR>
 
 " Git gutter modified/added/removed signs
 let g:gitgutter_sign_added = '│'
@@ -447,9 +498,6 @@ function! s:show_documentation()
   endif
 endfunction
 
-" Required for operations modifying multiple buffers like rename.
-set hidden
-
 " Remap keys for gotos
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
@@ -457,9 +505,6 @@ nmap <leader>d <Plug>(coc-definition)
 nmap <leader>y <Plug>(coc-type-definition)
 nmap <leader>gi <Plug>(coc-implementation)
 nmap <leader>r <Plug>(coc-references)
-
-" Use <c-k> for trigger completion.
-inoremap <silent><expr> <c-k> coc#refresh()
 
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
@@ -474,9 +519,11 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Use <c-space> to trigger completion.
+" inoremap <silent><expr> <c-l> coc#refresh()
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " }} COC
 
@@ -552,7 +599,7 @@ vmap <C-j> <Plug>(coc-snippets-select)
 " Use <C-j> to jump to forward placeholder, which is default
 let g:coc_snippet_next = '<c-j>'
 " Use <C-k> to jump to backward placeholder, which is default
-let g:coc_snippet_prev = '<c-k>'
+" let g:coc_snippet_prev = '<c-k>'
 
 let g:UltiSnipsExpandTrigger = '<F3>'
 " }}
@@ -573,7 +620,7 @@ nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 " highlight line number
 set cursorline
 " set the whole current line
-highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
+" highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=8 guibg=NONE guifg=NONE
 " set color for number in the gutter
 highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff
 
@@ -608,3 +655,4 @@ nmap <c-p> :TagbarToggle<CR>
 let g:comfortable_motion_friction = 10.0
 let g:comfortable_motion_air_drag = 10.0
 " }}
+set wrap

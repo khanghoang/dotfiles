@@ -94,3 +94,10 @@ if command -v brew >/dev/null 2>&1; then
   # Load rupa's z if installed
   [ -f $(brew --prefix)/etc/profile.d/z.sh ] && source $(brew --prefix)/etc/profile.d/z.sh
 fi
+
+function run() {
+  local scripts=$(cat package.json | python -c 'import sys, json; print "\n".join(sorted(["\t".join(s) for s in json.load(sys.stdin)["scripts"].items()]))')
+  local script=$(echo "$scripts" | column -t -s $'\t' | fzf --height 50% --reverse --min-height 20 | awk '{print $1}')
+  
+  [ -n "$script" ]] && npm run $script
+}
