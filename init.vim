@@ -23,6 +23,8 @@ Plug 'mbbill/undotree'
 " Smooth scroll
 Plug 'yuttie/comfortable-motion.vim'
 
+Plug '/Users/khanghoang/code/coc-jest'
+
 " NERDTree + Ag
 Plug 'taiansu/nerdtree-ag'
 
@@ -66,7 +68,7 @@ Plug 'jparise/vim-graphql'
 
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
-Plug 'neoclide/coc.nvim', { 'do': 'yarn install'  }
+Plug 'khanghoang/coc.nvim', { 'do': 'yarn install'  }
 
 " Distract free writing
 Plug 'junegunn/goyo.vim'

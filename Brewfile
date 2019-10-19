@@ -28,6 +28,7 @@ brew "zsh-autosuggestions"
 brew "shellcheck"
 brew "terminal-notifier"
 
+
 # mkcert is a simple tool for making locally-trusted development certificates
 brew "mkcert"
 brew "nss"
@@ -37,6 +38,13 @@ tap "homebrew/cask"
 cask "font-roboto-mono"
 cask "font-roboto-mono-for-powerline"
 cask "font-source-code-pro"
+
+brew "ffmpeg"
+tap "phinze/homebrew-cask"
+cask "x-quartz"
+# click through the stuff
+brew "gifsicle"
+brew "imagemagick"
 
 # text linter
 tap "ValeLint/vale"
