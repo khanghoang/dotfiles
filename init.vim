@@ -66,13 +66,6 @@ Plug 'neoclide/coc.nvim', { 'do': 'yarn install'  }
 " Distract free writing
 Plug 'junegunn/goyo.vim'
 
-" vim-test config
-" make test commands execute using neoterm
-Plug 'kassio/neoterm'
-Plug 'janko-m/vim-test'
-Plug 'christoomey/vim-tmux-runner'
-let test#strategy = "neoterm"
-
 Plug 'Galooshi/vim-import-js'
 
 Plug 'vim-scripts/git-time-lapse'
@@ -168,19 +161,6 @@ nnoremap <Leader><Space> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclu
 
 "clear highlight search
 nnoremap <Esc> :noh<CR><Esc>
-
-let g:neoterm_size = '80v'
-let g:neoterm_automap_keys = ',,t'
-" Useful maps
-" hide/close terminal
-nnoremap <Leader>tg :call neoterm#toggle()<cr>
-
-" allow to navigation as normal
-au TermOpen *neoterm* :tnoremap <buffer> <Esc> <C-\><C-n>
-au TermOpen *neoterm* :tnoremap <buffer> <C-h> <C-\><C-n><C-w>h
-au TermOpen *neoterm* :tnoremap <buffer> <C-k> <C-\><C-n><C-w>k
-au TermOpen *neoterm* :tnoremap <buffer> <C-j> <C-\><C-n><C-w>j
-au TermOpen *neoterm* :tnoremap <buffer> <C-l> <C-\><C-n><C-w>l
 
 "jsx highlight
 let g:jsx_ext_required = 0
