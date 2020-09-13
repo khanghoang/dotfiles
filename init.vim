@@ -18,6 +18,7 @@ Plug 'taiansu/nerdtree-ag'
 
 " Typescript
 Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 
 Plug 'haorenW1025/floatLf-nvim'
 Plug 'vifm/vifm.vim'
@@ -612,3 +613,5 @@ if has('nvim') && exists('&winblend') && &termguicolors
     call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
   endfunction
 endif
+
+set vicmd=nvim
