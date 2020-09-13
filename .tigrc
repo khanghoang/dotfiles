@@ -3,3 +3,14 @@ bind diff R !git rebase -i %(commit)^
 
 bind generic 0 !git checkout %(commit)
 bind generic 9 !@sh -c "echo %(commit) | pbcopy"
+
+bind status P !git push origin HEAD
+bind status D !@?rm %(file)
+bind generic + !git commit --amend
+bind main ! !git revert %(commit)
+bind stash D !?git stash drop %(stash)
+bind stash A !?git stash apply %(stash)
+bind status S !?git stash save --keep-index %(prompt)
+
+set main-options = --exclude=refs/stash --all
+set line-graphics = utf-8
