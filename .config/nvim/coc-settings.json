@@ -1,0 +1,9 @@
+{
+  "codeLens.enable": true,
+  "languageserver": {
+    "reason": {
+      "command": "reason-language-server",
+      "filetypes": ["reason"]
+    }
+  }
+}
