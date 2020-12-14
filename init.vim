@@ -4,11 +4,12 @@ call plug#begin('~/.local/share/nvim/plugged')
 Plug 'neovim/node-host'
 Plug 'moll/vim-node'
 Plug 'Lokaltog/vim-easymotion'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'scrooloose/nerdcommenter'
+" Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+" Plug 'scrooloose/nerdcommenter'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Plug 'leafgarland/typescript-vim'
 " Plug 'MaxMEllon/vim-jsx-pretty'
+" Plug 'reasonml-editor/vim-reason-plus'
 
 " UndoTree
 Plug 'mbbill/undotree'
@@ -30,10 +31,12 @@ Plug 'vifm/vifm.vim'
 Plug 'xolox/vim-misc'
 Plug 'heavenshell/vim-jsdoc'
 Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-haml'
-Plug 'tpope/vim-bundler'
+" Plug 'tpope/vim-haml'
+" Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-endwise'
 Plug 'pangloss/vim-javascript', { 'for': '*javascript*' }
 Plug 'mxw/vim-jsx', { 'for': '*javascript*' }
@@ -259,7 +262,7 @@ let g:neosnippet#snippets_directory='~/.vim/bundle/vim-snippets/snippets'
 
 " neo format for arettier
 let g:neoformat_enabled_javascript = ['prettier']
-autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ none\ --tab-width\ 4\ --jsx-bracket-same-line\ true
+" autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow\ --single-quote\ --trailing-comma\ none\ --tab-width\ 4\ --jsx-bracket-same-line\ true
 let g:neoformat_try_formatprg = 1
 
 " ==== NERD tree
@@ -372,11 +375,11 @@ let g:easytags_suppress_ctags_warning = 1
 
 " {{ Gitgutter
 " Gitgutter shortcuts
-nmap <Leader>ha <Plug>GitGutterNextStageHunk
-nmap <Leader>ho <Plug>GitGutterUndoHunk
-nmap <Leader>,d <Plug>GitGutterNextHunk
-nmap <Leader>,u <Plug>GitGutterPrevHunk
-nmap <Leader>hp <Plug>GitGutterPreviewHunk
+nmap <Leader>ha <Plug>(GitGutterNextStageHunk)
+nmap <Leader>ho <Plug>(GitGutterUndoHunk)
+nmap <Leader>,d <Plug>(GitGutterNextHunk)
+nmap <Leader>,u <Plug>(GitGutterPrevHunk)
+nmap <Leader>hp <Plug>(GitGutterPreviewHunk)
 
 " Git gutter modified/added/removed signs
 let g:gitgutter_sign_added = '│'
@@ -404,6 +407,9 @@ nnoremap <Leader>b :Gblame<CR>
 " }} Vim Tig keymap
 
 " {{ COC
+
+let g:coc_global_extensions = [ 'coc-reason', 'coc-tsserver', 'coc-json', 'coc-tabnine' ]
+
 " if hidden is not set, TextEdit might fail.
 set hidden
 
@@ -614,4 +620,32 @@ if has('nvim') && exists('&winblend') && &termguicolors
   endfunction
 endif
 
-set vicmd=nvim
+" ----------------------------------------------------------------------------
+" DiffRev
+" ----------------------------------------------------------------------------
+let s:git_status_dictionary = {
+            \ "A": "Added",
+            \ "B": "Broken",
+            \ "C": "Copied",
+            \ "D": "Deleted",
+            \ "M": "Modified",
+            \ "R": "Renamed",
+            \ "T": "Changed",
+            \ "U": "Unmerged",
+            \ "X": "Unknown"
+            \ }
+function! s:get_diff_files(rev)
+  let list = map(split(system(
+              \ 'git diff --name-status '.a:rev), '\n'),
+              \ '{"filename":matchstr(v:val, "\\S\\+$"),"text":s:git_status_dictionary[matchstr(v:val, "^\\w")]}'
+              \ )
+  call setqflist(list)
+  copen
+endfunction
+
+command! -nargs=1 DiffRev call s:get_diff_files(<q-args>)
+
+" ----------------------------------------------------------------------------
+" Git-fugitive config
+" ----------------------------------------------------------------------------
+let g:github_enterprise_urls = ['https://github.paypal.com']
