@@ -19,6 +19,9 @@ Plug 'epilande/vim-es2015-snippets'
 Plug 'epilande/vim-react-snippets'
 Plug 'jhkersul/vim-jest-snippets'
 
+" Node debugger
+Plug 'puremourning/vimspector'
+
 call plug#end()
 
 map <Leader>gf :ImportJSGoto<CR>
@@ -135,3 +138,17 @@ let g:coc_snippet_prev = '<c-k>'
 let g:UltiSnipsExpandTrigger = '<F3>'
 " }}
 "
+
+nmap <Leader>p <Plug>VimspectorContinue
+nmap <Leader>k <Plug>VimspectorStepOver
+nmap <Leader>l <Plug>VimspectorStepInto
+nmap <Leader>h <Plug>VimspectorStepOut
+nmap <Leader>r <Plug>VimspectorRunToCursor
+nmap <Leader>c <Plug>VimspectorToggleBreakpoint
+nmap <Leader>v <Plug>VimspectorRestart
+
+sign define vimspectorBP text=o          texthl=WarningMsg
+sign define vimspectorBPCond text=o?     texthl=WarningMsg
+sign define vimspectorBPDisabled text=o! texthl=LineNr
+sign define vimspectorPC text=~>        texthl=MatchParen
+sign define vimspectorPCBP text=o>       texthl=MatchParen
