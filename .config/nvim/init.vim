@@ -2,27 +2,11 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
 Plug 'Lokaltog/vim-easymotion'
-Plug 'reasonml-editor/vim-reason-plus'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-
-" NERDTree + Ag
-Plug 'taiansu/nerdtree-ag'
-
-" Typescript
-Plug 'leafgarland/typescript-vim'
 
 Plug 'haorenW1025/floatLf-nvim'
 Plug 'vifm/vifm.vim'
 
-" https://medium.com/@kuiro5/best-way-to-set-up-ctags-with-neovim-37be99c1bd11
-" Ctags for NeoVim
-" Plug 'ludovicchabant/vim-gutentags'
-" Plug 'xolox/vim-easytags'
-Plug 'xolox/vim-misc'
-Plug 'heavenshell/vim-jsdoc'
-Plug 'junegunn/fzf.vim'
-Plug 'tpope/vim-haml'
-Plug 'tpope/vim-bundler'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-endwise'
@@ -30,32 +14,25 @@ Plug 'rking/ag.vim'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'itchyny/lightline.vim'
 Plug 'terryma/vim-multiple-cursors'
-Plug 'wellle/targets.vim'
-Plug 'majutsushi/tagbar'
-Plug 'szw/vim-tags'
 Plug 'airblade/vim-gitgutter'
-Plug 'skwp/vim-html-escape'
-Plug 'justinmk/vim-sneak'
-Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'sbdchd/neoformat'
 Plug 'jparise/vim-graphql'
 Plug 'w0rp/ale'
 Plug 'maximbaz/lightline-ale'
-
-" Distract free writing
-Plug 'junegunn/goyo.vim'
-
-" vim-test config
-" make test commands execute using neoterm
-Plug 'kassio/neoterm'
-Plug 'janko-m/vim-test'
-Plug 'christoomey/vim-tmux-runner'
-let test#strategy = "neoterm"
-
 Plug 'vim-scripts/git-time-lapse'
+
+" Measure the 
+Plug 'tweekmonster/startuptime.vim'
 
 "Comment out stuffs
 Plug 'tomtom/tcomment_vim'
+
+" Plug 'wellle/targets.vim'
+" Plug 'majutsushi/tagbar'
+" Plug 'szw/vim-tags'
+" Plug 'skwp/vim-html-escape'
+" Plug 'justinmk/vim-sneak'
+" Plug 'MarcWeber/vim-addon-mw-utils'
 
 Plug 'romainl/flattened'
 Plug 'Yggdroot/indentLine'
@@ -64,8 +41,6 @@ let g:indentLine_char = '│'
 Plug 'mhartington/oceanic-next'
 
 Plug 'jiangmiao/auto-pairs'
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
 Plug 'whatyouhide/vim-lengthmatters'
 
 " The donkey vim starting screen
@@ -88,6 +63,7 @@ Plug 'Shougo/neosnippet-snippets'
 Plug 'tpope/vim-surround'
 
 Plug 'frankier/neovim-colors-solarized-truecolor-only'
+Plug 'puremourning/vimspector'
 
 " auto reload
 autocmd! bufwritepost init.vim so %
@@ -137,7 +113,6 @@ nnoremap <Leader><Space> :call fzf#run(fzf#wrap({'source': 'git ls-files --exclu
 nnoremap <Esc> :noh<CR><Esc>
 
 let g:neoterm_size = '80v'
-let g:neoterm_automap_keys = ',,t'
 " Useful maps
 " hide/close terminal
 nnoremap <Leader>tg :call neoterm#toggle()<cr>
@@ -191,8 +166,8 @@ set foldlevel=99
 " https://medium.com/@docodemore/an-alternative-to-operator-mono-font-5e5d040e1c7e#.z15iviagh
 let g:Guifont="Operator Mono:h14"
 
-"UI
-set number
+"UI relative line number
+set number relativenumber
 
 noremap <Leader>ne :lNext<CR>
 noremap <Leader>cl :lclose<CR>
@@ -407,7 +382,7 @@ vmap <Leader>,b :Buffers<CR>
 noremap <Leader>,b :Buffers<CR>
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-noremap ; :GFiles?<CR>
+" noremap ; :GFiles?<CR>
 
 nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 
@@ -482,4 +457,4 @@ if has('nvim') && exists('&winblend') && &termguicolors
   endfunction
 endif
 
-let g:coc_global_extensions = [ 'coc-reason' ]
+" let g:coc_global_extensions = [ 'coc-reason' ]
