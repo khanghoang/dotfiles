@@ -7,6 +7,8 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'haorenW1025/floatLf-nvim'
 Plug 'vifm/vifm.vim'
 
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-endwise'
@@ -73,6 +75,9 @@ call plug#end()
 " ------
 " Configuration starts here
 " ------
+
+" disable swapfile
+set noswapfile
 
 if (has("termguicolors"))
   set termguicolors
