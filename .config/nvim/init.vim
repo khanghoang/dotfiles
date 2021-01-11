@@ -461,5 +461,3 @@ if has('nvim') && exists('&winblend') && &termguicolors
     call nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
   endfunction
 endif
-
-" let g:coc_global_extensions = [ 'coc-reason' ]
