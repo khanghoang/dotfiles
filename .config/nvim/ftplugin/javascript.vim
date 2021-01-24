@@ -44,7 +44,11 @@ noremap <Leader>,w :ImportJSFix<CR>
 map <leader>,d :vsp <CR> <Plug>(coc-definition)
 map <leader>,h <Plug>(coc-diagnostic-next)
 
+"-- FOLDING --
+set foldmethod=syntax "syntax highlighting items specify folds
+set foldcolumn=1 "defines 1 col at window left, to indicate folding
 let javaScript_fold=1 
+set foldlevelstart=99 "start file with all folds opened
 
 set t_ZH=^[[3m
 set t_ZR=^[[23m
