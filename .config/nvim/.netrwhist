@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='/Users/khanghoang/.zgen'
+let g:netrw_dirhist_5='/Users/khanghoang/code/brain/graphql/__tests__'
+let g:netrw_dirhist_4='/Users/khanghoang/code/brain/payment'
+let g:netrw_dirhist_3='/Users/khanghoang/code/braintree/routes'
+let g:netrw_dirhist_2='/Users/khanghoang/code/javascript-workout/contract'
+let g:netrw_dirhist_1='/Users/khanghoang/code/motion/store'

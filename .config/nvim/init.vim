@@ -6,6 +6,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 
 Plug 'haorenW1025/floatLf-nvim'
 Plug 'vifm/vifm.vim'
+Plug 'junegunn/fzf.vim'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
@@ -383,11 +384,13 @@ xnoremap U   :<C-u>silent! '<,'>move-2<CR>gv=gv
 xnoremap D   :<C-u>silent! '<,'>move'>+<CR>gv=gv
 " }} Move 1 line or a block of code up or down
 
-vmap <Leader>,b :Buffers<CR>
-noremap <Leader>,b :Buffers<CR>
-
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-" noremap ; :GFiles?<CR>
+
+nnoremap <silent> <Leader>; :GFiles?<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>f :Rg<CR>
+nnoremap <silent> <Leader>/ :BLines<CR>
+nnoremap <silent> <Leader>' :Marks<CR>
 
 nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 

@@ -35,8 +35,8 @@ autocmd FileType javascript setlocal formatprg=prettier\ --stdin\ --parser\ flow
 let g:neoformat_try_formatprg = 1
 
 " custom
-vmap <Leader>,f :Neoformat<CR>
-noremap <Leader>,f :Neoformat<CR>
+vmap <Leader>,f :Prettier<CR>
+noremap <Leader>,f :Prettier<CR>
 vmap <Leader>,w :ImportJSFix<CR>
 noremap <Leader>,w :ImportJSFix<CR>
 
