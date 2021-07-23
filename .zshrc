@@ -33,7 +33,7 @@ if ! zgen saved; then
   zgen load sindresorhus/pure
 
   # notify for long running commands
-  zgen load marzocchi/zsh-notify
+  # zgen load marzocchi/zsh-notify
 
   # vi mode for terminal
   zgen load jeffreytse/zsh-vi-mode
@@ -53,87 +53,51 @@ nvm() {
   nvm "$@"
 }
 
-# load fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # set default editor
 export EDITOR=nvim
 export VISUAL=nvim
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/bin"
+export PATH="$PATH:$HOME/local/bin/nvim"
 export PATH="$PATH:$HOME/.rvm/bin"
-export PATH="$PATH:$HOME/Library/Python/2.7/bin"
+# export PATH="$PATH:$HOME/Library/Python/2.7/bin"
+export PATH="$PATH:$HOME/.local/bin"
 
-# fzf config move up/down by Ctrl-D/Ctrl-U
-export FZF_DEFAULT_OPTS='--bind ctrl-d:down,ctrl-u:up'
+# Use Git's default (reverse chronological) order, never automatically
+# use topo-order for the commit graph
+set commit-order = default
 
-# Recent git branches
-grb() {
-  local tags branches target
-  branches=$(
-    git --no-pager branch --sort=-committerdate --all \
-      --format="%(if)%(HEAD)%(then)%(else)%(if:equals=HEAD)%(refname:strip=3)%(then)%(else)%1B[0;34;1mbranch%09%1B[m%(refname:short)%(end)%(end)" \
-    | sed '/^$/d') || return
-  tags=$(
-    git --no-pager tag | awk '{print "\x1b[35;1mtag\x1b[m\t" $1}') || return
-  target=$(
-    (echo "$branches"; echo "$tags") |
-    fzf --no-hscroll --no-multi -n 2 \
-        --ansi --preview="git --no-pager log -150 --pretty=format:%s '..{2}'") || return
-  git checkout $(awk '{print $2}' <<<"$target" )
-}
+# Limit number of commits loaded by default to 1000
+set main-options = -n 1000
 
-# https://superuser.com/questions/292652/change-iterm2-window-and-tab-titles-in-zsh/292660#292660
-export DISABLE_AUTO_TITLE="true"
+# Don't show staged and unstaged changes in the main view
+set show-changes = no
 
-alias vi='nvim'
-alias cat='bat'
-alias lc='leetcode'
-
-# change the color of auto-suggestions
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
-
-# Move next only if `homebrew` is installed
-if command -v brew >/dev/null 2>&1; then
-  # Load rupa's z if installed
-  [ -f $(brew --prefix)/etc/profile.d/z.sh ] && source $(brew --prefix)/etc/profile.d/z.sh
+export PYENV_ROOT="$HOME/.pyenv" export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
 fi
 
-function run() {
-  local scripts=$(cat package.json | python -c 'import sys, json; print "\n".join(sorted(["\t".join(s) for s in json.load(sys.stdin)["scripts"].items()]))')
-  local script=$(echo "$scripts" | column -t -s $'\t' | fzf --height 50% --reverse --min-height 20 | awk '{print $1}')
-  
-  [ -n "$script" ]] && npm run $script
-}
+# load fzf
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
+# fzf config move up/down by Ctrl-D/Ctrl-U
+export FZF_DEFAULT_OPTS="--bind ctrl-d:down,ctrl-u:up"
 
-# tabtab source for electron-forge package
-# uninstall by removing these lines or running `tabtab uninstall electron-forge`
-[[ -f /Users/khanghoang/.config/yarn/global/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.zsh ]] && . /Users/khanghoang/.config/yarn/global/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.zsh###-begin-leetcode-completions-###
-#
-# yargs command completion script
-#
-# Installation: /usr/local/bin/leetcode completion >> ~/.bashrc
-#    or /usr/local/bin/leetcode completion >> ~/.bash_profile on OSX.
-#
-_yargs_completions()
-{
-    local cur_word args type_list
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
-    cur_word="${COMP_WORDS[COMP_CWORD]}"
-    args=("${COMP_WORDS[@]}")
+# the detailed meaning of the below three variable can be found in `man zshparam`.
+export HISTFILE=~/.zsh_history
+export HISTSIZE=1000000   # the number of items for the internal history list
+export SAVEHIST=1000000   # maximum number of items for the history file
 
-    # ask yargs to generate completions.
-    type_list=$(/usr/local/bin/leetcode --get-yargs-completions "${args[@]}")
-
-    COMPREPLY=( $(compgen -W "${type_list}" -- ${cur_word}) )
-
-    # if no match was found, fall back to filename completion
-    if [ ${#COMPREPLY[@]} -eq 0 ]; then
-      COMPREPLY=( $(compgen -f -- "${cur_word}" ) )
-    fi
-
-    return 0
-}
-complete -F _yargs_completions leetcode
-###-end-leetcode-completions-###
-
+# The meaning of these options can be found in man page of `zshoptions`.
+setopt HIST_IGNORE_ALL_DUPS  # do not put duplicated command into history list
+setopt HIST_SAVE_NO_DUPS  # do not save duplicated command
+setopt HIST_REDUCE_BLANKS  # remove unnecessary blanks
+setopt INC_APPEND_HISTORY_TIME  # append command to history file immediately after execution
+setopt EXTENDED_HISTORY  # record command start time
