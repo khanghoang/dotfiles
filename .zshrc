@@ -89,6 +89,7 @@ export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 export FZF_DEFAULT_OPTS="--bind ctrl-d:down,ctrl-u:up"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
 
 # the detailed meaning of the below three variable can be found in `man zshparam`.
 export HISTFILE=~/.zsh_history

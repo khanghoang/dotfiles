@@ -34,6 +34,10 @@ return require('packer').startup(function()
   use 'neovim/nvim-lspconfig'
   use 'kabouzeid/nvim-lspinstall'
 
+  use 'nvim-lua/popup.nvim'
+  use 'nvim-lua/plenary.nvim'
+  use 'nvim-telescope/telescope.nvim'
+
   -- Misc
   use 'windwp/nvim-autopairs'
   use 'tpope/vim-surround'

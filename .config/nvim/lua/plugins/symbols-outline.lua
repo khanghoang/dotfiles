@@ -20,4 +20,4 @@ g.symbols_outline = {
     lsp_blacklist = {},
 }
 
-vim.api.nvim_set_keymap('n', '<C-p>', ':SymbolsOutline<CR>', {noremap = true})
+-- vim.api.nvim_set_keymap('n', '<C-p>', ':SymbolsOutline<CR>', {noremap = true})
