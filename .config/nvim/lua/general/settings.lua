@@ -49,9 +49,3 @@ vim.cmd [[syntax on]]
 -- without this typescript highlighting will suffer due to 'redrawtime' exceeded, syntax highlighting disabled
 -- https://jameschambers.co.uk/vim-typescript-slow
 vim.cmd [[set re=0]]
-
-
-
-
-
-
