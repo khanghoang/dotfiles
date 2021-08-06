@@ -7,6 +7,7 @@ return require('packer').startup(function()
 
   -- Navigation
   use 'vifm/vifm.vim'
+  use 'rbgrouleff/bclose.vim'
   use 'easymotion/vim-easymotion'
   use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
   use 'junegunn/fzf.vim'
@@ -25,6 +26,10 @@ return require('packer').startup(function()
   use 'tpope/vim-rhubarb'
   use 'junegunn/gv.vim'
   use 'airblade/vim-gitgutter'
+  use {
+    'ruifm/gitlinker.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+  }
 
   -- Language support
   use 'dense-analysis/ale'
@@ -34,6 +39,8 @@ return require('packer').startup(function()
   use 'nvim-treesitter/playground'
   use 'neovim/nvim-lspconfig'
   use 'kabouzeid/nvim-lspinstall'
+  -- use 'HerringtonDarkholme/yats.vim'
+  -- use 'maxmellon/vim-jsx-pretty'
 
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'

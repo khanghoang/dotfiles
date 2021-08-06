@@ -1,6 +1,8 @@
 require('general/settings')
 require('general/mappings')
 
+require('colorschemes/lua/oceannext')
+
 require('plugins')
 require('plugins/vifm')
 require('plugins/symbols-outline')
@@ -16,5 +18,5 @@ require('plugins/treesitter')
 require('plugins/lsp')
 require('plugins/indent-blankline')
 require('plugins/colorizer')
-
-require('colorschemes/lua/oceannext')
+require('plugins/gitlinker')
+require('plugins/telescope')
