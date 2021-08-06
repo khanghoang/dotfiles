@@ -52,3 +52,6 @@ vim.cmd [[set re=0]]
 
 --  :h scrolloff
 vim.cmd [[set scrolloff=25]]
+
+-- clipboard setting
+vim.cmd [[set clipboard+=unnamedplus]]
