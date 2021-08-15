@@ -13,3 +13,9 @@ api.nvim_set_keymap('n', '<leader><leader>', '<C-^>', {noremap = true})
 
 -- Esc key to clean seach result
 api.nvim_set_keymap('n', '<Esc>', ':noh<CR>', {noremap = true})
+
+api.nvim_set_keymap('n', 'Y', "y$", {noremap = true})
+
+-- Keep it center
+api.nvim_set_keymap('n', 'n', "nzzzv", {noremap = true})
+api.nvim_set_keymap('n', 'N', "nzzzv", {noremap = true})
