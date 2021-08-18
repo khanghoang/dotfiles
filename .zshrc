@@ -86,7 +86,7 @@ fi
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 # fzf config move up/down by Ctrl-D/Ctrl-U
-export FZF_DEFAULT_OPTS="--bind ctrl-d:down,ctrl-u:up"
+export FZF_DEFAULT_OPTS="--bind ctrl-n:down,ctrl-p:up"
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
