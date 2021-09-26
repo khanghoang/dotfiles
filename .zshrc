@@ -7,11 +7,11 @@ if ! zgen saved; then
   # Load the oh-my-zsh's library.
   zgen oh-my-zsh
 
-  zgen load z
+  zgen load agkozak/zsh-z
   zgen load hlissner/zsh-autopair
 
   # nicoulaj's moar completion files for zsh -- not sure why disabled.
-  # zgen load zsh-users/zsh-completions src
+  zgen load zsh-users/zsh-completions src
 
   # Syntax highlighting on the readline
   zgen load zsh-users/zsh-syntax-highlighting
