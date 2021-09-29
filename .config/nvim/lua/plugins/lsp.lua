@@ -103,3 +103,17 @@ nvim_lsp.sumneko_lua.setup {
   },
   on_attach = on_attach,
 }
+
+-- JSON
+-- LspInstall json
+-- yarn global add vscode-langservers-extracted
+nvim_lsp.jsonls.setup {
+  commands = {
+    Format = {
+      function()
+        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+      end
+    }
+  },
+  capabilities = capabilities
+}
