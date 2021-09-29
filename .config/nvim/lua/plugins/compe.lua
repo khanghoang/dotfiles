@@ -1,3 +1,6 @@
+-- You must set completeopt to menuone,noselect which can be easily done as follows.
+vim.o.completeopt = "menuone,noselect"
+
 require('compe').setup({
   enabled = true,
   autocomplete = true,

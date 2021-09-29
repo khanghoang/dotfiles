@@ -1,5 +1,15 @@
 local nvim_lsp = require('lspconfig')
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities.textDocument.completion.completionItem.snippetSupport = true
+capabilities.textDocument.completion.completionItem.resolveSupport = {
+    properties = {
+      'documentation',
+      'detail',
+      'additionalTextEdits',
+    }
+}
+
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
@@ -60,6 +70,7 @@ nvim_lsp.pyright.setup({
   -- handlers = {['textDocument/publishDiagnostics'] = function(...) end},
 })
 
+-- PYRIGHT
 nvim_lsp.pyright.setup({
   cmd = { "pyright-langserver", "--stdio", '--stats', '--verbose'},
   on_attach = on_attach,
@@ -79,6 +90,8 @@ nvim_lsp.pyright.setup({
   -- handlers = {['textDocument/publishDiagnostics'] = function(...) end},
 })
 
+-- LUA
+-- LspInstall lua
 local system_name = "Linux" -- (Linux, macOS, or Windows)
 local sumneko_root_path = '/home/khanghoang/lua-language-server'
 local sumneko_binary = sumneko_root_path.."/bin/"..system_name.."/lua-language-server"
