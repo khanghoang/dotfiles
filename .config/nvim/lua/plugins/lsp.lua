@@ -59,3 +59,47 @@ nvim_lsp.pyright.setup({
   },
   -- handlers = {['textDocument/publishDiagnostics'] = function(...) end},
 })
+
+nvim_lsp.pyright.setup({
+  cmd = { "pyright-langserver", "--stdio", '--stats', '--verbose'},
+  on_attach = on_attach,
+  flags = {
+    debounce_text_changes = 150,
+  },
+  settings = {
+    python = {
+      analysis = {
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = 'workspace',
+        logLevel = 'Trace'
+      },
+    },
+  },
+  -- handlers = {['textDocument/publishDiagnostics'] = function(...) end},
+})
+
+local system_name = "Linux" -- (Linux, macOS, or Windows)
+local sumneko_root_path = '/home/khanghoang/lua-language-server'
+local sumneko_binary = sumneko_root_path.."/bin/"..system_name.."/lua-language-server"
+
+nvim_lsp.sumneko_lua.setup {
+  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+  settings = {
+    -- Insert your settings here
+    runtime = {
+      -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+      version = 'LuaJIT',
+      -- Setup your lua path
+      path = vim.split(package.path, ';'),
+    },
+    workspace = {
+      -- Make the server aware of Neovim runtime files
+      library = {
+        [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+        [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+      },
+    },
+  },
+  on_attach = on_attach,
+}
