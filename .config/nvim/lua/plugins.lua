@@ -58,5 +58,9 @@ return require('packer').startup(function()
 
   -- Tig in vim
   use 'iberianpig/tig-explorer.vim'
+
+  -- Vimspector
+  use 'puremourning/vimspector'
+
 end)
 
