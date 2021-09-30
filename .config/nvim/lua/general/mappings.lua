@@ -19,3 +19,6 @@ api.nvim_set_keymap('n', 'Y', "y$", {noremap = true})
 -- Keep it center
 api.nvim_set_keymap('n', 'n', "nzzzv", {noremap = true})
 api.nvim_set_keymap('n', 'N', "nzzzv", {noremap = true})
+
+-- Reload bazel
+api.nvim_set_keymap('n', '<leader>R', ":Dispatch! bzl itest-reload-current<CR>", {noremap = true})
