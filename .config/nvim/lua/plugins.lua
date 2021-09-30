@@ -62,5 +62,10 @@ return require('packer').startup(function()
   -- Vimspector
   use 'puremourning/vimspector'
 
+  -- Navigate between LRU files
+  -- use 'nvim-lua/popup.nvim'
+  -- use 'nvim-lua/plenary.nvim'
+  use 'ThePrimeagen/harpoon'
+
 end)
 
