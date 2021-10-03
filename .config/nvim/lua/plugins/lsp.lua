@@ -92,12 +92,11 @@ nvim_lsp.pyright.setup({
 
 -- LUA
 -- LspInstall lua
-local system_name = "Linux" -- (Linux, macOS, or Windows)
-local sumneko_root_path = '/home/khanghoang/lua-language-server'
-local sumneko_binary = sumneko_root_path.."/bin/"..system_name.."/lua-language-server"
+local sumneko_root_path = '/Users/khanghoang/.local/share/nvim/lspinstall/lua'
+local sumneko_binary = sumneko_root_path.."/sumneko-lua-language-server"
 
 nvim_lsp.sumneko_lua.setup {
-  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/main.lua"};
+  cmd = {sumneko_binary, "-E", sumneko_root_path .. "/sumneko-lua/extension/server/main.lua"};
   settings = {
     -- Insert your settings here
     runtime = {
