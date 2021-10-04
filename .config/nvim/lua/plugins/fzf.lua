@@ -6,10 +6,10 @@ g.fzf_history_dir = '~/.local/share/fzf-history'
 vim.cmd [[command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]]
 
 api.nvim_set_keymap('n', '<leader><space>', ':Telescope git_files<CR>', {noremap = true})
-api.nvim_set_keymap('n', '<leader>h', ':History<CR>', {noremap = true})
-api.nvim_set_keymap('n', '<leader>fg', ':Rg!<CR>', {noremap = true})
+api.nvim_set_keymap('n', '<leader>f', ':History<CR>', {noremap = true})
+-- api.nvim_set_keymap('n', '<leader>fg', ':Rg!<CR>', {noremap = true})
 -- api.nvim_set_keymap('n', '<leader>fb', ':Buffers!<CR>', {noremap = true})
-api.nvim_set_keymap('n', '<leader>fw', ':Rg!<C-R><C-W><CR>', {noremap = true})
+-- api.nvim_set_keymap('n', '<leader>fw', ':Rg!<C-R><C-W><CR>', {noremap = true})
 
 -- api.nvim_set_keymap('n', '<leader>p', '<leader>ff', {noremap = false})
 -- api.nvim_set_keymap('n', '<leader>s', '<leader>fg', {noremap = false})

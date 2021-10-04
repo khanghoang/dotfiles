@@ -67,5 +67,8 @@ return require('packer').startup(function()
   -- use 'nvim-lua/plenary.nvim'
   use 'ThePrimeagen/harpoon'
 
+  -- Vim dispatch
+  use 'tpope/vim-dispatch'
+
 end)
 
