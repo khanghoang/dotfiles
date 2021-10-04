@@ -1,6 +1,4 @@
 require('general/settings')
-require('general/mappings')
-
 require('colorschemes/lua/oceannext')
 
 require('plugins')
@@ -22,3 +20,6 @@ require('plugins/gitlinker')
 require('plugins/telescope')
 require('plugins/vimspector')
 require('plugins/harpoon')
+require('plugins/find_dotfiles')
+
+require('general/mappings')
