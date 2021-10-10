@@ -42,13 +42,23 @@ local on_attach = function(client, bufnr)
    buf_set_keymap("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
 end
 
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = {
+      prefix = "»",
+      spacing = 4,
+    },
+    signs = true,
+    update_in_insert = false,
+  }
+)
+
 -- npm install -g typescript typescript-language-server
 nvim_lsp.tsserver.setup({
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,
   },
-  handlers = {['textDocument/publishDiagnostics'] = function(...) end},
 })
 
 nvim_lsp.pyright.setup({
