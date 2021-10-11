@@ -1,8 +1,6 @@
 vim.cmd [[autocmd ColorScheme * highlight IndentOdd guifg=NONE guibg=NONE gui=nocombine]]
 vim.cmd [[autocmd ColorScheme * highlight IndentEven guifg=NONE guibg=#323232 gui=nocombine]]
 
-vim.cmd [[set statusline+=%{LspStatus()}]]
-
 vim.g.indent_blankline_char_highlight_list = {'IndentOdd', 'IndentEven'}
 vim.g.indent_blankline_space_char_highlight_list = {'IndentOdd', 'IndentEven'}
 
