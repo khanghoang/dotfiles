@@ -42,10 +42,16 @@ return require('packer').startup(function()
     config = 'vim.cmd[[ALEEnable]]'
   }
 
-  use 'tree-sitter/tree-sitter-typescript'
+  use {
+    'tree-sitter/tree-sitter-typescript',
+    ft = {'typescriptreact', 'typescript'},
+  }
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use 'nvim-treesitter/nvim-treesitter-refactor'
-  use 'nvim-treesitter/playground'
+  use {
+    'nvim-treesitter/playground',
+    cmd = {'TSPlaygroundToggle'}
+  }
   use 'neovim/nvim-lspconfig'
   use 'kabouzeid/nvim-lspinstall'
   -- use 'HerringtonDarkholme/yats.vim'
@@ -54,6 +60,8 @@ return require('packer').startup(function()
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
   use 'nvim-telescope/telescope.nvim'
+
+  use {'andymass/vim-matchup', event = 'VimEnter'}
 
   -- Misc
   use 'windwp/nvim-autopairs'
