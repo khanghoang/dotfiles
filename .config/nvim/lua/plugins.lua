@@ -13,7 +13,38 @@ return require('packer').startup(function()
   use 'junegunn/fzf.vim'
 
   -- Completion
-  use 'hrsh7th/nvim-compe'
+  use {
+    'hrsh7th/nvim-cmp',
+    config = function()
+      local cmp = require'cmp'
+
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            -- For `vsnip` user.
+            vim.fn["vsnip#anonymous"](args.body)
+          end,
+        },
+        mapping = {
+          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-k'] = cmp.mapping.complete(),
+          ['<C-e>'] = cmp.mapping.close(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        },
+        sources = {
+          { name = 'nvim_lsp' },
+          -- For vsnip user.
+          { name = 'vsnip' },
+          { name = 'buffer' },
+        }
+      })
+    end,
+    requires = {'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp', 'neovim/nvim-lspconfig'}
+
+  }
+
+  use 'hrsh7th/cmp-vsnip'
   use 'hrsh7th/vim-vsnip'
 
   -- Git support
@@ -92,7 +123,6 @@ return require('packer').startup(function()
   -- Misc
   use 'windwp/nvim-autopairs'
   use 'tpope/vim-surround'
-  use 'norcalli/nvim-colorizer.lua'
   use 'simrat39/symbols-outline.nvim'
   use 'christoomey/vim-tmux-navigator'
   use 'tomtom/tcomment_vim'
@@ -232,6 +262,75 @@ return require('packer').startup(function()
       vim.api.nvim_command('augroup END')
     end,
   }
+
+  use {
+    'rhysd/accelerated-jk',
+    opt = true
+  }
+
+  use {
+    'hrsh7th/vim-eft',
+    opt = true,
+    config = function()
+      vim.g.eft_ignorecase = true
+    end
+  }
+
+  use {
+    'kana/vim-operator-replace',
+    keys = {{'x','p'}},
+    config = function()
+      vim.api.nvim_set_keymap("x", "p", "<Plug>(operator-replace)",{silent =true})
+    end,
+    requires = 'kana/vim-operator-user'
+  }
+
+  use {
+    'rhysd/vim-operator-surround',
+    event = 'BufRead',
+    requires = 'kana/vim-operator-user'
+  }
+
+  use {
+    'kana/vim-niceblock',
+    opt = true
+  }
+
+  use {
+    'Raimondi/delimitMate',
+    event = 'InsertEnter',
+    config = function()
+      vim.g.delimitMate_expand_cr = 0
+      vim.g.delimitMate_expand_space = 1
+      vim.g.delimitMate_smart_quotes = 1
+      vim.g.delimitMate_expand_inside_quotes = 0
+      vim.api.nvim_command('au FileType markdown let b:delimitMate_nesting_quotes = ["`"]')
+    end
+  }
+
+  use {
+    'norcalli/nvim-colorizer.lua',
+    ft = { 'html','css','sass','vim','typescript','typescriptreact'},
+    config = function() 
+      require 'colorizer'.setup {
+        css = { rgb_fn = true; };
+        scss = { rgb_fn = true; };
+        sass = { rgb_fn = true; };
+        stylus = { rgb_fn = true; };
+        vim = { names = true; };
+        tmux = { names = false; };
+        'javascript';
+        'javascriptreact';
+        'typescript';
+        'typescriptreact';
+        html = {
+          mode = 'foreground';
+        }
+      }
+    end
+  }
+
+
 
 end)
 

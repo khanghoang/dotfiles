@@ -80,6 +80,7 @@ nvim_lsp.pyright.setup({
       },
     },
   },
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
 -- LUA
@@ -111,6 +112,7 @@ nvim_lsp.sumneko_lua.setup {
     },
   },
   on_attach = on_attach,
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
 -- JSON
@@ -124,5 +126,5 @@ nvim_lsp.jsonls.setup {
       end
     }
   },
-  capabilities = capabilities
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
