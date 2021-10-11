@@ -53,8 +53,13 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
--- npm install -g typescript typescript-language-server
+local lsp_install_path = '$HOME/.local/share/nvim/lspinstall'
+
+-- TypeScript
+-- LspInstall typescript
+local typescript_bin = lsp_install_path..'/typescript/node_modules/typescript-language-server/lib/cli.js'
 nvim_lsp.tsserver.setup({
+  cmd = { typescript_bin, '--stdio' },
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,
@@ -81,24 +86,29 @@ nvim_lsp.pyright.setup({
 
 -- LUA
 -- LspInstall lua
-local sumneko_root_path = '/Users/khanghoang/.local/share/nvim/lspinstall/lua'
-local sumneko_binary = sumneko_root_path.."/sumneko-lua-language-server"
-
+local sumneko_root_path = lsp_install_path..'/lua'
+local sumneko_binary = sumneko_root_path..'/sumneko-lua-language-server'
 nvim_lsp.sumneko_lua.setup {
   cmd = {sumneko_binary, "-E", sumneko_root_path .. "/sumneko-lua/extension/server/main.lua"};
   settings = {
-    -- Insert your settings here
-    runtime = {
-      -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
-      version = 'LuaJIT',
-      -- Setup your lua path
-      path = vim.split(package.path, ';'),
-    },
-    workspace = {
-      -- Make the server aware of Neovim runtime files
-      library = {
-        [vim.fn.expand('$VIMRUNTIME/lua')] = true,
-        [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+    Lua = {
+      -- Insert your settings here
+      runtime = {
+        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
+        version = 'LuaJIT',
+        -- Setup your lua path
+        path = vim.split(package.path, ';'),
+      },
+      diagnostics = {
+        -- Get the language server to recognize the `vim` global
+        globals = {'vim', 'use'},
+      },
+      workspace = {
+        -- Make the server aware of Neovim runtime files
+        library = {
+          [vim.fn.expand('$VIMRUNTIME/lua')] = true,
+          [vim.fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true,
+        },
       },
     },
   },

@@ -25,11 +25,19 @@ return require('packer').startup(function()
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
   use 'junegunn/gv.vim'
-  use 'airblade/vim-gitgutter'
   use {
     'ruifm/gitlinker.nvim',
     requires = 'nvim-lua/plenary.nvim',
   }
+  use {
+    'lewis6991/gitsigns.nvim',
+    requires = {
+      'nvim-lua/plenary.nvim'
+    },
+    config = function()
+      require('gitsigns').setup()
+  end
+}
 
   -- Language support
   use 'dense-analysis/ale'
@@ -56,18 +64,30 @@ return require('packer').startup(function()
   use 'frankier/neovim-colors-solarized-truecolor-only'
 
   -- Tig in vim
-  use 'iberianpig/tig-explorer.vim'
+  use {
+    'iberianpig/tig-explorer.vim',
+    opt = true,
+    cmd = {'Tig'}
+  }
 
   -- Vimspector
-  use 'puremourning/vimspector'
+  use {
+    'puremourning/vimspector',
+    opt = true,
+    cmd = {'VimspectorContinue'}
+  }
 
   -- Navigate between LRU files
   -- use 'nvim-lua/popup.nvim'
   -- use 'nvim-lua/plenary.nvim'
-  use 'ThePrimeagen/harpoon'
+  -- use 'ThePrimeagen/harpoon'
 
   -- Vim async dispatch
-  use 'tpope/vim-dispatch'
+  use {
+    'tpope/vim-dispatch',
+    opt = true,
+    cmd = {'Dispatch', 'Make', 'Focus', 'Start'}
+  }
 
   use {
     'glepnir/galaxyline.nvim',
@@ -164,6 +184,20 @@ return require('packer').startup(function()
       }
       -- because lazy load indent-blankline so need readd this autocmd
       vim.cmd('autocmd CursorMoved * IndentBlanklineRefresh')
+    end,
+  }
+
+  use {
+    'itchyny/vim-cursorword',
+    event = {'BufReadPre','BufNewFile'},
+    config = function()
+      vim.api.nvim_command('augroup user_plugin_cursorword')
+      vim.api.nvim_command('autocmd!')
+      vim.api.nvim_command('autocmd FileType NvimTree,lspsagafinder,dashboard,vista let b:cursorword = 0')
+      vim.api.nvim_command('autocmd WinEnter * if &diff || &pvw | let b:cursorword = 0 | endif')
+      vim.api.nvim_command('autocmd InsertEnter * let b:cursorword = 0')
+      vim.api.nvim_command('autocmd InsertLeave * let b:cursorword = 1')
+      vim.api.nvim_command('augroup END')
     end,
   }
 
