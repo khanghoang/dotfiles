@@ -19,7 +19,6 @@ return require('packer').startup(function()
   -- Git support
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
-  use 'junegunn/gv.vim'
   use {
     'ruifm/gitlinker.nvim',
     requires = 'nvim-lua/plenary.nvim',
@@ -52,10 +51,37 @@ return require('packer').startup(function()
     'nvim-treesitter/playground',
     cmd = {'TSPlaygroundToggle'}
   }
+  use {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    config = function()
+      require'nvim-treesitter.configs'.setup {
+        textobjects = {
+          select = {
+            enable = true,
+
+            -- Automatically jump forward to textobj, similar to targets.vim
+            lookahead = true,
+
+            keymaps = {
+              -- You can use the capture groups defined in textobjects.scm
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+
+              -- Or you can define your own textobjects like this
+              ["iF"] = {
+                python = "(function_definition) @function",
+                typescriptreact = "(function_definition) @function",
+              },
+            },
+          },
+        },
+      }
+    end
+  }
   use 'neovim/nvim-lspconfig'
   use 'kabouzeid/nvim-lspinstall'
-  -- use 'HerringtonDarkholme/yats.vim'
-  -- use 'maxmellon/vim-jsx-pretty'
 
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
@@ -85,11 +111,6 @@ return require('packer').startup(function()
     opt = true,
     cmd = {'VimspectorContinue'}
   }
-
-  -- Navigate between LRU files
-  -- use 'nvim-lua/popup.nvim'
-  -- use 'nvim-lua/plenary.nvim'
-  -- use 'ThePrimeagen/harpoon'
 
   -- Vim async dispatch
   use {
