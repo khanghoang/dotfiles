@@ -17,9 +17,9 @@ return require('packer').startup(function()
   use 'hrsh7th/vim-vsnip'
 
   -- Statusline
-  use 'itchyny/lightline.vim'
-  use 'maximbaz/lightline-ale'
-  use 'spywhere/lightline-lsp'
+  -- use 'itchyny/lightline.vim'
+  -- use 'maximbaz/lightline-ale'
+  -- use 'spywhere/lightline-lsp'
 
   -- Git support
   use 'tpope/vim-fugitive'
@@ -33,7 +33,7 @@ return require('packer').startup(function()
 
   -- Language support
   use 'dense-analysis/ale'
-  use 'tree-sitter/tree-sitter-typescript'
+  -- use 'tree-sitter/tree-sitter-typescript'
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use 'nvim-treesitter/playground'
@@ -69,6 +69,16 @@ return require('packer').startup(function()
 
   -- Vim async dispatch
   use 'tpope/vim-dispatch'
+
+  use {
+    'glepnir/galaxyline.nvim',
+    branch = 'main',
+    -- event = { 'VimEnter' },
+    config = function()
+      -- require('plugins.lightline')
+    end,
+    requires = {'kyazdani42/nvim-web-devicons', opt = true}
+  }
 
 end)
 

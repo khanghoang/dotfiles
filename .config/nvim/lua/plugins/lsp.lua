@@ -77,27 +77,6 @@ nvim_lsp.pyright.setup({
       },
     },
   },
-  -- handlers = {['textDocument/publishDiagnostics'] = function(...) end},
-})
-
--- PYRIGHT
-nvim_lsp.pyright.setup({
-  cmd = { "pyright-langserver", "--stdio", '--stats', '--verbose'},
-  on_attach = on_attach,
-  flags = {
-    debounce_text_changes = 150,
-  },
-  settings = {
-    python = {
-      analysis = {
-        autoSearchPaths = true,
-        useLibraryCodeForTypes = true,
-        diagnosticMode = 'workspace',
-        logLevel = 'Trace'
-      },
-    },
-  },
-  -- handlers = {['textDocument/publishDiagnostics'] = function(...) end},
 })
 
 -- LUA
