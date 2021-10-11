@@ -108,6 +108,8 @@ return require('packer').startup(function()
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
 
+  use 'glepnir/lspsaga.nvim'
+
   use {
     'lukas-reineke/indent-blankline.nvim',
     event = 'BufEnter',

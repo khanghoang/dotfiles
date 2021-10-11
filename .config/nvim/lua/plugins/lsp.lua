@@ -53,7 +53,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
-local lsp_install_path = '$HOME/.local/share/nvim/lspinstall'
+local lsp_install_path = vim.env.HOME..'/.local/share/nvim/lspinstall'
 
 -- TypeScript
 -- LspInstall typescript
