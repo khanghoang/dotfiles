@@ -16,11 +16,6 @@ return require('packer').startup(function()
   use 'hrsh7th/nvim-compe'
   use 'hrsh7th/vim-vsnip'
 
-  -- Statusline
-  -- use 'itchyny/lightline.vim'
-  -- use 'maximbaz/lightline-ale'
-  -- use 'spywhere/lightline-lsp'
-
   -- Git support
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
@@ -40,7 +35,13 @@ return require('packer').startup(function()
 }
 
   -- Language support
-  use 'dense-analysis/ale'
+  use {
+    'w0rp/ale',
+    ft = {'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex'},
+    cmd = 'ALEEnable',
+    config = 'vim.cmd[[ALEEnable]]'
+  }
+
   use 'tree-sitter/tree-sitter-typescript'
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use 'nvim-treesitter/nvim-treesitter-refactor'
