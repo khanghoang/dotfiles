@@ -349,7 +349,7 @@ return require('packer').startup(function()
   use {
     'norcalli/nvim-colorizer.lua',
     ft = { 'html','css','sass','vim','typescript','typescriptreact'},
-    config = function() 
+    config = function()
       require 'colorizer'.setup {
         css = { rgb_fn = true; };
         scss = { rgb_fn = true; };
@@ -368,30 +368,32 @@ return require('packer').startup(function()
     end
   }
 
-  -- use {
-  --   'kdheepak/tabline.nvim',
-  --   config = function()
-  --     require'tabline'.setup {
-  --       -- Defaults configuration options
-  --       enable = true,
-  --       options = {
-  --         -- If lualine is installed tabline will use separators configured in lualine by default.
-  --         -- These options can be used to override those settings.
-  --         section_separators = {'|', '|'},
-  --         component_separators = {'|', '|'},
-  --         max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
-  --         show_tabs_always = false, -- this shows tabs only when there are more than one tab or if the first tab is named
-  --         show_devicons = false, -- this shows devicons in buffer section
-  --         show_bufnr = false, -- this appends [bufnr] to buffer section,
-  --         show_filename_only = true, -- shows base filename only instead of relative path in filename
-  --       }
-  --     }
-  --     vim.cmd[[
-  --       set guioptions-=e " Use showtabline in gui vim
-  --       set sessionoptions+=tabpages,globals " store tabpages and globals in session
-  --     ]]
-  --   end,
-  --   requires = { { 'hoob3rt/lualine.nvim', opt=true }, {'kyazdani42/nvim-web-devicons', opt = true} }
-  -- }
+  use {
+    'kdheepak/tabline.nvim',
+    config = function()
+      require'tabline'.setup {
+        -- Defaults configuration options
+        enable = true,
+        options = {
+          -- If lualine is installed tabline will use separators configured in lualine by default.
+          -- These options can be used to override those settings.
+          section_separators = {'|', '|'},
+          component_separators = {'|', '|'},
+          max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
+          show_tabs_always = true, -- this shows tabs only when there are more than one tab or if the first tab is named
+          show_devicons = false, -- this shows devicons in buffer section
+          show_bufnr = false, -- this appends [bufnr] to buffer section,
+          show_filename_only = true, -- shows base filename only instead of relative path in filename
+        }
+      }
+
+      vim.cmd[[
+        set guioptions-=e " Use showtabline in gui vim
+        set sessionoptions+=tabpages,globals " store tabpages and globals in session
+      ]]
+
+    end,
+    requires = { { 'hoob3rt/lualine.nvim', opt=true }, {'kyazdani42/nvim-web-devicons', opt = true} }
+  }
 
 end)
