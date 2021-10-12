@@ -42,15 +42,6 @@ zplug "junegunn/fzf-bin", \
     as:command, \
     rename-to:fzf \
 
-
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-	printf "Install? [y/N]: "
-	if read -q; then
-		echo; zplug install
-	fi
-fi
-
 set -o vi
 
 # lazy load nvm since it will take 1-2 seconds for nvm to fully loaded
@@ -92,7 +83,7 @@ fi
 
 # load fzf
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-source ~/.fzf.zsh
+# source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 # fzf config move up/down by Ctrl-D/Ctrl-U
 export FZF_DEFAULT_OPTS="--bind ctrl-n:down,ctrl-p:up"
@@ -118,3 +109,12 @@ alias luamake=/home/khanghoang/lua-language-server/3rd/luamake/luamake
 
 # Then, source plugins and add commands to $PATH
 zplug load
+
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+	printf "Install? [y/N]: "
+	if read -q; then
+		echo; zplug install
+	fi
+fi
+
