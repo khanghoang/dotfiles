@@ -14,7 +14,6 @@ require('plugins/lsp')
 require('plugins/gitlinker')
 require('plugins/telescope')
 require('plugins/vimspector')
-require('plugins/harpoon')
 require('plugins/find_dotfiles')
 require('plugins/lightline')
 

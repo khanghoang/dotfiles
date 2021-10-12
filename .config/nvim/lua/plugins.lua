@@ -12,6 +12,22 @@ return require('packer').startup(function()
   use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
   use 'junegunn/fzf.vim'
 
+  use {
+    'alexghergh/nvim-tmux-navigation',
+    config = function()
+      require'nvim-tmux-navigation'.setup {
+        disable_when_zoomed = true -- defaults to false
+      }
+
+      vim.api.nvim_set_keymap('n', "<C-h>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<cr>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-j>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<cr>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-k>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<cr>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-l>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<cr>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-\\>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLastActive()<cr>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", { noremap = true, silent = true })
+    end
+  }
+
   -- Completion
   use {
     'hrsh7th/nvim-cmp',
@@ -352,7 +368,30 @@ return require('packer').startup(function()
     end
   }
 
-
+  -- use {
+  --   'kdheepak/tabline.nvim',
+  --   config = function()
+  --     require'tabline'.setup {
+  --       -- Defaults configuration options
+  --       enable = true,
+  --       options = {
+  --         -- If lualine is installed tabline will use separators configured in lualine by default.
+  --         -- These options can be used to override those settings.
+  --         section_separators = {'|', '|'},
+  --         component_separators = {'|', '|'},
+  --         max_bufferline_percent = 66, -- set to nil by default, and it uses vim.o.columns * 2/3
+  --         show_tabs_always = false, -- this shows tabs only when there are more than one tab or if the first tab is named
+  --         show_devicons = false, -- this shows devicons in buffer section
+  --         show_bufnr = false, -- this appends [bufnr] to buffer section,
+  --         show_filename_only = true, -- shows base filename only instead of relative path in filename
+  --       }
+  --     }
+  --     vim.cmd[[
+  --       set guioptions-=e " Use showtabline in gui vim
+  --       set sessionoptions+=tabpages,globals " store tabpages and globals in session
+  --     ]]
+  --   end,
+  --   requires = { { 'hoob3rt/lualine.nvim', opt=true }, {'kyazdani42/nvim-web-devicons', opt = true} }
+  -- }
 
 end)
-
