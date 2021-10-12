@@ -1,46 +1,54 @@
-# load zgen
-source "${HOME}/.zgen/zgen.zsh"
+# curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+# zplug install
+# zplug load
 
-# if the init scipt doesn't exist
-if ! zgen saved; then
+source ~/.zplug/init.zsh
 
-  # Load the oh-my-zsh's library.
-  zgen oh-my-zsh
+# Load the oh-my-zsh's library.
+# zplug "oh-my-zsh"
 
-  zgen load agkozak/zsh-z
-  zgen load hlissner/zsh-autopair
+zplug "agkozak/zsh-z"
+zplug "hlissner/zsh-autopair"
 
-  # nicoulaj's moar completion files for zsh -- not sure why disabled.
-  zgen load zsh-users/zsh-completions src
+# nicoulaj's moar completion files for zsh -- not sure why disabled.
+zplug "zsh-users/zsh-completions"
 
-  # Syntax highlighting on the readline
-  zgen load zsh-users/zsh-syntax-highlighting
+# Syntax highlighting on the readline
+zplug "zsh-users/zsh-syntax-highlighting"
 
-  # Utils functions for git
-  zgen load wfxr/forgit
+# Utils functions for git
+zplug "wfxr/forgit"
 
-  # history search
-  zgen load zsh-users/zsh-history-substring-search ./zsh-history-substring-search.zsh
+# history search
+zplug "zsh-users/zsh-history-substring-search"
 
-  # suggestions
-  zgen load tarruda/zsh-autosuggestions
+# suggestions
+zplug "tarruda/zsh-autosuggestions"
 
-  # colors for all files!
-  zgen load trapd00r/zsh-syntax-highlighting-filetypes
+# colors for all files!
+zplug "trapd00r/zsh-syntax-highlighting-filetypes"
 
-  # dont set a theme, because pure does it all
-  zgen load mafredri/zsh-async
-  zgen load sindresorhus/pure
+# dont set a theme, because pure does it all
+zplug "mafredri/zsh-async"
+zplug "sindresorhus/pure"
 
-  # notify for long running commands
-  # zgen load marzocchi/zsh-notify
+# vi mode for terminal
+zplug "jeffreytse/zsh-vi-mode"
 
-  # vi mode for terminal
-  zgen load jeffreytse/zsh-vi-mode
+# Grab binaries from GitHub Releases
+# and rename with the "rename-to:" tag
+zplug "junegunn/fzf-bin", \
+    from:gh-r, \
+    as:command, \
+    rename-to:fzf \
 
-  # Tell Antigen that you're done.
-  zgen save
 
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+	printf "Install? [y/N]: "
+	if read -q; then
+		echo; zplug install
+	fi
 fi
 
 set -o vi
@@ -83,7 +91,8 @@ if command -v pyenv 1>/dev/null 2>&1; then
 fi
 
 # load fzf
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
 # fzf config move up/down by Ctrl-D/Ctrl-U
 export FZF_DEFAULT_OPTS="--bind ctrl-n:down,ctrl-p:up"
@@ -106,3 +115,6 @@ setopt INC_APPEND_HISTORY_TIME  # append command to history file immediately aft
 setopt EXTENDED_HISTORY  # record command start time
 
 alias luamake=/home/khanghoang/lua-language-server/3rd/luamake/luamake
+
+# Then, source plugins and add commands to $PATH
+zplug load
