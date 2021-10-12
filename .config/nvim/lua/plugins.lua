@@ -177,7 +177,22 @@ return require('packer').startup(function()
   use {
     'puremourning/vimspector',
     opt = true,
-    cmd = {'VimspectorContinue'}
+    cmd = {'VimspectorContinue'},
+    config = function ()
+      local map = vim.api.nvim_set_keymap
+      local opt = {noremap = false}
+
+      map('n', '<leader>dd', ':call vimspector#Launch()<CR>',opt)
+      map('n', '<leader>de', ':call vimspector#Reset()<CR>',opt)
+      map('n', '<leader>dr', ':call vimspector#Restart()<CR>',opt)
+
+      map('n', '<leader>dl', ':call vimspector#StepInto()<CR>',opt)
+      map('n', '<leader>dh', ':call vimspector#StepOut()<CR>',opt)
+      map('n', '<leader>dj', ':call vimspector#StopOver()<CR>',opt)
+      map('n', '<leader>dc', ':call vimspector#Continue()<CR>',opt)
+      map('n', '<leader>drc', '<Plug>VimspectorRunToCursor',opt)
+      map('n', '<leader>dbp', '<Plug>VimspectorToggleBreakpoint',opt)
+    end
   }
 
   -- Vim async dispatch
@@ -303,7 +318,6 @@ return require('packer').startup(function()
 
   use {
     'rhysd/accelerated-jk',
-    opt = true
   }
 
   use {

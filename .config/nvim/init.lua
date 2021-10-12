@@ -13,7 +13,6 @@ require('plugins/treesitter')
 require('plugins/lsp')
 require('plugins/gitlinker')
 require('plugins/telescope')
-require('plugins/vimspector')
 require('plugins/find_dotfiles')
 require('plugins/lightline')
 
