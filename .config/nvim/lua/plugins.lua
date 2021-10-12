@@ -392,8 +392,19 @@ return require('packer').startup(function()
         set sessionoptions+=tabpages,globals " store tabpages and globals in session
       ]]
 
+      require'lualine'.setup {
+        tabline = {
+          lualine_a = {},
+          lualine_b = {},
+          lualine_c = { require'tabline'.tabline_buffers },
+          lualine_x = { require'tabline'.tabline_tabs },
+          lualine_y = {},
+          lualine_z = {},
+        },
+      }
+
     end,
-    requires = { { 'hoob3rt/lualine.nvim', opt=true }, {'kyazdani42/nvim-web-devicons', opt = true} }
+    requires = { { 'hoob3rt/lualine.nvim'}, {'kyazdani42/nvim-web-devicons', opt = true} }
   }
 
 end)
