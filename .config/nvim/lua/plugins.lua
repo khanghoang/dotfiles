@@ -176,8 +176,8 @@ return require('packer').startup(function()
   -- Vimspector
   use {
     'puremourning/vimspector',
-    opt = true,
-    cmd = {'VimspectorContinue'},
+    -- opt = true,
+    -- cmd = {'VimspectorContinue'},
     config = function ()
       local map = vim.api.nvim_set_keymap
       local opt = {noremap = false}
@@ -419,6 +419,21 @@ return require('packer').startup(function()
 
     end,
     requires = { { 'hoob3rt/lualine.nvim'}, {'kyazdani42/nvim-web-devicons', opt = true} }
+  }
+
+  use {
+    '~/code/dotfiles/neovim-plugins/obsidian.nvim',
+    config = function ()
+      local api = vim.api
+
+      require('obsidian').setup({
+        directory = '~/thoughts/brain'
+      })
+
+      api.nvim_set_keymap('n', '<leader>zn', ':Capture ', {noremap = true})
+      api.nvim_set_keymap('n', '<leader>zs', ':Screenshot<CR>', {noremap = true})
+      api.nvim_set_keymap('n', '<leader>zi', ':LinkNote<CR>', {noremap = true})
+    end
   }
 
 end)
