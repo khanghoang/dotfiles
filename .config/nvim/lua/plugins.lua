@@ -317,10 +317,6 @@ return require('packer').startup(function()
   }
 
   use {
-    'rhysd/accelerated-jk',
-  }
-
-  use {
     'hrsh7th/vim-eft',
     opt = true,
     config = function()

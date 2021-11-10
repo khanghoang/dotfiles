@@ -6,6 +6,10 @@ local DEFAULT_TEMPLATE = [[
 tags: []
 ---
 # %s
+
+## References
+1. 
+
 ]]
 
 local function lines(str)
@@ -38,10 +42,14 @@ M.screenshot = function()
   local now = os.date('%Y%m%d%H%M%S')
   local buf_name = fn.expand('%:t')
   local img_name = fn.split(buf_name, '\\.')[1] .. '_' .. now .. '.png'
+  local os = string.lower(jit.os)
 
-  -- api.nvim_command('silent !screencapture -i ' .. path_join(M.config.directory, img_name))
-  -- bindsym Shift+Print exec --no-startup-id maim --select "/home/$USER/Pictures/$(date)"
-  api.nvim_command('silent !maim --select ' .. path_join(M.config.directory, img_name))
+  if os == "linux" then
+    api.nvim_command('silent !maim --select ' .. path_join(M.config.directory, img_name))
+  else
+    api.nvim_command('silent !screencapture -i ' .. path_join(M.config.directory, img_name))
+  end
+
   api.nvim_put({'![[' .. img_name .. ']]'}, 'l', true, true)
 end
 
