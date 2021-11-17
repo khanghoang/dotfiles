@@ -115,6 +115,22 @@ nvim_lsp.sumneko_lua.setup {
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
+local gopls = lsp_install_path..'/go'
+local gopls_path = gopls..'/gopls'
+nvim_lsp.gopls.setup({
+  cmd = {gopls_path, "serve"},
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+  on_attach = on_attach,
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+})
+
 -- JSON
 -- LspInstall json
 -- yarn global add vscode-langservers-extracted
