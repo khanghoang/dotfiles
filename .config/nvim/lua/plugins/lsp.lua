@@ -51,11 +51,11 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   }
 )
 
-local lsp_install_path = vim.env.HOME..'/.local/share/nvim/lspinstall'
+local lsp_install_path = vim.env.HOME..'/.local/share/nvim/lsp_servers'
 
 -- TypeScript
 -- LspInstall typescript
-local typescript_bin = lsp_install_path..'/typescript/node_modules/typescript-language-server/lib/cli.js'
+local typescript_bin = lsp_install_path..'/tsserver/node_modules/typescript-language-server/lib/cli.js'
 nvim_lsp.tsserver.setup({
   cmd = { typescript_bin, '--stdio' },
   on_attach = on_attach,
@@ -64,8 +64,9 @@ nvim_lsp.tsserver.setup({
   },
 })
 
+local pyright_bin = lsp_install_path..'/python/node_modules/pyright/langserver.index.js'
 nvim_lsp.pyright.setup({
-  cmd = { "pyright-langserver", "--stdio", '--stats', '--verbose'},
+  cmd = { pyright_bin, '--stdio' },
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,

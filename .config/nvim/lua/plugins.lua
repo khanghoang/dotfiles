@@ -149,8 +149,11 @@ return require('packer').startup(function()
       }
     end
   }
-  use 'neovim/nvim-lspconfig'
-  use 'kabouzeid/nvim-lspinstall'
+
+  use {
+    'neovim/nvim-lspconfig',
+    'williamboman/nvim-lsp-installer',
+  }
 
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
