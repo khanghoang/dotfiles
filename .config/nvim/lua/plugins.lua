@@ -1,3 +1,4 @@
+
 return require('packer').startup(function()
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
@@ -12,6 +13,19 @@ return require('packer').startup(function()
   use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
   use 'junegunn/fzf.vim'
 
+  use 'pantharshit00/vim-prisma'
+
+  use {
+    "folke/which-key.nvim",
+    config = function()
+      require("which-key").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
   use {
     'alexghergh/nvim-tmux-navigation',
     config = function()
@@ -25,6 +39,47 @@ return require('packer').startup(function()
       vim.api.nvim_set_keymap('n', "<C-l>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<cr>", { noremap = true, silent = true })
       vim.api.nvim_set_keymap('n', "<C-\\>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLastActive()<cr>", { noremap = true, silent = true })
       vim.api.nvim_set_keymap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", { noremap = true, silent = true })
+    end
+  }
+
+  use {
+    'nvim-lua/lsp-status.nvim',
+    config = function()
+      local lsp_status = require("lsp-status")
+      local LSP_KIND_SIGNS = {
+        Text = '  ',
+        Method = '  ',
+        Function = '  ',
+        Constructor = '  ',
+        Field = '  ',
+        Variable = '  ',
+        Class = '  ',
+        Interface = '  ',
+        Module = '  ',
+        Property = '  ',
+        Unit = '  ',
+        Value = '  ',
+        Enum = '  ',
+        Keyword = '  ',
+        Snippet = '  ',
+        Color = '  ',
+        File = '  ',
+        Reference = '  ',
+        Folder = '  ',
+        EnumMember = '  ',
+        Constant = '  ',
+        Struct = '  ',
+        Event = '  ',
+        Operator = '  ',
+        TypeParameter = '  ',
+      }
+
+      lsp_status.config({
+        kind_labels = LSP_KIND_SIGNS,
+        status_symbol = "",
+        diagnostics = false,
+      })
+      lsp_status.register_progress()
     end
   }
 
@@ -53,13 +108,47 @@ return require('packer').startup(function()
           -- For vsnip user.
           { name = 'vsnip' },
           { name = 'buffer' },
-        }
+        },
+        formatting = {
+          format = function(entry, vim_item)
+            local LSP_KIND_ICONS = {
+              Text = '  ',
+              Method = '  ',
+              Function = '  ',
+              Constructor = '  ',
+              Field = '  ',
+              Variable = '  ',
+              Class = '  ',
+              Interface = '  ',
+              Module = '  ',
+              Property = '  ',
+              Unit = '  ',
+              Value = '  ',
+              Enum = '  ',
+              Keyword = '  ',
+              Snippet = '  ',
+              Color = '  ',
+              File = '  ',
+              Reference = '  ',
+              Folder = '  ',
+              EnumMember = '  ',
+              Constant = '  ',
+              Struct = '  ',
+              Event = '  ',
+              Operator = '  ',
+              TypeParameter = '  ',
+            }
+            vim_item.kind = string.format("%s %s", LSP_KIND_ICONS[vim_item.kind], vim_item.kind)
+            return vim_item
+          end
+        },
       })
     end,
     requires = {'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp', 'neovim/nvim-lspconfig'}
 
   }
 
+  use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-vsnip'
   use 'hrsh7th/vim-vsnip'
 
@@ -120,6 +209,7 @@ return require('packer').startup(function()
     'nvim-treesitter/playground',
     cmd = {'TSPlaygroundToggle'}
   }
+
   use {
     'nvim-treesitter/nvim-treesitter-textobjects',
     config = function()
@@ -154,7 +244,6 @@ return require('packer').startup(function()
     'neovim/nvim-lspconfig',
     'williamboman/nvim-lsp-installer',
   }
-
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
   use 'nvim-telescope/telescope.nvim'
@@ -203,20 +292,21 @@ return require('packer').startup(function()
     'tpope/vim-dispatch',
     opt = true,
     cmd = {'Dispatch', 'Make', 'Focus', 'Start'}
+
   }
 
   use {
-    'glepnir/galaxyline.nvim',
-    branch = 'main',
+    'NTBBloodbath/galaxyline.nvim',
+    -- branch = 'main',
     -- event = { 'VimEnter' },
     config = function()
-       require('plugins.lightline')
+      -- require('plugins.lightline')
+      require("galaxyline.themes.eviline")
     end,
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
 
-  use 'glepnir/lspsaga.nvim'
-
+  -- use 'tami5/lspsaga.nvim'
   use {
     'lukas-reineke/indent-blankline.nvim',
     event = 'BufEnter',
@@ -417,7 +507,7 @@ return require('packer').startup(function()
       }
 
     end,
-    requires = { { 'hoob3rt/lualine.nvim'}, {'kyazdani42/nvim-web-devicons', opt = true} }
+    requires = { { 'nvim-lualine/lualine.nvim'}, {'kyazdani42/nvim-web-devicons', opt = true} }
   }
 
   use {

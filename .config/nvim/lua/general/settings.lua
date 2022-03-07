@@ -44,7 +44,7 @@ vim.cmd [[highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE g
 -- set color for number in the gutter
 vim.cmd [[highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff]]
 
-vim.cmd [[syntax on]] 
+vim.cmd [[syntax on]]
 -- Use new regular expression engine
 -- without this typescript highlighting will suffer due to 'redrawtime' exceeded, syntax highlighting disabled
 -- https://jameschambers.co.uk/vim-typescript-slow
