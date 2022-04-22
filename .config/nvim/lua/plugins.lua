@@ -27,6 +27,12 @@ return require('packer').startup(function()
   }
 
   use {
+   'heavenshell/vim-jsdoc',
+    ft = {'typescriptreact', 'typescript'},
+    run = "make install"
+  }
+
+  use {
     'alexghergh/nvim-tmux-navigation',
     config = function()
       require'nvim-tmux-navigation'.setup {
@@ -201,8 +207,9 @@ return require('packer').startup(function()
 
   use {
     'tree-sitter/tree-sitter-typescript',
-    ft = {'typescriptreact', 'typescript'},
+    ft = {'typescriptreact', 'typescript', 'javascript', 'javascriptreact'},
   }
+
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
   use 'nvim-treesitter/nvim-treesitter-refactor'
   use {
@@ -300,13 +307,79 @@ return require('packer').startup(function()
     -- branch = 'main',
     -- event = { 'VimEnter' },
     config = function()
-      -- require('plugins.lightline')
-      require("galaxyline.themes.eviline")
+      require('plugins.lightline')
     end,
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
 
-  -- use 'tami5/lspsaga.nvim'
+  use {
+    'tami5/lspsaga.nvim',
+    branch = 'nvim6.0'
+  }
+
+  use {
+    'stevearc/aerial.nvim',
+    config = function()
+      require('aerial').setup({
+        nerd_font = false,
+
+        filter_kind = {
+          "Class",
+          "Constructor",
+          "Constant",
+          "Enum",
+          "Function",
+          "Interface",
+          "Module",
+          "Method",
+          "Struct",
+        },
+
+        icons = {
+          Text = '  ',
+          Method = '  ',
+          Function = '  ',
+          Constructor = '  ',
+          Field = '  ',
+          Variable = '  ',
+          Class = '  ',
+          Interface = '  ',
+          Module = '  ',
+          Property = '  ',
+          Unit = '  ',
+          Value = '  ',
+          Enum = '  ',
+          Keyword = '  ',
+          Snippet = '  ',
+          Color = '  ',
+          File = '  ',
+          Reference = '  ',
+          Folder = '  ',
+          EnumMember = '  ',
+          Constant = '  ',
+          Struct = '  ',
+          Event = '  ',
+          Operator = '  ',
+          TypeParameter = '  ',
+        },
+
+        -- Customize the characters used when show_guides = true
+        guides = {
+          -- When the child item has a sibling below it
+          mid_item = "├─",
+          -- When the child item is the last in the list
+          last_item = "└─",
+          -- When there are nested child guides to the right
+          nested_top = "│ ",
+          -- Raw indentation
+          whitespace = "  ",
+        },
+
+        backends = { "lsp", "treesitter", "markdown" },
+      })
+    end
+  }
+
   use {
     'lukas-reineke/indent-blankline.nvim',
     event = 'BufEnter',
