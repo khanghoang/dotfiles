@@ -23,7 +23,7 @@ o.list = true
 o.scrolloff = 10
 o.regexpengine = 1
 o.completeopt = 'menuone,noselect'
-o.clipboard = o.clipboard .. 'unnamedplus'
+-- o.clipboard = o.clipboard .. 'unnamedplus'
 o.lazyredraw = true
 o.termguicolors = true
 o.background = 'dark'
@@ -44,7 +44,6 @@ vim.cmd [[highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE g
 -- set color for number in the gutter
 vim.cmd [[highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff]]
 
-vim.cmd [[syntax on]]
 -- Use new regular expression engine
 -- without this typescript highlighting will suffer due to 'redrawtime' exceeded, syntax highlighting disabled
 -- https://jameschambers.co.uk/vim-typescript-slow
@@ -54,4 +53,8 @@ vim.cmd [[set re=0]]
 vim.cmd [[set scrolloff=25]]
 
 -- clipboard setting
-vim.cmd [[set clipboard+=unnamedplus]]
+-- vim.cmd [[set clipboard=unnamedplus]]
+
+-- TreeSitter folding
+vim.cmd [[set foldmethod=expr]]
+vim.cmd [[set foldexpr=nvim_treesitter#foldexpr()]]

@@ -30,7 +30,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "gp", "<cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>", opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap("n", "gr", "<cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gD', ":vsp<cr><cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
   buf_set_keymap("n", "gd", "<cmd>lua require'telescope.builtin'.lsp_definitions()<CR>", opts)
   buf_set_keymap("n", "<C-p>", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<CR>", opts)
   buf_set_keymap("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
@@ -138,7 +138,9 @@ nvim_lsp.gopls.setup({
 -- JSON
 -- LspInstall json
 -- yarn global add vscode-langservers-extracted
+local jsonls = lsp_install_path..'/jsonls/node_modules/vscode-langservers-extracted/bin/vscode-json-language-server'
 nvim_lsp.jsonls.setup {
+  cmd = {jsonls, '--stdio'},
   commands = {
     Format = {
       function()

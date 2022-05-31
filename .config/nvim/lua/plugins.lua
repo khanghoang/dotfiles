@@ -228,6 +228,21 @@ return require('packer').startup(function()
     'nvim-treesitter/nvim-treesitter-textobjects',
     config = function()
       require'nvim-treesitter.configs'.setup {
+        highlight = {
+          enable = true
+        },
+        incremental_selection = {
+          enable = true,
+          keymaps = {
+            init_selection = "gnn",
+            node_incremental = "grn",
+            scope_incremental = "grc",
+            node_decremental = "grm",
+          },
+        },
+        indent = {
+          enable = true
+        },
         textobjects = {
           select = {
             enable = true,
@@ -267,7 +282,15 @@ return require('packer').startup(function()
   -- Misc
   use 'windwp/nvim-autopairs'
   use 'tpope/vim-surround'
-  use 'simrat39/symbols-outline.nvim'
+  use {
+    'simrat39/symbols-outline.nvim',
+    config = function ()
+      local map = vim.api.nvim_set_keymap
+      local opt = {noremap = false}
+
+      map('n', 'so', ':SymbolsOutline<CR>',opt)
+    end
+  }
   use 'christoomey/vim-tmux-navigator'
   use 'tomtom/tcomment_vim'
   use 'frankier/neovim-colors-solarized-truecolor-only'
@@ -321,7 +344,18 @@ return require('packer').startup(function()
 
   use {
     'tami5/lspsaga.nvim',
-    branch = 'nvim6.0'
+    -- branch = 'nvim6.0'
+    branch = 'main'
+  }
+
+  use {
+    'folke/trouble.nvim',
+    config = function ()
+      local map = vim.api.nvim_set_keymap
+      local opt = {noremap = false}
+
+      map('n', 'gt', ':TroubleToggle<CR>',opt)
+    end
   }
 
   use {
@@ -589,6 +623,8 @@ return require('packer').startup(function()
     end,
     requires = { { 'nvim-lualine/lualine.nvim'}, {'kyazdani42/nvim-web-devicons', opt = true} }
   }
+
+  use 'godlygeek/tabular'
 
   use {
     '~/code/dotfiles/neovim-plugins/obsidian.nvim',

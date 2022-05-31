@@ -18,3 +18,7 @@ require('plugins/lightline')
 
 require('colorschemes/lua/oceannext')
 require('general/mappings')
+
+vim.cmd [[
+  let g:vimspector_base_dir='/home/khanghoang/.local/share/nvim/site/pack/packer/start/vimspector'
+]]

@@ -23,3 +23,6 @@ api.nvim_set_keymap('n', 'N', "nzzzv", {noremap = true})
 
 -- Reload bazel
 api.nvim_set_keymap('n', '<leader>R', ":Dispatch! bzl itest-reload-current<CR>", {noremap = true})
+
+-- Prettier current file
+api.nvim_set_keymap('n', '<leader><leader>f', ":Dispatch! prettier % -w<CR>:edit!<CR>", {noremap = true})
