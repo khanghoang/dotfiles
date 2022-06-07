@@ -194,5 +194,8 @@ setopt EXTENDED_HISTORY  # record command start time
 
 alias luamake=/home/khanghoang/lua-language-server/3rd/luamake/luamake
 alias vi=nvim
+export PATH="$PATH:$(yarn global bin)"
 
 export NODE_OPTIONS="--max-old-space-size=4096"
+alias luamake=/home/khanghoang/code/lua-language-server/3rd/luamake/luamake
+[[ "$TERM" == "xterm-kitty" ]] && alias ssh="kitty +kitten ssh"

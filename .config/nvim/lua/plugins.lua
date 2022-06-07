@@ -282,15 +282,6 @@ return require('packer').startup(function()
   -- Misc
   use 'windwp/nvim-autopairs'
   use 'tpope/vim-surround'
-  use {
-    'simrat39/symbols-outline.nvim',
-    config = function ()
-      local map = vim.api.nvim_set_keymap
-      local opt = {noremap = false}
-
-      map('n', 'so', ':SymbolsOutline<CR>',opt)
-    end
-  }
   use 'christoomey/vim-tmux-navigator'
   use 'tomtom/tcomment_vim'
   use 'frankier/neovim-colors-solarized-truecolor-only'
@@ -417,7 +408,12 @@ return require('packer').startup(function()
         },
 
         backends = { "lsp", "treesitter", "markdown" },
+
       })
+      local map = vim.api.nvim_set_keymap
+      local opt = {noremap = false}
+
+      map('n', 'so', ':AerialToggle<CR>',opt)
     end
   }
 
