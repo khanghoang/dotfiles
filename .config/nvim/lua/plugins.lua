@@ -345,7 +345,7 @@ return require('packer').startup(function()
       local map = vim.api.nvim_set_keymap
       local opt = {noremap = false}
 
-      map('n', 'gt', ':TroubleToggle<CR>',opt)
+      map('n', 'tt', ':TroubleToggle<CR>',opt)
     end
   }
 
@@ -634,6 +634,44 @@ return require('packer').startup(function()
       api.nvim_set_keymap('n', '<leader>zn', ':Capture ', {noremap = true})
       api.nvim_set_keymap('n', '<leader>zs', ':Screenshot<CR>', {noremap = true})
       api.nvim_set_keymap('n', '<leader>zi', ':LinkNote<CR>', {noremap = true})
+    end
+  }
+
+  use {
+    "rcarriga/neotest",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      -- disable due to a weird error about duplicated function declaration
+      -- "antoinemadec/FixCursorHold.nvim",
+      "vim-test/vim-test",
+      "rcarriga/neotest-vim-test",
+      "rcarriga/neotest-plenary",
+    },
+    config = function ()
+      local g = vim.g
+      -- in millisecond, used for both CursorHold and CursorHoldI,
+      -- use updatetime instead if not defined
+      g.cursorhold_updatetime = 100
+
+      require("neotest").setup({
+        adapters = {
+          require("neotest-vim-test")({ ignore_filetypes = { "python", "lua" } }),
+          -- why do we need this???
+          -- require("neotest-plenary")
+        }
+      })
+
+      -- disable for testing
+      -- g["test#javascript#runner"] = 'jest'
+      -- g["test#typescript#runner"] = 'jest'
+      -- g["test#strategy"] = 'dispatch_background'
+
+      -- usage: 
+      -- 1. Run test (for example :TestNearest)
+      -- 2. <C-o> to scroll through the test results
+      -- 3. <C-o> on the failed test LOC to open it in vim
+      vim.cmd[[tmap <C-o> <C-\><C-n>]]
     end
   }
 

@@ -26,3 +26,9 @@ api.nvim_set_keymap('n', '<leader>R', ":Dispatch! bzl itest-reload-current<CR>",
 
 -- Prettier current file
 api.nvim_set_keymap('n', '<leader><leader>f', ":Dispatch! prettier % -w<CR>:edit!<CR>", {noremap = true})
+
+-- Tabs
+api.nvim_set_keymap('n', 'tc', ":tabclose<CR>", {noremap = true})
+api.nvim_set_keymap('n', 'tn', ":tabprevious<CR>", {noremap = true})
+api.nvim_set_keymap('n', 'tp', ":tabnext<CR>", {noremap = true})
+api.nvim_set_keymap('n', 'tn', ":tabnew<CR>", {noremap = true})
