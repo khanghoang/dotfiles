@@ -672,6 +672,10 @@ return require('packer').startup(function()
       -- 2. <C-o> to scroll through the test results
       -- 3. <C-o> on the failed test LOC to open it in vim
       vim.cmd[[tmap <C-o> <C-\><C-n>]]
+
+      vim.api.nvim_set_keymap('n', '<leader>tn', ":TestNearest<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>tf', ":TestNearest<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>ts', ":TestNearest<CR>", {noremap = true})
     end
   }
 
