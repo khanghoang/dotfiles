@@ -228,6 +228,10 @@ return require('packer').startup(function()
     'nvim-treesitter/nvim-treesitter-textobjects',
     config = function()
       require'nvim-treesitter.configs'.setup {
+        matchup = {
+          enable = true,
+        },
+        ensure_installed = {'javascript', 'lua', 'bash', 'go', 'json', 'typescript', 'python'},
         highlight = {
           enable = true
         },
@@ -257,15 +261,24 @@ return require('packer').startup(function()
               ["ac"] = "@class.outer",
               ["ic"] = "@class.inner",
 
-              -- Or you can define your own textobjects like this
-              ["iF"] = {
-                python = "(function_definition) @function",
-                typescriptreact = "(function_definition) @function",
-              },
+              -- -- Or you can define your own textobjects like this
+              -- ["iF"] = {
+              --   python = "(function_definition) @function",
+              --   typescriptreact = "(function_definition) @function",
+              -- },
             },
           },
         },
       }
+
+      -- fix fold on typescriptreact
+      local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
+      parser_config.typescript.used_by = "typescriptreact"
+
+      -- fold
+      vim.cmd [[set foldmethod=expr]]
+      vim.cmd [[set foldexpr=nvim_treesitter#foldexpr()]]
+      vim.cmd [[set foldlevel=1000]]
     end
   }
 
