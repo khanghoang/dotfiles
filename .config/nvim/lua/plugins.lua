@@ -278,7 +278,8 @@ return require('packer').startup(function()
       -- fold
       vim.cmd [[set foldmethod=expr]]
       vim.cmd [[set foldexpr=nvim_treesitter#foldexpr()]]
-      vim.cmd [[set foldlevel=1000]]
+      -- this will fold EVERYTHINGGG!!!
+      -- vim.cmd [[set foldlevel=1000]]
     end
   }
 
