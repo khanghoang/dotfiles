@@ -280,6 +280,8 @@ return require('packer').startup(function()
       vim.cmd [[set foldexpr=nvim_treesitter#foldexpr()]]
       -- this will fold EVERYTHINGGG!!!
       -- vim.cmd [[set foldlevel=1000]]
+      -- disable auto fold when opening file
+      vim.cmd [[set nofoldenable]]
     end
   }
 
