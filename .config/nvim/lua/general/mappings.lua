@@ -32,3 +32,10 @@ api.nvim_set_keymap('n', 'tc', ":tabclose<CR>", {noremap = true})
 api.nvim_set_keymap('n', 'tn', ":tabprevious<CR>", {noremap = true})
 api.nvim_set_keymap('n', 'tp', ":tabnext<CR>", {noremap = true})
 api.nvim_set_keymap('n', 'tn', ":tabnew<CR>", {noremap = true})
+
+-- testing 
+vim.api.nvim_set_keymap('n', '<leader>tr', ":lua require('neotest').run.run()<CR>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>tt', ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader>to', ":lua require('neotest').summary.open()<CR>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader><leader>x', ":w<CR>:source %<CR>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('neotest-vim-test.reload').reload()<CR>", {noremap = true})

@@ -655,13 +655,16 @@ return require('packer').startup(function()
 
   use {
     "rcarriga/neotest",
+    -- "~/code/neotest",
     requires = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       -- disable due to a weird error about duplicated function declaration
-      -- "antoinemadec/FixCursorHold.nvim",
+      "antoinemadec/FixCursorHold.nvim",
       "vim-test/vim-test",
       "rcarriga/neotest-vim-test",
+      -- local dev
+      -- '~/code/neotest-vim-test',
       "rcarriga/neotest-plenary",
     },
     config = function ()
