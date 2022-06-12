@@ -54,7 +54,3 @@ vim.cmd [[set scrolloff=25]]
 
 -- clipboard setting
 -- vim.cmd [[set clipboard=unnamedplus]]
-
--- TreeSitter folding
-vim.cmd [[set foldmethod=expr]]
-vim.cmd [[set foldexpr=nvim_treesitter#foldexpr()]]

@@ -218,7 +218,9 @@ return require('packer').startup(function()
   }
 
   use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
-  use 'nvim-treesitter/nvim-treesitter-refactor'
+  use {
+    'nvim-treesitter/nvim-treesitter-refactor',
+  }
   use {
     'nvim-treesitter/playground',
     cmd = {'TSPlaygroundToggle'}
@@ -235,13 +237,21 @@ return require('packer').startup(function()
         highlight = {
           enable = true
         },
+        highlight_definitions = {
+          enable = true,
+          -- Set to false if you have an `updatetime` of ~100.
+          clear_on_cursor_move = true,
+        },
+        -- refactor = {
+        --   highlight_current_scope = { enable = true },
+        -- },
         incremental_selection = {
           enable = true,
           keymaps = {
-            init_selection = "gnn",
-            node_incremental = "grn",
-            scope_incremental = "grc",
-            node_decremental = "grm",
+            init_selection = '<CR>',
+            scope_incremental = '<CR>',
+            node_incremental = '<TAB>',
+            node_decremental = '<S-TAB>',
           },
         },
         indent = {
@@ -260,12 +270,33 @@ return require('packer').startup(function()
               ["if"] = "@function.inner",
               ["ac"] = "@class.outer",
               ["ic"] = "@class.inner",
+              ['uc'] = '@comment.outer',
 
               -- -- Or you can define your own textobjects like this
-              -- ["iF"] = {
-              --   python = "(function_definition) @function",
-              --   typescriptreact = "(function_definition) @function",
-              -- },
+              ["iF"] = {
+                -- python = "(function_definition) @function",
+                typescriptreact = "(function_definition) @function",
+              },
+            },
+          },
+          move = {
+            enable = true,
+            set_jumps = true, -- whether to set jumps in the jumplist
+            goto_next_start = {
+              ["]m"] = "@function.outer",
+              ["]]"] = "@class.outer",
+            },
+            goto_next_end = {
+              ["]M"] = "@function.outer",
+              ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+              ["[m"] = "@function.outer",
+              ["[["] = "@class.outer",
+            },
+            goto_previous_end = {
+              ["[M"] = "@function.outer",
+              ["[]"] = "@class.outer",
             },
           },
         },
