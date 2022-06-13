@@ -96,7 +96,8 @@ return require('packer').startup(function()
         snippet = {
           expand = function(args)
             -- For `vsnip` user.
-            vim.fn["vsnip#anonymous"](args.body)
+            -- vim.fn["vsnip#anonymous"](args.body)
+            require'luasnip'.lsp_expand(args.body)
           end,
         },
         mapping = cmp.mapping.preset.insert({
@@ -114,6 +115,7 @@ return require('packer').startup(function()
           end
         }),
         sources = {
+          { name = 'luasnip' },
           { name = 'nvim_lsp' },
           -- For vsnip user.
           { name = 'path' },
@@ -163,6 +165,38 @@ return require('packer').startup(function()
   use 'hrsh7th/cmp-vsnip'
   use 'hrsh7th/vim-vsnip'
   use 'hrsh7th/cmp-path'
+  use 'saadparwaiz1/cmp_luasnip'
+  use {
+    'L3MON4D3/LuaSnip',
+    config = function ()
+      require("luasnip.loaders.from_vscode").lazy_load({ paths = { "/home/khanghoang/.config/nvim/lua/snippets/vscode-jest-snippets" }})
+      local ls = require('luasnip');
+
+      -- <c-k> is my expansion key
+      -- this will expand the current item or jump to the next item within the snippet.
+      vim.keymap.set({ "i", "s" }, "<c-k>", function()
+        if ls.expand_or_jumpable() then
+          ls.expand_or_jump()
+        end
+      end, { silent = true })
+
+      -- <c-j> is my jump backwards key.
+      -- this always moves to the previous item within the snippet
+      vim.keymap.set({ "i", "s" }, "<c-j>", function()
+        if ls.jumpable(-1) then
+          ls.jump(-1)
+        end
+      end, { silent = true })
+
+      -- <c-l> is selecting within a list of options.
+      -- This is useful for choice nodes (introduced in the forthcoming episode 2)
+      vim.keymap.set("i", "<c-l>", function()
+        if ls.choice_active() then
+          ls.change_choice(1)
+        end
+      end)
+    end
+  }
 
   -- Git support
   use 'tpope/vim-fugitive'
