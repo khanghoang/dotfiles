@@ -13,7 +13,10 @@ return require('packer').startup(function()
   use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
   use 'junegunn/fzf.vim'
 
-  use 'pantharshit00/vim-prisma'
+  use {
+    'pantharshit00/vim-prisma',
+    ft = {"prisma"}
+  }
 
   use {
     "folke/which-key.nvim",
@@ -24,12 +27,6 @@ return require('packer').startup(function()
         -- refer to the configuration section below
       }
     end
-  }
-
-  use {
-   'heavenshell/vim-jsdoc',
-    ft = {'typescriptreact', 'typescript'},
-    run = "make install"
   }
 
   use {
@@ -237,11 +234,11 @@ return require('packer').startup(function()
         highlight = {
           enable = true
         },
-        highlight_definitions = {
-          enable = true,
-          -- Set to false if you have an `updatetime` of ~100.
-          clear_on_cursor_move = true,
-        },
+        -- highlight_definitions = {
+        --   enable = true,
+        --   -- Set to false if you have an `updatetime` of ~100.
+        --   clear_on_cursor_move = false,
+        -- },
         -- refactor = {
         --   highlight_current_scope = { enable = true },
         -- },
@@ -367,7 +364,6 @@ return require('packer').startup(function()
     'tpope/vim-dispatch',
     opt = true,
     cmd = {'Dispatch', 'Make', 'Focus', 'Start'}
-
   }
 
   use {
@@ -728,6 +724,18 @@ return require('packer').startup(function()
       vim.api.nvim_set_keymap('n', '<leader>ts', ":TestNearest<CR>", {noremap = true})
       vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", {noremap = true})
     end
+  }
+
+  -- Generate table of content from a markdown file
+  -- use {
+  --   'mzlogin/vim-markdown-toc',
+  --   ft = {'markdown'},
+  --   opt = true,
+  --   cmd = {'GenTocGFM'}
+  -- }
+  use {
+    'preservim/vim-markdown',
+    ft = {'markdown'},
   }
 
 end)
