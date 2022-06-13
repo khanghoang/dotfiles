@@ -116,6 +116,7 @@ return require('packer').startup(function()
         sources = {
           { name = 'nvim_lsp' },
           -- For vsnip user.
+          { name = 'path' },
           { name = 'vsnip' },
           { name = 'buffer' },
         },
@@ -161,6 +162,7 @@ return require('packer').startup(function()
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-vsnip'
   use 'hrsh7th/vim-vsnip'
+  use 'hrsh7th/cmp-path'
 
   -- Git support
   use 'tpope/vim-fugitive'
