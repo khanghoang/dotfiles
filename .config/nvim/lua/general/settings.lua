@@ -54,3 +54,9 @@ vim.cmd [[set scrolloff=25]]
 
 -- clipboard setting
 -- vim.cmd [[set clipboard=unnamedplus]]
+
+-- Global status line
+vim.cmd [[set laststatus=3]]
+
+-- Make the pane border thinner
+vim.cmd [[highlight WinSeparator guibg=None]]
