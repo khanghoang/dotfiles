@@ -1,23 +1,24 @@
 
 return require('packer').startup(function()
   -- Packer can manage itself
+  -- Package manager
+  -- {{{
   use 'wbthomason/packer.nvim'
+  -- }}}
 
   -- Color schemes
+  -- {{{
   use 'mhartington/oceanic-next'
+  use 'frankier/neovim-colors-solarized-truecolor-only'
+  -- }}}
 
   -- Navigation
+  -- {{{
   use 'vifm/vifm.vim'
   use 'rbgrouleff/bclose.vim'
   use 'easymotion/vim-easymotion'
   use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
   use 'junegunn/fzf.vim'
-
-  use {
-    'pantharshit00/vim-prisma',
-    ft = {"prisma"}
-  }
-
   use {
     "folke/which-key.nvim",
     config = function()
@@ -44,7 +45,10 @@ return require('packer').startup(function()
       vim.api.nvim_set_keymap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", { noremap = true, silent = true })
     end
   }
+  -- }}}
 
+  -- LSP
+  --- {{{
   use {
     'nvim-lua/lsp-status.nvim',
     config = function()
@@ -86,7 +90,99 @@ return require('packer').startup(function()
     end
   }
 
+  use {
+    'neovim/nvim-lspconfig',
+    'williamboman/nvim-lsp-installer',
+  }
+
+  use {
+    'tami5/lspsaga.nvim',
+    -- branch = 'nvim6.0'
+    branch = 'main'
+  }
+
+  use {
+    'stevearc/aerial.nvim',
+    config = function()
+      require('aerial').setup({
+        nerd_font = false,
+
+        filter_kind = {
+          "Class",
+          "Constructor",
+          "Constant",
+          "Enum",
+          "Function",
+          "Interface",
+          "Module",
+          "Method",
+          "Struct",
+        },
+
+        icons = {
+          Text = '  ',
+          Method = '  ',
+          Function = '  ',
+          Constructor = '  ',
+          Field = '  ',
+          Variable = '  ',
+          Class = '  ',
+          Interface = '  ',
+          Module = '  ',
+          Property = '  ',
+          Unit = '  ',
+          Value = '  ',
+          Enum = '  ',
+          Keyword = '  ',
+          Snippet = '  ',
+          Color = '  ',
+          File = '  ',
+          Reference = '  ',
+          Folder = '  ',
+          EnumMember = '  ',
+          Constant = '  ',
+          Struct = '  ',
+          Event = '  ',
+          Operator = '  ',
+          TypeParameter = '  ',
+        },
+
+        -- Customize the characters used when show_guides = true
+        guides = {
+          -- When the child item has a sibling below it
+          mid_item = "├─",
+          -- When the child item is the last in the list
+          last_item = "└─",
+          -- When there are nested child guides to the right
+          nested_top = "│ ",
+          -- Raw indentation
+          whitespace = "  ",
+        },
+
+        backends = { "lsp", "treesitter", "markdown" },
+
+      })
+      local map = vim.api.nvim_set_keymap
+      local opt = {noremap = false}
+
+      map('n', 'so', ':AerialToggle<CR>',opt)
+    end
+  }
+
+  use {
+    'folke/trouble.nvim',
+    config = function ()
+      local map = vim.api.nvim_set_keymap
+      local opt = {noremap = false}
+
+      map('n', 'tt', ':TroubleToggle<CR>',opt)
+    end
+  }
+
+  --}}}
+  
   -- Completion
+  -- {{{
   use {
     'hrsh7th/nvim-cmp',
     config = function()
@@ -198,7 +294,10 @@ return require('packer').startup(function()
     end
   }
 
+  -- }}}
+
   -- Git support
+  -- {{{
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
   use {
@@ -237,14 +336,12 @@ return require('packer').startup(function()
     end
   }
 
-  -- Language support
-  use {
-    'w0rp/ale',
-    ft = {'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex'},
-    cmd = 'ALEEnable',
-    config = 'vim.cmd[[ALEEnable]]'
-  }
+  -- }}}
 
+  -- Language support
+
+  -- TreeSitter
+  -- {{{
   use {
     'tree-sitter/tree-sitter-typescript',
     ft = {'typescriptreact', 'typescript', 'javascript', 'javascriptreact'},
@@ -349,31 +446,125 @@ return require('packer').startup(function()
     end
   }
 
+  -- run and display test results
   use {
-    'neovim/nvim-lspconfig',
-    'williamboman/nvim-lsp-installer',
+    "rcarriga/neotest",
+    -- "~/code/neotest",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      -- disable due to a weird error about duplicated function declaration
+      "antoinemadec/FixCursorHold.nvim",
+      "vim-test/vim-test",
+      "rcarriga/neotest-vim-test",
+      -- local dev
+      -- '~/code/neotest-vim-test',
+      "rcarriga/neotest-plenary",
+    },
+    config = function ()
+      local g = vim.g
+      -- in millisecond, used for both CursorHold and CursorHoldI,
+      -- use updatetime instead if not defined
+      g.cursorhold_updatetime = 100
+
+      require("neotest").setup({
+        adapters = {
+          require("neotest-vim-test")({ ignore_filetypes = { "python", "lua" } }),
+          -- why do we need this???
+          -- require("neotest-plenary")
+        }
+      })
+
+      -- disable for testing
+      -- g["test#javascript#runner"] = 'jest'
+      -- g["test#typescript#runner"] = 'jest'
+      -- g["test#strategy"] = 'dispatch_background'
+
+      -- usage: 
+      -- 1. Run test (for example :TestNearest)
+      -- 2. <C-o> to scroll through the test results
+      -- 3. <C-o> on the failed test LOC to open it in vim
+      vim.cmd[[tmap <C-o> <C-\><C-n>]]
+
+      vim.api.nvim_set_keymap('n', '<leader>tn', ":TestNearest<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>tf', ":TestNearest<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>ts', ":TestNearest<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", {noremap = true})
+    end
   }
+
+
+  -- }}}
+
+  -- Filetypes
+  -- {{{
+  -- Generate table of content from a markdown file
+  use {
+    'preservim/vim-markdown',
+    ft = {'markdown'},
+  }
+  -- }}}
+
+  -- Misc
+  --- {{{
+  -- Written in Lua
+  -- This plug-in provides automatic closing of quotes, parenthesis, brackets
+  use 'windwp/nvim-autopairs'
+  -- Same as the above
+  -- use {
+  --   'Raimondi/delimitMate',
+  --   event = 'InsertEnter',
+  --   config = function()
+  --     vim.g.delimitMate_expand_cr = 0
+  --     vim.g.delimitMate_expand_space = 1
+  --     vim.g.delimitMate_smart_quotes = 1
+  --     vim.g.delimitMate_expand_inside_quotes = 0
+  --     vim.api.nvim_command('au FileType markdown let b:delimitMate_nesting_quotes = ["`"]')
+  --   end
+  -- }
+
+  use 'tpope/vim-surround'
+  use 'christoomey/vim-tmux-navigator'
+  use 'tomtom/tcomment_vim'
+
+  -- find the matching characters for {}, [], etc
+  use {'andymass/vim-matchup', event = 'VimEnter'}
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
   use 'nvim-telescope/telescope.nvim'
 
-  use {'andymass/vim-matchup', event = 'VimEnter'}
+  -- support prisma schema
+  use {
+    'pantharshit00/vim-prisma',
+    ft = {"prisma"}
+  }
 
-  -- Misc
-  use 'windwp/nvim-autopairs'
-  use 'tpope/vim-surround'
-  use 'christoomey/vim-tmux-navigator'
-  use 'tomtom/tcomment_vim'
-  use 'frankier/neovim-colors-solarized-truecolor-only'
+  -- This plugin provides f/t/F/T mappings that can be customized by your setting.
+  use {
+    'hrsh7th/vim-eft',
+    opt = true,
+    config = function()
+      vim.g.eft_ignorecase = true
+    end
+  }
+
+
+  use 'godlygeek/tabular'
+
+
+  --}}}
 
   -- Tig in vim
+  -- {{{
   use {
     'iberianpig/tig-explorer.vim',
     opt = true,
     cmd = {'Tig'}
   }
+  -- }}}
 
   -- Vimspector
+  -- {{{
   use {
     'puremourning/vimspector',
     -- opt = true,
@@ -394,14 +585,19 @@ return require('packer').startup(function()
       map('n', '<leader>dbp', '<Plug>VimspectorToggleBreakpoint',opt)
     end
   }
+  -- }}}
 
   -- Vim async dispatch
+  -- {{{
   use {
     'tpope/vim-dispatch',
     opt = true,
     cmd = {'Dispatch', 'Make', 'Focus', 'Start'}
   }
+  -- }}}
 
+  -- UI
+  -- {{{
   use {
     'NTBBloodbath/galaxyline.nvim',
     -- branch = 'main',
@@ -410,90 +606,6 @@ return require('packer').startup(function()
       require('plugins.lightline')
     end,
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
-  }
-
-  use {
-    'tami5/lspsaga.nvim',
-    -- branch = 'nvim6.0'
-    branch = 'main'
-  }
-
-  use {
-    'folke/trouble.nvim',
-    config = function ()
-      local map = vim.api.nvim_set_keymap
-      local opt = {noremap = false}
-
-      map('n', 'tt', ':TroubleToggle<CR>',opt)
-    end
-  }
-
-  use {
-    'stevearc/aerial.nvim',
-    config = function()
-      require('aerial').setup({
-        nerd_font = false,
-
-        filter_kind = {
-          "Class",
-          "Constructor",
-          "Constant",
-          "Enum",
-          "Function",
-          "Interface",
-          "Module",
-          "Method",
-          "Struct",
-        },
-
-        icons = {
-          Text = '  ',
-          Method = '  ',
-          Function = '  ',
-          Constructor = '  ',
-          Field = '  ',
-          Variable = '  ',
-          Class = '  ',
-          Interface = '  ',
-          Module = '  ',
-          Property = '  ',
-          Unit = '  ',
-          Value = '  ',
-          Enum = '  ',
-          Keyword = '  ',
-          Snippet = '  ',
-          Color = '  ',
-          File = '  ',
-          Reference = '  ',
-          Folder = '  ',
-          EnumMember = '  ',
-          Constant = '  ',
-          Struct = '  ',
-          Event = '  ',
-          Operator = '  ',
-          TypeParameter = '  ',
-        },
-
-        -- Customize the characters used when show_guides = true
-        guides = {
-          -- When the child item has a sibling below it
-          mid_item = "├─",
-          -- When the child item is the last in the list
-          last_item = "└─",
-          -- When there are nested child guides to the right
-          nested_top = "│ ",
-          -- Raw indentation
-          whitespace = "  ",
-        },
-
-        backends = { "lsp", "treesitter", "markdown" },
-
-      })
-      local map = vim.api.nvim_set_keymap
-      local opt = {noremap = false}
-
-      map('n', 'so', ':AerialToggle<CR>',opt)
-    end
   }
 
   use {
@@ -598,46 +710,7 @@ return require('packer').startup(function()
     end,
   }
 
-  use {
-    'hrsh7th/vim-eft',
-    opt = true,
-    config = function()
-      vim.g.eft_ignorecase = true
-    end
-  }
-
-  use {
-    'kana/vim-operator-replace',
-    keys = {{'x','p'}},
-    config = function()
-      vim.api.nvim_set_keymap("x", "p", "<Plug>(operator-replace)",{silent =true})
-    end,
-    requires = 'kana/vim-operator-user'
-  }
-
-  use {
-    'rhysd/vim-operator-surround',
-    event = 'BufRead',
-    requires = 'kana/vim-operator-user'
-  }
-
-  use {
-    'kana/vim-niceblock',
-    opt = true
-  }
-
-  use {
-    'Raimondi/delimitMate',
-    event = 'InsertEnter',
-    config = function()
-      vim.g.delimitMate_expand_cr = 0
-      vim.g.delimitMate_expand_space = 1
-      vim.g.delimitMate_smart_quotes = 1
-      vim.g.delimitMate_expand_inside_quotes = 0
-      vim.api.nvim_command('au FileType markdown let b:delimitMate_nesting_quotes = ["`"]')
-    end
-  }
-
+  -- Display color for hex string
   use {
     'norcalli/nvim-colorizer.lua',
     ft = { 'html','css','sass','vim','typescript','typescriptreact'},
@@ -699,8 +772,10 @@ return require('packer').startup(function()
     requires = { { 'nvim-lualine/lualine.nvim'}, {'kyazdani42/nvim-web-devicons', opt = true} }
   }
 
-  use 'godlygeek/tabular'
+  -- }}}
 
+  -- Note taking
+  -- {{{
   use {
     '~/code/dotfiles/neovim-plugins/obsidian.nvim',
     config = function ()
@@ -715,63 +790,30 @@ return require('packer').startup(function()
       api.nvim_set_keymap('n', '<leader>zi', ':LinkNote<CR>', {noremap = true})
     end
   }
+  -- }}}
 
-  use {
-    "rcarriga/neotest",
-    -- "~/code/neotest",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      -- disable due to a weird error about duplicated function declaration
-      "antoinemadec/FixCursorHold.nvim",
-      "vim-test/vim-test",
-      "rcarriga/neotest-vim-test",
-      -- local dev
-      -- '~/code/neotest-vim-test',
-      "rcarriga/neotest-plenary",
-    },
-    config = function ()
-      local g = vim.g
-      -- in millisecond, used for both CursorHold and CursorHoldI,
-      -- use updatetime instead if not defined
-      g.cursorhold_updatetime = 100
-
-      require("neotest").setup({
-        adapters = {
-          require("neotest-vim-test")({ ignore_filetypes = { "python", "lua" } }),
-          -- why do we need this???
-          -- require("neotest-plenary")
-        }
-      })
-
-      -- disable for testing
-      -- g["test#javascript#runner"] = 'jest'
-      -- g["test#typescript#runner"] = 'jest'
-      -- g["test#strategy"] = 'dispatch_background'
-
-      -- usage: 
-      -- 1. Run test (for example :TestNearest)
-      -- 2. <C-o> to scroll through the test results
-      -- 3. <C-o> on the failed test LOC to open it in vim
-      vim.cmd[[tmap <C-o> <C-\><C-n>]]
-
-      vim.api.nvim_set_keymap('n', '<leader>tn', ":TestNearest<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>tf', ":TestNearest<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>ts', ":TestNearest<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", {noremap = true})
-    end
-  }
-
-  -- Generate table of content from a markdown file
+  -- Uncategorized
+  -- Waiting to be removed
+  -- {{{
   -- use {
-  --   'mzlogin/vim-markdown-toc',
-  --   ft = {'markdown'},
-  --   opt = true,
-  --   cmd = {'GenTocGFM'}
+  --   'kana/vim-operator-replace',
+  --   keys = {{'x','p'}},
+  --   config = function()
+  --     vim.api.nvim_set_keymap("x", "p", "<Plug>(operator-replace)",{silent =true})
+  --   end,
+  --   requires = 'kana/vim-operator-user'
   -- }
-  use {
-    'preservim/vim-markdown',
-    ft = {'markdown'},
-  }
+  --
+  -- use {
+  --   'rhysd/vim-operator-surround',
+  --   event = 'BufRead',
+  --   requires = 'kana/vim-operator-user'
+  -- }
+  --
+  -- use {
+  --   'kana/vim-niceblock',
+  --   opt = true
+  -- }
+  -- }}}
 
 end)
