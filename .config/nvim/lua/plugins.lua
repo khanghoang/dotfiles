@@ -380,7 +380,7 @@ return require('packer').startup(function()
           keymaps = {
             init_selection = '<CR>',
             scope_incremental = '<CR>',
-            node_incremental = '<TAB>',
+            node_incremental = '<space>',
             node_decremental = '<S-TAB>',
           },
         },
@@ -509,7 +509,13 @@ return require('packer').startup(function()
   --- {{{
   -- Written in Lua
   -- This plug-in provides automatic closing of quotes, parenthesis, brackets
-  use 'windwp/nvim-autopairs'
+  use {
+    'windwp/nvim-autopairs',
+    config = function ()
+      require('nvim-autopairs').setup({
+      })
+    end
+  }
   -- Same as the above
   -- use {
   --   'Raimondi/delimitMate',
