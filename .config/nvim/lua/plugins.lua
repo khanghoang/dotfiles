@@ -783,45 +783,6 @@ return require('packer').startup(function()
 
   -- Note taking
   -- {{{
-  -- use {
-  --   '~/code/dotfiles/neovim-plugins/obsidian.nvim',
-  --   config = function ()
-  --     local api = vim.api
-  --
-  --     require('obsidian').setup({
-  --       directory = '~/thoughts/brain'
-  --     })
-  --
-  --     api.nvim_set_keymap('n', '<leader>zn', ':Capture ', {noremap = true})
-  --     api.nvim_set_keymap('n', '<leader>zs', ':Screenshot<CR>', {noremap = true})
-  --     api.nvim_set_keymap('n', '<leader>zi', ':LinkNote<CR>', {noremap = true})
-  --   end
-  -- }
-  -- }}}
-
-  -- Uncategorized
-  -- Waiting to be removed
-  -- {{{
-  -- use {
-  --   'kana/vim-operator-replace',
-  --   keys = {{'x','p'}},
-  --   config = function()
-  --     vim.api.nvim_set_keymap("x", "p", "<Plug>(operator-replace)",{silent =true})
-  --   end,
-  --   requires = 'kana/vim-operator-user'
-  -- }
-  --
-  -- use {
-  --   'rhysd/vim-operator-surround',
-  --   event = 'BufRead',
-  --   requires = 'kana/vim-operator-user'
-  -- }
-  --
-  -- use {
-  --   'kana/vim-niceblock',
-  --   opt = true
-  -- }
-  -- }}}
   use {
     'mickael-menu/zk-nvim',
     config = function ()
@@ -852,7 +813,7 @@ return require('packer').startup(function()
 
       -- Create a new note after asking for its title.
       -- Conflicted with the ft one
-      -- vim.api.nvim_set_keymap("n", "<leader>zn", "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>", opts)
+      vim.api.nvim_set_keymap("n", "<leader>zn", "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>", opts)
 
       -- integrate with telescope
       require("telescope").load_extension("zk")
@@ -868,5 +829,30 @@ return require('packer').startup(function()
       vim.api.nvim_set_keymap("v", "<leader>zf", ":'<,'>ZkMatch<CR>", opts)
     end
   }
+
+  -- Uncategorized
+  -- Waiting to be removed
+  -- {{{
+  -- use {
+  --   'kana/vim-operator-replace',
+  --   keys = {{'x','p'}},
+  --   config = function()
+  --     vim.api.nvim_set_keymap("x", "p", "<Plug>(operator-replace)",{silent =true})
+  --   end,
+  --   requires = 'kana/vim-operator-user'
+  -- }
+  --
+  -- use {
+  --   'rhysd/vim-operator-surround',
+  --   event = 'BufRead',
+  --   requires = 'kana/vim-operator-user'
+  -- }
+  --
+  -- use {
+  --   'kana/vim-niceblock',
+  --   opt = true
+  -- }
+  -- }}}
+  
 
 end)
