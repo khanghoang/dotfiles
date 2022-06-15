@@ -499,10 +499,11 @@ return require('packer').startup(function()
   -- Filetypes
   -- {{{
   -- Generate table of content from a markdown file
-  use {
-    'preservim/vim-markdown',
-    ft = {'markdown'},
-  }
+  -- Disabled since we have marksman - markdown ls
+  -- use {
+  --   'preservim/vim-markdown',
+  --   ft = {'markdown'},
+  -- }
   -- }}}
 
   -- Misc
@@ -782,20 +783,20 @@ return require('packer').startup(function()
 
   -- Note taking
   -- {{{
-  use {
-    '~/code/dotfiles/neovim-plugins/obsidian.nvim',
-    config = function ()
-      local api = vim.api
-
-      require('obsidian').setup({
-        directory = '~/thoughts/brain'
-      })
-
-      api.nvim_set_keymap('n', '<leader>zn', ':Capture ', {noremap = true})
-      api.nvim_set_keymap('n', '<leader>zs', ':Screenshot<CR>', {noremap = true})
-      api.nvim_set_keymap('n', '<leader>zi', ':LinkNote<CR>', {noremap = true})
-    end
-  }
+  -- use {
+  --   '~/code/dotfiles/neovim-plugins/obsidian.nvim',
+  --   config = function ()
+  --     local api = vim.api
+  --
+  --     require('obsidian').setup({
+  --       directory = '~/thoughts/brain'
+  --     })
+  --
+  --     api.nvim_set_keymap('n', '<leader>zn', ':Capture ', {noremap = true})
+  --     api.nvim_set_keymap('n', '<leader>zs', ':Screenshot<CR>', {noremap = true})
+  --     api.nvim_set_keymap('n', '<leader>zi', ':LinkNote<CR>', {noremap = true})
+  --   end
+  -- }
   -- }}}
 
   -- Uncategorized
@@ -821,5 +822,51 @@ return require('packer').startup(function()
   --   opt = true
   -- }
   -- }}}
+  use {
+    'mickael-menu/zk-nvim',
+    config = function ()
+      require("zk").setup({
+        -- can be "telescope", "fzf" or "select" (`vim.ui.select`)
+        -- it's recommended to use "telescope" or "fzf"
+        picker = "select",
+
+        lsp = {
+          -- `config` is passed to `vim.lsp.start_client(config)`
+          config = {
+            cmd = { "zk", "lsp" },
+            name = "zk",
+            -- on_attach = ...
+            -- etc, see `:h vim.lsp.start_client()`
+          },
+
+          -- automatically attach buffers in a zk notebook that match the given filetypes
+          auto_attach = {
+            enabled = true,
+            filetypes = { "markdown" },
+          },
+        },
+      })
+
+      -- https://github.com/mickael-menu/zk-nvim#example-mappings
+      local opts = { noremap=true, silent=false }
+
+      -- Create a new note after asking for its title.
+      -- Conflicted with the ft one
+      -- vim.api.nvim_set_keymap("n", "<leader>zn", "<Cmd>ZkNew { title = vim.fn.input('Title: ') }<CR>", opts)
+
+      -- integrate with telescope
+      require("telescope").load_extension("zk")
+
+      -- Open notes.
+      vim.api.nvim_set_keymap("n", "<leader>zo", ":Telescope zk notes sort='modified'<CR>", opts)
+      -- Open notes associated with the selected tags.
+      vim.api.nvim_set_keymap("n", "<leader>zt", ":Telescope zk tags<CR>", opts)
+
+      -- Search for the notes matching a given query.
+      vim.api.nvim_set_keymap("n", "<leader>zf", "<Cmd>ZkNotes { sort = { 'modified' }, match = vim.fn.input('Search: ') }<CR>", opts)
+      -- Search for the notes matching the current visual selection.
+      vim.api.nvim_set_keymap("v", "<leader>zf", ":'<,'>ZkMatch<CR>", opts)
+    end
+  }
 
 end)

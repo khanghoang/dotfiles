@@ -44,6 +44,9 @@ vim.cmd [[highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE g
 -- set color for number in the gutter
 vim.cmd [[highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff]]
 
+-- Make the pane border thinner
+vim.cmd [[highlight WinSeparator guibg=None]]
+
 -- Use new regular expression engine
 -- without this typescript highlighting will suffer due to 'redrawtime' exceeded, syntax highlighting disabled
 -- https://jameschambers.co.uk/vim-typescript-slow
@@ -60,6 +63,3 @@ vim.cmd [[set cmdheight=0]]
 
 -- Global status line
 vim.cmd [[set laststatus=3]]
-
--- Make the pane border thinner
-vim.cmd [[highlight WinSeparator guibg=None]]
