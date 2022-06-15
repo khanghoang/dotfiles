@@ -1,4 +1,4 @@
--- vim: set foldmethod=marker foldlevel=0 :
+-- vim: set foldmethod=marker foldlevel=0 foldlevelstart=0 foldenable :
 
 return require('packer').startup(function()
   -- Packer can manage itself
