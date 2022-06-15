@@ -858,7 +858,7 @@ return require('packer').startup(function()
       require("telescope").load_extension("zk")
 
       -- Open notes.
-      vim.api.nvim_set_keymap("n", "<leader>zo", ":Telescope zk notes sort='modified'<CR>", opts)
+      vim.api.nvim_set_keymap("n", "<leader>zo", ":Telescope zk notes<CR>", opts)
       -- Open notes associated with the selected tags.
       vim.api.nvim_set_keymap("n", "<leader>zt", ":Telescope zk tags<CR>", opts)
 
