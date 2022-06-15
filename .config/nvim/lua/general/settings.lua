@@ -43,23 +43,3 @@ vim.cmd [[set cursorline]]
 vim.cmd [[highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE]]
 -- set color for number in the gutter
 vim.cmd [[highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff]]
-
--- Make the pane border thinner
-vim.cmd [[highlight WinSeparator guibg=None]]
-
--- Use new regular expression engine
--- without this typescript highlighting will suffer due to 'redrawtime' exceeded, syntax highlighting disabled
--- https://jameschambers.co.uk/vim-typescript-slow
-vim.cmd [[set re=0]]
-
---  :h scrolloff
-vim.cmd [[set scrolloff=25]]
-
--- clipboard setting
--- vim.cmd [[set clipboard=unnamedplus]]
---
--- Hide command line
-vim.cmd [[set cmdheight=0]]
-
--- Global status line
-vim.cmd [[set laststatus=3]]

@@ -16,7 +16,30 @@ require('plugins/lightline')
 
 require('colorschemes/lua/oceannext')
 require('general/mappings')
-
 vim.cmd [[
   let g:vimspector_base_dir='/home/khanghoang/.local/share/nvim/site/pack/packer/start/vimspector'
 ]]
+
+-- Make the pane border thinner
+vim.cmd [[highlight WinSeparator guibg=None]]
+
+-- Use new regular expression engine
+-- without this typescript highlighting will suffer due to 'redrawtime' exceeded, syntax highlighting disabled
+-- https://jameschambers.co.uk/vim-typescript-slow
+vim.cmd [[set re=0]]
+
+--  :h scrolloff
+vim.cmd [[set scrolloff=25]]
+
+-- clipboard setting
+-- vim.cmd [[set clipboard=unnamedplus]]
+--
+-- Hide command line
+vim.cmd [[set cmdheight=1]]
+
+-- Global status line
+vim.cmd [[set laststatus=3]]
+
+-- enable modeline
+-- https://vim.fandom.com/wiki/Modeline_magic
+vim.cmd [[set modeline]]
