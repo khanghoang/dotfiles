@@ -115,7 +115,6 @@ gls.mid[2] = {
   }
 }
 
-
 vim.cmd [[hi StatusLine guibg=#352f2d guifg=#352f2d]]
 
 M.reload = function ()
