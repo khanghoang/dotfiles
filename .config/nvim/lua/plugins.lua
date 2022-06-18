@@ -494,7 +494,7 @@ return require('packer').startup(function()
       vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", {noremap = true})
       vim.api.nvim_set_keymap('n', '<leader>tr', ":lua require('neotest').run.run()<CR>", {noremap = true})
       vim.api.nvim_set_keymap('n', '<leader>tt', ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>to', ":lua require('neotest').summary.open()", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>to', ":lua require('neotest').summary.open()<CR>", {noremap = true})
     end
   }
 
