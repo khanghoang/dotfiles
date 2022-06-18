@@ -85,6 +85,7 @@ gls.right[4] = {
 gls.right[5] = {
   LinePercent = {
     provider = 'LinePercent',
+    icon = '↓',
     separator = '',
     separator_highlight = {'NONE',colors.bg},
     highlight = {colors.blue,colors.bg,'bold'}
@@ -103,7 +104,8 @@ gls.mid[1] = {
 gls.mid[2] = {
   FileName = {
     provider = function ()
-      return vim.fn.expand('%:t');
+      local filepath = vim.fn.fnamemodify(vim.fn.expand '%', ':~:.')
+      return filepath
     end,
     condition = condition.buffer_not_empty,
     highlight = {"#b4bdc3", "#352f2d"},
