@@ -500,11 +500,11 @@ return require('packer').startup(function()
   -- Filetypes
   -- {{{
   -- Generate table of content from a markdown file
-  -- Disabled since we have marksman - markdown ls
-  -- use {
-  --   'preservim/vim-markdown',
-  --   ft = {'markdown'},
-  -- }
+  -- Mostly for Table of Content, zk is for another purpose
+  use {
+    'preservim/vim-markdown',
+    ft = {'markdown'},
+  }
   -- }}}
 
   -- Misc
