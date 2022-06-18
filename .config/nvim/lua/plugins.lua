@@ -536,6 +536,7 @@ return require('packer').startup(function()
   use 'tomtom/tcomment_vim'
 
   -- find the matching characters for {}, [], etc
+  -- https://github.com/andymass/vim-matchup#a2-jump-to-open-and-close-words
   use {'andymass/vim-matchup', event = 'VimEnter'}
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
