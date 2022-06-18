@@ -481,7 +481,7 @@ return require('packer').startup(function()
       -- g["test#typescript#runner"] = 'jest'
       -- g["test#strategy"] = 'dispatch_background'
 
-      -- usage: 
+      -- usage:
       -- 1. Run test (for example :TestNearest)
       -- 2. <C-o> to scroll through the test results
       -- 3. <C-o> on the failed test LOC to open it in vim
@@ -491,6 +491,10 @@ return require('packer').startup(function()
       vim.api.nvim_set_keymap('n', '<leader>tf', ":TestNearest<CR>", {noremap = true})
       vim.api.nvim_set_keymap('n', '<leader>ts', ":TestNearest<CR>", {noremap = true})
       vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>tr', ":lua require('neotest').run.run()<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>tt', ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>", {noremap = true})
+      vim.api.nvim_set_keymap('n', '<leader>to', ":lua require('neotest').summary.open()", {noremap = true})
     end
   }
 
