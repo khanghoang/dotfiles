@@ -35,7 +35,7 @@ vim.cmd [[set scrolloff=25]]
 -- vim.cmd [[set clipboard=unnamedplus]]
 --
 -- Hide command line
-vim.cmd [[set cmdheight=1]]
+vim.cmd [[set cmdheight=0]]
 
 -- Global status line
 vim.cmd [[set laststatus=3]]
