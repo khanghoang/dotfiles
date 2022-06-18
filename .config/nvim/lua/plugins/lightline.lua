@@ -2,6 +2,7 @@ local gl = require('galaxyline')
 local colors = require('galaxyline.themes.colors').default
 local condition = require('galaxyline.condition')
 local gls = gl.section
+local M = {}
 
 -- Default colors and providers
 -- https://github.com/glepnir/galaxyline.nvim#default-provider-groups
@@ -10,6 +11,7 @@ gls.left[3] = {
   DiagnosticError = {
     condition = condition.buffer_not_empty,
     provider = 'DiagnosticError',
+    icon = ' ',
     separator = '',
     highlight = {colors.red,colors.bg},
     separator_highlight = {'NONE',colors.bg},
@@ -19,7 +21,7 @@ gls.left[4] = {
   DiagnosticWarn = {
     condition = condition.buffer_not_empty,
     provider = 'DiagnosticWarn',
-    separator = '',
+    icon = ' ',
     highlight = {colors.yellow,colors.bg},
     separator_highlight = {'NONE',colors.bg},
   }
@@ -29,7 +31,7 @@ gls.left[5] = {
   DiagnosticHint = {
     condition = condition.buffer_not_empty,
     provider = 'DiagnosticHint',
-    separator = '',
+    icon = ' ',
     highlight = {colors.cyan,colors.bg},
     separator_highlight = {'NONE',colors.bg},
   }
@@ -39,7 +41,7 @@ gls.left[6] = {
   DiagnosticInfo = {
     condition = condition.buffer_not_empty,
     provider = 'DiagnosticInfo',
-    icon = '',
+    icon = ' ',
     highlight = {colors.blue,colors.bg},
     separator_highlight = {'NONE',colors.bg},
   }
@@ -52,16 +54,7 @@ gls.left[7] = {
     icon = ' LSP:',
     highlight = {colors.cyan,colors.bg},
     separator_highlight = {'NONE',colors.bg},
-    separator = " ",
-  }
-}
-
-gls.right[1] = {
-  LinePercent = {
-    provider = 'LinePercent',
-    separator = ' ',
-    separator_highlight = {'NONE',colors.bg},
-    highlight = {colors.green,colors.bg,'bold'}
+    separator = "  ",
   }
 }
 
@@ -70,6 +63,8 @@ gls.right[2] = {
     provider = 'DiffAdd',
     icon = '+',
     highlight = {colors.green,colors.bg},
+    separator = " ",
+    separator_highlight = {'NONE',colors.bg},
   }
 }
 gls.right[3] = {
@@ -87,6 +82,15 @@ gls.right[4] = {
   }
 }
 
+gls.right[5] = {
+  LinePercent = {
+    provider = 'LinePercent',
+    separator = '',
+    separator_highlight = {'NONE',colors.bg},
+    highlight = {colors.blue,colors.bg,'bold'}
+  }
+}
+
 gls.mid[1] = {
   GitBranch = {
     provider = 'GitBranch',
@@ -98,17 +102,19 @@ gls.mid[1] = {
 
 gls.mid[2] = {
   FileName = {
-    provider = 'FilePath',
+    provider = function ()
+      return vim.fn.expand('%:t');
+    end,
     condition = condition.buffer_not_empty,
     highlight = {"#b4bdc3", "#352f2d"},
     separator = ' - ',
     separator_highlight = {'NONE', "#352f2d"},
+    icon_highlight = {'NONE', "#352f2d"},
   }
 }
 
-vim.cmd [[hi StatusLine guibg=#352f2d guifg=#352f2d]]
 
-local M = {}
+vim.cmd [[hi StatusLine guibg=#352f2d guifg=#352f2d]]
 
 M.reload = function ()
   local gl = require('galaxyline')
@@ -121,7 +127,7 @@ M.reload = function ()
   require("plenary.reload").reload_module("plugins.lightline")
   require("plugins.lightline")
 
-  print('reloaded')
+ print('reloaded')
 end
 
 return M
