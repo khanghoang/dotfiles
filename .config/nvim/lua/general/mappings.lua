@@ -35,8 +35,17 @@ api.nvim_set_keymap('n', 'tn', ":tabnew<CR>", {noremap = true})
 
 -- testing 
 vim.api.nvim_set_keymap('n', '<leader><leader>x', ":w<CR>:source %<CR>", {noremap = true})
-vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('neotest-vim-test.reload').reload()<CR>", {noremap = true})
+vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('plugins.lightline').reload()<CR>", {noremap = true})
 
 -- easy save
 vim.api.nvim_set_keymap('n', '<leader>s', ":w!<CR>", {noremap = true})
 vim.api.nvim_set_keymap('n', '<leader>S', ":wq!<CR>", {noremap = true})
+
+-- F5 to insert current datetime
+vim.api.nvim_set_keymap('n', '<F5>', "put=strftime('%c')<CR>P", { noremap = true })
+vim.api.nvim_set_keymap('i', '<F5>', "<C-R>=strftime('%c')<CR>", { noremap = true })
+
+-- using 'dts' as abbreviations
+-- :help :map-expression
+-- :help abbreviations
+vim.cmd [[iab <expr> dts strftime("%c")]]
