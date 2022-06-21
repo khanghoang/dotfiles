@@ -48,4 +48,9 @@ vim.api.nvim_set_keymap('i', '<F5>', "<C-R>=strftime('%c')<CR>", { noremap = tru
 -- using 'dts' as abbreviations
 -- :help :map-expression
 -- :help abbreviations
-vim.cmd [[iab <expr> dts strftime("%c")]]
+-- add "/" to the iskeyword since it's not a keyword
+-- https://www.reddit.com/r/vim/comments/lfg95e/escape_characters_on_abbreviations/gmm9pqs/?utm_source=reddit&utm_medium=web2x&context=3
+vim.cmd [[set iskeyword+=/]]
+
+-- get current datetime by '/today'
+vim.cmd [[iab <expr> /today strftime("%c")]]
