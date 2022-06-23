@@ -149,7 +149,15 @@ nvim_lsp.jsonls.setup {
       end
     }
   },
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+}
+
+-- Tailwindcss
+-- local tailwind = lsp_install_path..'/'
+local tailwind = lsp_install_path..'/tailwindcss_npm/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server'
+nvim_lsp.tailwindcss.setup {
+  cmd = {tailwind, '--stdio'},
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 -- Markdown
