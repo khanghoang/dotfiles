@@ -63,7 +63,7 @@ if vim.fn.has "mac" == 1 then
     },
     ui = {
       Lock = "",
-      Circle = "",
+      Circle = "●",
       BigCircle = "",
       BigUnfilledCircle = "",
       Close = "",
@@ -160,7 +160,7 @@ else
     },
     ui = {
       Lock = " ",
-      Circle = " ",
+      Circle = "●",
       BigCircle = " ",
       BigUnfilledCircle = " ",
       Close = " ",
