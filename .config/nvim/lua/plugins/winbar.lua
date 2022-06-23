@@ -16,6 +16,9 @@ M.winbar_filetype_exclude = {
   "fugitive",
   "gitcommit",
   "Trouble",
+  "dbui",
+  "dbout",
+  "sql",
 }
 
 local get_filename = function()

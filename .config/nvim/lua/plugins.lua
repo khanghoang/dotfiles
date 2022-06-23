@@ -918,7 +918,7 @@ return require('packer').startup(function()
   use {
     "kristijanhusak/vim-dadbod-completion",
     config = function ()
-      vim.api.cmd [[
+      vim.cmd [[
         autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
         " Source is automatically added, you just need to include it in the chain complete list
         let g:completion_chain_complete_list = {
