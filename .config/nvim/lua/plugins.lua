@@ -425,7 +425,8 @@ return require('packer').startup(function()
 
   use {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    config = function()
+    ft = {'typescriptreact', 'typescript', 'javascript', 'javascriptreact', 'lua', 'bash', 'go', 'json', 'python'},
+    config = function() 
       require'nvim-treesitter.configs'.setup {
         matchup = {
           enable = true,
