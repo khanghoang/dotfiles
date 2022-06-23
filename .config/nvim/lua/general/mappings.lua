@@ -45,6 +45,9 @@ vim.api.nvim_set_keymap('n', '<leader>S', ":wq!<CR>", {noremap = true})
 vim.api.nvim_set_keymap('n', '<F5>', "put=strftime('%c')<CR>P", { noremap = true })
 vim.api.nvim_set_keymap('i', '<F5>', "<C-R>=strftime('%c')<CR>", { noremap = true })
 
+-- Telescope live grep
+vim.api.nvim_set_keymap('n', '<leader>lg', ":Telescope live_grep<CR>", { noremap = true })
+
 -- using 'dts' as abbreviations
 -- :help :map-expression
 -- :help abbreviations
