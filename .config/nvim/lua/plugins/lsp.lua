@@ -149,6 +149,7 @@ nvim_lsp.jsonls.setup {
       end
     }
   },
+  on_attach = on_attach,
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
@@ -156,6 +157,7 @@ nvim_lsp.jsonls.setup {
 local tailwind = lsp_install_path..'/tailwindcss_npm/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server'
 nvim_lsp.tailwindcss.setup {
   cmd = {tailwind, '--stdio'},
+  on_attach = on_attach,
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
@@ -163,25 +165,27 @@ nvim_lsp.tailwindcss.setup {
 local docker = lsp_install_path..'/dockerfile/node_modules/dockerfile-language-server-nodejs/bin/docker-langserver'
 nvim_lsp.dockerls.setup {
   cmd = {docker, '--stdio'},
+  on_attach = on_attach,
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 -- Markdown
 -- LspInstall markdown marksman
--- local markdown = lsp_install_path..'/marksman/marksman'
--- nvim_lsp.marksman.setup {
---   cmd = {markdown, "server"},
---   commands = {
---     Format = {
---       function()
---         vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
---       end
---     }
---   },
---   on_attach = on_attach,
---   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
--- }
+local markdown = lsp_install_path..'/marksman/marksman'
+nvim_lsp.marksman.setup {
+  cmd = {markdown, "server"},
+  commands = {
+    Format = {
+      function()
+        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+      end
+    }
+  },
+  on_attach = on_attach,
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+}
 
+-- Zk
 require("zk").setup({
   -- can be "telescope", "fzf" or "select" (`vim.ui.select`)
   -- it's recommended to use "telescope" or "fzf"
