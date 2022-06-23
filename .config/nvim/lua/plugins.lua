@@ -1,5 +1,44 @@
 -- vim: set foldmethod=marker foldlevel=0 foldlevelstart=0 foldenable :
 
+-- Have packer use a popup window
+-- Use a protected call so we don't error out on first use
+local status_ok, packer = pcall(require, "packer")
+if not status_ok then
+  return
+end
+
+-- Have packer use a popup window
+-- Packer init
+-- {{{
+packer.init {
+  git = {
+    cmd = 'git', -- The base command for git operations
+    subcommands = { -- Format strings for git subcommands
+      update         = 'pull --ff-only --progress --rebase=false',
+      install        = 'clone --depth %i --no-single-branch --progress',
+      fetch          = 'fetch --depth 999999 --progress',
+      checkout       = 'checkout %s --',
+      update_branch  = 'merge --ff-only @{u}',
+      current_branch = 'branch --show-current',
+      diff           = 'log --color=never --pretty=format:FMT --no-show-signature HEAD@{1}...HEAD',
+      diff_fmt       = '%%h %%s (%%cr)',
+      get_rev        = 'rev-parse --short HEAD',
+      get_msg        = 'log --color=never --pretty=format:FMT --no-show-signature HEAD -n 1',
+      submodules     = 'submodule update --init --recursive --progress'
+    },
+    depth = 1, -- Git clone depth
+    -- tree-sitter/tree-sitter-typescript timeout at 60s
+    clone_timeout = 5 * 60, -- Timeout, in seconds, for git clones
+    default_url_format = 'https://github.com/%s' -- Lua format string used for "aaa/bbb" style plugins
+  },
+  display = {
+    open_fn = function()
+      return require("packer.util").float { border = "rounded" }
+    end,
+  },
+}
+-- }}}
+
 return require('packer').startup(function()
   -- Packer can manage itself
   -- Package manager
