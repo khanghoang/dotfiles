@@ -153,10 +153,16 @@ nvim_lsp.jsonls.setup {
 }
 
 -- Tailwindcss
--- local tailwind = lsp_install_path..'/'
 local tailwind = lsp_install_path..'/tailwindcss_npm/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server'
 nvim_lsp.tailwindcss.setup {
   cmd = {tailwind, '--stdio'},
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+}
+
+-- Docker
+local docker = lsp_install_path..'/dockerfile/node_modules/dockerfile-language-server-nodejs/bin/docker-langserver'
+nvim_lsp.dockerls.setup {
+  cmd = {docker, '--stdio'},
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
