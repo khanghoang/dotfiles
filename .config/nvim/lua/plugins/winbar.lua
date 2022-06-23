@@ -15,6 +15,7 @@ M.winbar_filetype_exclude = {
   "toggleterm",
   "fugitive",
   "gitcommit",
+  "Trouble",
 }
 
 local get_filename = function()
