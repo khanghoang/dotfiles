@@ -65,6 +65,7 @@ nvim_lsp.tsserver.setup({
   flags = {
     debounce_text_changes = 150,
   },
+  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
 local pyright_bin = lsp_install_path..'/python/node_modules/pyright/langserver.index.js'
