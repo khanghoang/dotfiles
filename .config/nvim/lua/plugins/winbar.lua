@@ -13,6 +13,8 @@ M.winbar_filetype_exclude = {
   "Outline",
   "spectre_panel",
   "toggleterm",
+  "fugitive",
+  "gitcommit",
 }
 
 local get_filename = function()
@@ -86,7 +88,7 @@ M.get_winbar = function()
   end
 
   if not f.isempty(value) and f.get_buf_option "mod" then
-    local mod = "%#LineNr#" .. require("user.icons").ui.Circle .. "%*"
+    local mod = "%#LineNr#" .. require("plugins.icons").ui.Circle .. "%*"
     if gps_added then
       value = value .. " " .. mod
     else
