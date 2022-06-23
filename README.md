@@ -1,8 +1,13 @@
 # Dotfiles
-Dear future me,  
-It seems like you have problem with dotfiles again, don't you? No worry, we have it all the time.  
-Here is the list of things that you need to do to save your time and productivity.  
 
+## For Linux
+### Apps
+- Variety for wallpaper
+- i3gaps
+- stow for symlink recursively
+- neovim >0.8
+
+## For Mac
 ## Alfred theme
 https://www.alfredapp.com/extras/theme/wmXBE8FfEe/
 
