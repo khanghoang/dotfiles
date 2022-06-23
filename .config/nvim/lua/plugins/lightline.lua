@@ -4,6 +4,8 @@ local condition = require('galaxyline.condition')
 local gls = gl.section
 local M = {}
 
+local lspIcon = require "plugins.icons".ui.ChevronRight
+
 -- Default colors and providers
 -- https://github.com/glepnir/galaxyline.nvim#default-provider-groups
 
@@ -51,7 +53,7 @@ gls.left[7] = {
   ShowLspClient = {
     provider = 'GetLspClient',
     condition = condition.buffer_not_empty,
-    icon = ' LSP:',
+    icon = ' ' .. lspIcon,
     highlight = {colors.cyan,colors.bg},
     separator_highlight = {'NONE',colors.bg},
     separator = "  ",
