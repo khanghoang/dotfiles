@@ -912,6 +912,13 @@ return require('packer').startup(function()
     end
   }
 
+  -- SQL
+  -- {{{
+  use "tpope/vim-dadbod"
+  use { "kristijanhusak/vim-dadbod-completion" }
+  use { "kristijanhusak/vim-dadbod-ui" }
+  -- }}}
+
   -- Uncategorized
   -- Waiting to be removed
   -- {{{
