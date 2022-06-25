@@ -1,16 +1,18 @@
 -- vim: set foldmethod=marker foldlevel=0 foldlevelstart=0 foldenable :
 
--- Have packer use a popup window
--- Use a protected call so we don't error out on first use
-local status_ok, packer = pcall(require, "packer")
-if not status_ok then
-  return
+-- Install Packer on fresh start
+local install_path = vim.fn.stdpath 'data' .. '/site/pack/packer/start/packer.nvim'
+local is_bootstrap = false
+if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+  is_bootstrap = true
+  vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
+  vim.cmd [[packadd packer.nvim]]
 end
 
 -- Have packer use a popup window
 -- Packer init
 -- {{{
-packer.init {
+require'packer'.init {
   git = {
     cmd = 'git', -- The base command for git operations
     subcommands = { -- Format strings for git subcommands
@@ -39,7 +41,7 @@ packer.init {
 }
 -- }}}
 
-return require('packer').startup(function()
+require('packer').startup(function()
   -- Packer can manage itself
   -- Package manager
   -- {{{
@@ -247,7 +249,7 @@ return require('packer').startup(function()
   }
 
   --}}}
-  
+
   -- Completion
   -- {{{
   use {
@@ -959,14 +961,40 @@ return require('packer').startup(function()
   --   opt = true
   -- }
   -- }}}
+
   -- Lua
-  
+  -- Winbar
+  --- {{{
   vim.api.nvim_create_autocmd({ "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost" }, {
     callback = function()
       require("plugins.winbar").get_winbar()
     end,
   })
+  --}}}
 
-
+  if is_bootstrap then
+    require('packer').sync()
+  end
 
 end)
+
+-- When we are bootstrapping a configuration, it doesn't
+-- make sense to execute the rest of the init.lua.
+--
+-- You'll need to restart nvim, and then it will work.
+if is_bootstrap then
+  print '=================================='
+  print '    Plugins are being installed'
+  print '    Wait until Packer completes,'
+  print '       then restart nvim'
+  print '=================================='
+  return
+end
+
+-- Automatically source and re-compile packer whenever you save this init.lua
+local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
+vim.api.nvim_create_autocmd('BufWritePost', {
+  command = 'source <afile> | PackerCompile',
+  group = packer_group,
+  pattern = vim.fn.expand '$MYVIMRC',
+})
