@@ -148,5 +148,3 @@ http://www.pyladies.com/blog/Get-Your-Mac-Ready-for-Python-Programming/
 ## Problem with vim or tmux yank?
 Check `vim` `+clipboard` by `vim --version | grep clipboard`, if it's `-clipboard` then you may need to install `vim` from `brew install vim --override-system-vim`   
 Install `brew install reattach-to-user-namespace` to make nvim yank work in tmux
-
-
