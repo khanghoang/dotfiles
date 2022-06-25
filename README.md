@@ -7,6 +7,8 @@
 - stow for symlink recursively
 - neovim >0.8
 - [picom](https://github.com/yshui/picom)
+- [Glow](https://github.com/charmbracelet/glow)
+    - Install by `sudo snap install glow`
 
 ## For Mac
 ## Alfred theme

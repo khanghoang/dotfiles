@@ -585,6 +585,11 @@ require('packer').startup(function()
     'preservim/vim-markdown',
     ft = {'markdown'},
   }
+  use {
+    "ellisonleao/glow.nvim",
+    branch = 'main',
+    ft = {'markdown'},
+  }
   -- }}}
 
   -- Misc
