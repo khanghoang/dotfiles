@@ -612,6 +612,10 @@ require('packer').startup(function()
   -- }
 
   use 'tpope/vim-surround'
+
+  -- Detect tabstop and shiftwidth automatically
+  use 'tpope/vim-sleuth'
+
   use 'christoomey/vim-tmux-navigator'
   use {
     'numToStr/Comment.nvim',
@@ -626,6 +630,9 @@ require('packer').startup(function()
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
   use 'nvim-telescope/telescope.nvim'
+
+  -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
+  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable "make" == 1 }
 
   -- support prisma schema
   use {
