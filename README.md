@@ -6,6 +6,7 @@
 - i3gaps
 - stow for symlink recursively
 - neovim >0.8
+- [picom](https://github.com/yshui/picom)
 
 ## For Mac
 ## Alfred theme
