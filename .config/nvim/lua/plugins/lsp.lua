@@ -1,22 +1,42 @@
 local nvim_lsp = require('lspconfig')
 
+-- Enable the following language servers
+local servers = {
+  'clangd',
+  'rust_analyzer',
+  'pyright',
+  'tsserver',
+  'sumneko_lua',
+  'zk',
+  'tailwindcss',
+  'jsonls',
+  'gopls',
+  'dockerls',
+}
+
+-- Ensure the servers above are installed
+require('nvim-lsp-installer').setup {
+  ensure_installed = servers,
+}
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
-    properties = {
-      'documentation',
-      'detail',
-      'additionalTextEdits',
-    }
+  properties = {
+    'documentation',
+    'detail',
+    'additionalTextEdits',
+  }
 }
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
 
   buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  local opts = {noremap = true, silent = true}
+  local opts = { noremap = true, silent = true }
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'gs', '<cmd>lua require("lspsaga.signaturehelp").signature_help()<CR>', opts)
@@ -45,20 +65,20 @@ end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = {
-      prefix = "»",
-      spacing = 4,
-    },
-    signs = true,
-    update_in_insert = false,
-  }
+  virtual_text = {
+    prefix = "»",
+    spacing = 4,
+  },
+  signs = true,
+  update_in_insert = false,
+}
 )
 
-local lsp_install_path = vim.env.HOME..'/.local/share/nvim/lsp_servers'
+local lsp_install_path = vim.env.HOME .. '/.local/share/nvim/lsp_servers'
 
 -- TypeScript
 -- LspInstall typescript
-local typescript_bin = lsp_install_path..'/tsserver/node_modules/typescript-language-server/lib/cli.js'
+local typescript_bin = lsp_install_path .. '/tsserver/node_modules/typescript-language-server/lib/cli.js'
 nvim_lsp.tsserver.setup({
   cmd = { typescript_bin, '--stdio' },
   on_attach = on_attach,
@@ -68,7 +88,7 @@ nvim_lsp.tsserver.setup({
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
-local pyright_bin = lsp_install_path..'/python/node_modules/pyright/langserver.index.js'
+local pyright_bin = lsp_install_path .. '/python/node_modules/pyright/langserver.index.js'
 nvim_lsp.pyright.setup({
   cmd = { pyright_bin, '--stdio' },
   on_attach = on_attach,
@@ -90,10 +110,10 @@ nvim_lsp.pyright.setup({
 
 -- LUA
 -- LspInstall lua
-local sumneko_root_path = lsp_install_path..'/sumneko_lua'
-local sumneko_binary = sumneko_root_path..'/extension/server/bin/lua-language-server'
+local sumneko_root_path = lsp_install_path .. '/sumneko_lua'
+local sumneko_binary = sumneko_root_path .. '/extension/server/bin/lua-language-server'
 nvim_lsp.sumneko_lua.setup {
-  cmd = {sumneko_binary};
+  cmd = { sumneko_binary };
   settings = {
     Lua = {
       -- Insert your settings here
@@ -105,7 +125,7 @@ nvim_lsp.sumneko_lua.setup {
       },
       diagnostics = {
         -- Get the language server to recognize the `vim` global
-        globals = {'vim', 'use'},
+        globals = { 'vim', 'use' },
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
@@ -120,10 +140,10 @@ nvim_lsp.sumneko_lua.setup {
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
-local gopls = lsp_install_path..'/go'
-local gopls_path = gopls..'/gopls'
+local gopls = lsp_install_path .. '/go'
+local gopls_path = gopls .. '/gopls'
 nvim_lsp.gopls.setup({
-  cmd = {gopls_path, "serve"},
+  cmd = { gopls_path, "serve" },
   settings = {
     gopls = {
       analyses = {
@@ -139,13 +159,13 @@ nvim_lsp.gopls.setup({
 -- JSON
 -- LspInstall json
 -- yarn global add vscode-langservers-extracted
-local jsonls = lsp_install_path..'/jsonls/node_modules/vscode-langservers-extracted/bin/vscode-json-language-server'
+local jsonls = lsp_install_path .. '/jsonls/node_modules/vscode-langservers-extracted/bin/vscode-json-language-server'
 nvim_lsp.jsonls.setup {
-  cmd = {jsonls, '--stdio'},
+  cmd = { jsonls, '--stdio' },
   commands = {
     Format = {
       function()
-        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+        vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
       end
     }
   },
@@ -154,36 +174,37 @@ nvim_lsp.jsonls.setup {
 }
 
 -- Tailwindcss
-local tailwind = lsp_install_path..'/tailwindcss_npm/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server'
+local tailwind = lsp_install_path ..
+    '/tailwindcss_npm/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server'
 nvim_lsp.tailwindcss.setup {
-  cmd = {tailwind, '--stdio'},
+  cmd = { tailwind, '--stdio' },
   on_attach = on_attach,
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 -- Docker
-local docker = lsp_install_path..'/dockerfile/node_modules/dockerfile-language-server-nodejs/bin/docker-langserver'
+local docker = lsp_install_path .. '/dockerfile/node_modules/dockerfile-language-server-nodejs/bin/docker-langserver'
 nvim_lsp.dockerls.setup {
-  cmd = {docker, '--stdio'},
+  cmd = { docker, '--stdio' },
   on_attach = on_attach,
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 -- Markdown
 -- LspInstall markdown marksman
-local markdown = lsp_install_path..'/marksman/marksman'
-nvim_lsp.marksman.setup {
-  cmd = {markdown, "server"},
-  commands = {
-    Format = {
-      function()
-        vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
-      end
-    }
-  },
-  on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
-}
+-- local markdown = lsp_install_path..'/marksman/marksman'
+-- nvim_lsp.marksman.setup {
+--   cmd = {markdown, "server"},
+--   commands = {
+--     Format = {
+--       function()
+--         vim.lsp.buf.range_formatting({},{0,0},{vim.fn.line("$"),0})
+--       end
+--     }
+--   },
+--   on_attach = on_attach,
+--   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+-- }
 
 -- Zk
 require("zk").setup({
