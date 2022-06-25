@@ -191,8 +191,8 @@ export PATH="$PATH:$HOME/.local/share/nvim/lsp_servers/zk"
 export NODE_OPTIONS="--max-old-space-size=4096"
 
 # Go path
-export GOPATH=$HOME/go/bin
-export PATH="$PATH:$GOPATH"
+export PATH="$PATH:$HOME/go/bin/bin"
+export TZ_LIST="Antarctica/Macquarie; Asia/Ho_Chi_Minh"
 
 alias luamake=/home/khanghoang/code/lua-language-server/3rd/luamake/luamake
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh="kitty +kitten ssh"
