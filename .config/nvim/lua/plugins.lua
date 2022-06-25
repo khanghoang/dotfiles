@@ -383,6 +383,13 @@ require('packer').startup(function()
         vim.cmd [[packadd plenary.nvim]]
       end
       require('gitsigns').setup {
+        signs = {
+          add = { text = '│' },
+          change = { text = '│' },
+          delete = { text = '│' },
+          topdelete = { text = '│' },
+          changedelete = { text = '│' },
+        },
         keymaps = {
           -- Default keymap options
           noremap = true,
@@ -606,7 +613,12 @@ require('packer').startup(function()
 
   use 'tpope/vim-surround'
   use 'christoomey/vim-tmux-navigator'
-  use 'tomtom/tcomment_vim'
+  use {
+    'numToStr/Comment.nvim',
+    config = function ()
+      require('Comment').setup()
+    end
+  }
 
   -- find the matching characters for {}, [], etc
   -- https://github.com/andymass/vim-matchup#a2-jump-to-open-and-close-words
@@ -697,6 +709,7 @@ require('packer').startup(function()
     config = function()
       vim.g.indent_blankline_char = "│"
       vim.g.indent_blankline_show_first_indent_level = true
+      vim.g.show_trailing_blankline_indent = false
       vim.g.indent_blankline_filetype_exclude = {
         "startify",
         "dashboard",
