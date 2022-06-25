@@ -19,6 +19,8 @@ require('nvim-lsp-installer').setup {
   ensure_installed = servers,
 }
 
+-- TODO: CONSIDER TO REFACOTR THIS BY USING
+-- https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L306
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
