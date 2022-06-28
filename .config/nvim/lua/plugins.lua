@@ -743,6 +743,9 @@ require('packer').startup(function()
         "TelescopePrompt",
         "undotree",
         "flutterToolsOutline",
+        "dbui",
+        "dbout",
+        "sql",
         "" -- for all buffers without a file type
       }
       vim.g.indent_blankline_buftype_exclude = {"terminal", "nofile"}
