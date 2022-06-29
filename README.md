@@ -9,6 +9,7 @@
 - [picom](https://github.com/yshui/picom)
 - [Glow](https://github.com/charmbracelet/glow)
     - Install by `sudo snap install glow`
+- `redshift` for screen temperature
 
 ## For Mac
 ## Alfred theme
