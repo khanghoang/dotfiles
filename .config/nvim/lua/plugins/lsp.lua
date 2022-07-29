@@ -177,7 +177,7 @@ nvim_lsp.jsonls.setup {
 
 -- Tailwindcss
 local tailwind = lsp_install_path ..
-    '/tailwindcss_npm/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server'
+    '/tailwindcss/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server'
 nvim_lsp.tailwindcss.setup {
   cmd = { tailwind, '--stdio' },
   on_attach = on_attach,
