@@ -76,11 +76,11 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
 }
 )
 
-local lsp_install_path = vim.env.HOME .. '/.local/share/nvim/lsp_servers'
+local lsp_install_path = vim.env.HOME .. '/.local/share/nvim/mason/bin'
 
 -- TypeScript
 -- LspInstall typescript
-local typescript_bin = lsp_install_path .. '/tsserver/node_modules/typescript-language-server/lib/cli.js'
+local typescript_bin = lsp_install_path .. '/typescript-language-server'
 nvim_lsp.tsserver.setup({
   cmd = { typescript_bin, '--stdio' },
   on_attach = on_attach,
@@ -90,7 +90,7 @@ nvim_lsp.tsserver.setup({
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
-local pyright_bin = lsp_install_path .. '/python/node_modules/pyright/langserver.index.js'
+local pyright_bin = lsp_install_path .. '/pyright-langserver'
 nvim_lsp.pyright.setup({
   cmd = { pyright_bin, '--stdio' },
   on_attach = on_attach,
@@ -112,8 +112,7 @@ nvim_lsp.pyright.setup({
 
 -- LUA
 -- LspInstall lua
-local sumneko_root_path = lsp_install_path .. '/sumneko_lua'
-local sumneko_binary = sumneko_root_path .. '/extension/server/bin/lua-language-server'
+local sumneko_binary = lsp_install_path .. '/lua-language-server'
 nvim_lsp.sumneko_lua.setup {
   cmd = { sumneko_binary };
   settings = {
@@ -142,6 +141,7 @@ nvim_lsp.sumneko_lua.setup {
   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
+-- unfinished config
 local gopls = lsp_install_path .. '/go'
 local gopls_path = gopls .. '/gopls'
 nvim_lsp.gopls.setup({
@@ -161,7 +161,7 @@ nvim_lsp.gopls.setup({
 -- JSON
 -- LspInstall json
 -- yarn global add vscode-langservers-extracted
-local jsonls = lsp_install_path .. '/jsonls/node_modules/vscode-langservers-extracted/bin/vscode-json-language-server'
+local jsonls = lsp_install_path .. '/vscode-json-language-server'
 nvim_lsp.jsonls.setup {
   cmd = { jsonls, '--stdio' },
   commands = {
@@ -177,7 +177,7 @@ nvim_lsp.jsonls.setup {
 
 -- Tailwindcss
 local tailwind = lsp_install_path ..
-    '/tailwindcss/node_modules/@tailwindcss/language-server/bin/tailwindcss-language-server'
+    '/tailwindcss-language-server'
 nvim_lsp.tailwindcss.setup {
   cmd = { tailwind, '--stdio' },
   on_attach = on_attach,
@@ -185,7 +185,7 @@ nvim_lsp.tailwindcss.setup {
 }
 
 -- Docker
-local docker = lsp_install_path .. '/dockerfile/node_modules/dockerfile-language-server-nodejs/bin/docker-langserver'
+local docker = lsp_install_path .. '/docker-langserver'
 nvim_lsp.dockerls.setup {
   cmd = { docker, '--stdio' },
   on_attach = on_attach,
