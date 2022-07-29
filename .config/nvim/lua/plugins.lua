@@ -505,7 +505,7 @@ require('packer').startup(function()
 
       -- fix fold on typescriptreact
       local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
-      parser_config.typescript.used_by = "typescriptreact"
+      parser_config.typescript.filetype_to_parsername = "typescriptreact"
 
       -- fold
       vim.cmd [[set foldmethod=expr]]
