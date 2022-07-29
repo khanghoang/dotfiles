@@ -478,12 +478,6 @@ require('packer').startup(function()
               ["ac"] = "@class.outer",
               ["ic"] = "@class.inner",
               ['uc'] = '@comment.outer',
-
-              -- -- Or you can define your own textobjects like this
-              ["iF"] = {
-                -- python = "(function_definition) @function",
-                typescriptreact = "(function_definition) @function",
-              },
             },
           },
           move = {
