@@ -693,6 +693,8 @@ require('packer').startup(function()
   -- }
   -- }}}
 
+  -- Debugger
+  -- {{{
   use {
     'williamboman/mason.nvim',
     config =function ()
@@ -774,6 +776,7 @@ require('packer').startup(function()
 
     end
   }
+  -- }}}
 
   -- Vim async dispatch
   -- {{{
