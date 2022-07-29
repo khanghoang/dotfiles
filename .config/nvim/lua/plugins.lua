@@ -671,27 +671,109 @@ require('packer').startup(function()
 
   -- Vimspector
   -- {{{
+  -- use {
+  --   'puremourning/vimspector',
+  --   -- opt = true,
+  --   -- cmd = {'VimspectorContinue'},
+  --   config = function ()
+  --     local map = vim.api.nvim_set_keymap
+  --     local opt = {noremap = false}
+  --
+  --     map('n', '<leader>dd', ':call vimspector#Launch()<CR>',opt)
+  --     map('n', '<leader>de', ':call vimspector#Reset()<CR>',opt)
+  --     map('n', '<leader>dr', ':call vimspector#Restart()<CR>',opt)
+  --
+  --     map('n', '<leader>dl', ':call vimspector#StepInto()<CR>',opt)
+  --     map('n', '<leader>dh', ':call vimspector#StepOut()<CR>',opt)
+  --     map('n', '<leader>dj', ':call vimspector#StopOver()<CR>',opt)
+  --     map('n', '<leader>dc', ':call vimspector#Continue()<CR>',opt)
+  --     map('n', '<leader>drc', '<Plug>VimspectorRunToCursor',opt)
+  --     map('n', '<leader>dbp', '<Plug>VimspectorToggleBreakpoint',opt)
+  --   end
+  -- }
+  -- }}}
+
   use {
-    'puremourning/vimspector',
-    -- opt = true,
-    -- cmd = {'VimspectorContinue'},
-    config = function ()
-      local map = vim.api.nvim_set_keymap
-      local opt = {noremap = false}
-
-      map('n', '<leader>dd', ':call vimspector#Launch()<CR>',opt)
-      map('n', '<leader>de', ':call vimspector#Reset()<CR>',opt)
-      map('n', '<leader>dr', ':call vimspector#Restart()<CR>',opt)
-
-      map('n', '<leader>dl', ':call vimspector#StepInto()<CR>',opt)
-      map('n', '<leader>dh', ':call vimspector#StepOut()<CR>',opt)
-      map('n', '<leader>dj', ':call vimspector#StopOver()<CR>',opt)
-      map('n', '<leader>dc', ':call vimspector#Continue()<CR>',opt)
-      map('n', '<leader>drc', '<Plug>VimspectorRunToCursor',opt)
-      map('n', '<leader>dbp', '<Plug>VimspectorToggleBreakpoint',opt)
+    'williamboman/mason.nvim',
+    config =function ()
+      require("mason").setup()
     end
   }
-  -- }}}
+  use 'mfussenegger/nvim-dap'
+  use {
+    "rcarriga/nvim-dap-ui",
+    requires = {"mfussenegger/nvim-dap"},
+    config =function ()
+      local dap = require('dap')
+      local dapui = require('dapui')
+
+      local api = vim.api
+      local installation_path = vim.fn.stdpath('data') .. '/mason/bin/'
+
+      -- May need to symlink manually, for example
+      -- ln -sf ~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3 ~/.local/share/nvim/mason/bin/
+      -- Though for debugpy, it needs the full path of the even python3, and
+      -- I still don't know why
+      dap.adapters.python = {
+        type = 'executable';
+        command = '~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3';
+        args = { '-m', 'debugpy.adapter' };
+      }
+
+      dap.configurations.python = {
+        {
+          -- The first three options are required by nvim-dap
+          type = 'python'; -- the type here established the link to the adapter definition: `dap.adapters.python`
+          request = 'launch';
+          name = "Launch file";
+
+          -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
+
+          program = "${file}"; -- This configuration will launch the current file if used.
+        },
+      }
+
+      vim.fn.sign_define('DapBreakpoint', {text = '●', texthl = 'GruvboxRed', linehl = '', numhl = ''})
+
+      api.nvim_set_keymap('n', '<leader>dd', ":lua require('dap').continue()<CR>", {noremap = true})
+      api.nvim_set_keymap('n', '<leader>dbp', ":lua require('dap').toggle_breakpoint()<CR>", {noremap = true})
+      api.nvim_set_keymap('n', '<leader>de', ":lua require('dap').close()<CR>", {noremap = true})
+      api.nvim_set_keymap('n', '<leader>dc', ":lua require('dap').continue()<CR>", {noremap = true})
+      api.nvim_set_keymap('n', '<leader>dr', ":lua require('dap').repl.open({}, 'vsplit')<CR><C-w>la", {noremap = true})
+
+      api.nvim_set_keymap('n', 'J', ":lua require('debug-helper').step_over({fallback = 'J'})<CR>", {noremap = true})
+      api.nvim_set_keymap('n', 'L', ":lua require('debug-helper').step_into({fallback = 'L'})<CR>", {noremap = true})
+      api.nvim_set_keymap('n', 'K', ":lua require('debug-helper').step_out({fallback = 'K'})<CR>", {noremap = true})
+
+      dapui.setup({
+        layouts = {
+          {
+            elements = {
+              'scopes',
+              'breakpoints',
+              'stacks',
+              'watches',
+            },
+            size = 80,
+            position = 'left',
+          },
+          {
+            elements = {
+              'repl',
+              'console',
+            },
+            size = 10,
+            position = 'bottom',
+          },
+        },
+      })
+
+      dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
+      dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
+      dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
+
+    end
+  }
 
   -- Vim async dispatch
   -- {{{
