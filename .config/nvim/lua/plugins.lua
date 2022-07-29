@@ -710,7 +710,7 @@ require('packer').startup(function()
       local dapui = require('dapui')
 
       local api = vim.api
-      local installation_path = vim.fn.stdpath('data') .. '/mason/bin/'
+      local installation_path = vim.fn.stdpath('data') .. '/mason/bin'
 
       -- May need to symlink manually, for example
       -- ln -sf ~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3 ~/.local/share/nvim/mason/bin/
@@ -732,6 +732,40 @@ require('packer').startup(function()
           -- Options below are for debugpy, see https://github.com/microsoft/debugpy/wiki/Debug-configuration-settings for supported options
 
           program = "${file}"; -- This configuration will launch the current file if used.
+        },
+      }
+
+      -- mkdir -p ~/.local/share/nvim/dap_debuggers && cd "$_"
+      -- git clone https://github.com/microsoft/vscode-node-debug2.git && cd vscode-node-debug2
+      -- npm install
+      -- npm run build
+      -- note: `npm run build` needs to run in node@16
+      dap.adapters.node2 = {
+        type = 'executable',
+        command = 'node',
+        -- relative path WILL NOT work
+        args = {os.getenv('HOME') .. '/.local/share/nvim/dap_debuggers/vscode-node-debug2/out/src/nodeDebug.js'},
+        -- Mason.nvim's symlinks don't work for nodejs
+        -- check ~/.local/share/nvim/mason/bin/node-debug2-adapter
+        -- args = { installation_path .. '/node-debug2-adapter' },
+      }
+      dap.configurations.javascript = {
+        {
+          name = 'Launch',
+          type = 'node2',
+          request = 'launch',
+          program = '${file}',
+          cwd = vim.fn.getcwd(),
+          sourceMaps = true,
+          protocol = 'inspector',
+          console = 'integratedTerminal',
+        },
+        {
+          -- For this to work you need to make sure the node process is started with the `--inspect` flag.
+          name = 'Attach to process',
+          type = 'node2',
+          request = 'attach',
+          processId = require'dap.utils'.pick_process,
         },
       }
 
