@@ -1,24 +1,5 @@
 local nvim_lsp = require('lspconfig')
 
--- Enable the following language servers
-local servers = {
-  'clangd',
-  'rust_analyzer',
-  'pyright',
-  'tsserver',
-  'sumneko_lua',
-  'zk',
-  'tailwindcss',
-  'jsonls',
-  'gopls',
-  'dockerls',
-}
-
--- Ensure the servers above are installed
-require('nvim-lsp-installer').setup {
-  ensure_installed = servers,
-}
-
 -- TODO: CONSIDER TO REFACOTR THIS BY USING
 -- https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L306
 local capabilities = vim.lsp.protocol.make_client_capabilities()
