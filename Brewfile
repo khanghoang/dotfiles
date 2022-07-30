@@ -29,6 +29,7 @@ brew "shellcheck"
 brew "terminal-notifier"
 brew "go"
 brew "vifm"
+brew "stow"
 
 # mkcert is a simple tool for making locally-trusted development certificates
 brew "mkcert"
