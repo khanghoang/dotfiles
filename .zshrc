@@ -83,6 +83,9 @@ plugins=(
   zsh-syntax-highlighting
 )
 
+# enable z.lua
+eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
+
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -142,9 +145,6 @@ nvm() {
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
   nvm "$@"
 }
-
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 
 # set default editor
 export EDITOR=nvim
