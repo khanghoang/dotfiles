@@ -38,8 +38,11 @@ vim.api.nvim_set_keymap('n', '<leader><leader>x', ":w<CR>:source %<CR>", { norem
 vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('plugins.lightline').reload()<CR>", { noremap = true })
 
 -- easy save
-vim.api.nvim_set_keymap('n', '<leader>s', ":w!<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', 'ss', ":w!<CR>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader>S', ":wq!<CR>", { noremap = true })
+
+-- fix "gg" doens't work because statusbar=3 in neovim 0.8
+vim.api.nvim_set_keymap('n', 'gg', ":0<CR>", { noremap = true })
 
 -- F5 to insert current datetime
 vim.api.nvim_set_keymap('n', '<F5>', "put=strftime('%c')<CR>P", { noremap = true })
