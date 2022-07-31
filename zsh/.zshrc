@@ -79,6 +79,10 @@ plugins=(
   # git clone git@github.com:skywind3000/z.lua.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua
   # eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
   z.lua
+  # git clone https://github.com/jeffreytse/zsh-vi-mode $ZSH_CUSTOM/plugins/zsh-vi-mode
+  # zsh-vi-mode
+
+  # always put this plugin last
   # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
   zsh-syntax-highlighting
 )
@@ -86,6 +90,13 @@ plugins=(
 # enable z.lua
 eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
 
+# Doing initialization at the plugin sourcing (Instantly)
+# fix conflict key binding with fzf
+# https://github.com/jeffreytse/zsh-vi-mode/issues/24#issuecomment-873164478
+# https://github.com/jeffreytse/zsh-vi-mode/issues/113#issue-935789567
+#
+# TLDR: Need to source zsh-vi-mode before oh-my-zsh
+ZVM_INIT_MODE=sourcing
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
