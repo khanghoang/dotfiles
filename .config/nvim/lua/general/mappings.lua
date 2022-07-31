@@ -23,7 +23,9 @@ api.nvim_set_keymap('n', 'n', "nzzzv", { noremap = true })
 api.nvim_set_keymap('n', 'N', "nzzzv", { noremap = true })
 
 -- Reload bazel
-api.nvim_set_keymap('n', '<leader>R', ":Dispatch! bzl itest-reload-current<CR>", { noremap = true })
+-- api.nvim_set_keymap('n', '<leader>R', ":Dispatch! bzl itest-reload-current<CR>", { noremap = true })
+-- api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'mbzl', 'itest-reload-current' })<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'echo', 'foo' })<CR>", { noremap = true })
 
 -- Tabs
 api.nvim_set_keymap('n', 'tc', ":tabclose<CR>", { noremap = true })
