@@ -1124,6 +1124,7 @@ require('packer').startup(function()
       vim.api.nvim_set_keymap("n", "<leader>zn", "<Cmd>ZkNew { dir = vim.fn.expand('%:p:h'), title = vim.fn.input('Title: '), datetime = 'today' }<CR>", opts)
     end
   }
+  -- }}}
 
   -- SQL
   -- {{{
@@ -1182,10 +1183,14 @@ require('packer').startup(function()
     end,
   })
   --}}}
+  
+  -- Developing Lua plugins
+  use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
 
   if is_bootstrap then
     require('packer').sync()
   end
+  --- }}}
 
 end)
 

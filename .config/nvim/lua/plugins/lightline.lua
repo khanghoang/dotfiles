@@ -119,6 +119,40 @@ gls.mid[2] = {
 
 vim.cmd [[hi StatusLine guibg=#352f2d guifg=#352f2d]]
 
+M.openNearestPackageJSON = function ()
+  local Path = require"plenary.path"
+  local p = Path:new { vim.api.nvim_buf_get_name(0) };
+  local parents = p:parents()
+
+  -- print(parents)
+
+  -- https://github.com/ericlacerda/nvim/blob/6dd2d2cf76ed2cd9bedcb70bb023ed2cb9e9c273/plugged/plenary.nvim/tests/plenary/path_spec.lua#L585
+  for _, parent in pairs(parents) do
+    -- print(parent)
+    -- @TODO: use :joinpath
+    local x = parent..'/package.json'
+    -- print(x)
+    local exists = Path.new(x):exists()
+    -- print(exists)
+    if exists then
+      print('found '.. x)
+      vim.api.nvim_command('e'..x)
+    end
+  end
+  -- package.json not found
+end
+
+vim.keymap.set('n', '<leader>rb', ":lua require('plugins/lightline').openNearestPackageJSON()<CR>")
+
+vim.api.nvim_create_user_command("OpenNearestPackageJSON", function(opts)
+  require('plugins/lightline').openNearestPackageJSON()
+end, {
+    desc = "Install one or more packages.",
+    nargs = "+",
+    complete = "custom,v:lua.mason_completion.available_package_completion",
+  })
+
+
 M.reload = function ()
   local gl = require('galaxyline')
   local gls = gl.section

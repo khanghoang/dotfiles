@@ -195,7 +195,7 @@ export PATH="$PATH:$(yarn global bin)"
 
 # setup for https://github.com/mickael-menu/zk-nvim
 export ZK_NOTEBOOK_DIR=$HOME/thoughts/brain/
-export PATH="$PATH:$HOME/.local/share/nvim/lsp_servers/zk"
+export PATH="$PATH:$HOME/.local/share/nvim/mason/bin/zk"
 export NODE_OPTIONS="--max-old-space-size=4096"
 
 # Go path
@@ -206,3 +206,7 @@ alias luamake=/home/khanghoang/code/lua-language-server/3rd/luamake/luamake
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh="kitty +kitten ssh"
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
+
+# Aliases
+alias vi=nvim
+alias cat=bat

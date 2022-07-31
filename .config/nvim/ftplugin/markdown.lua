@@ -11,7 +11,7 @@ if require("zk.util").notebook_root(vim.fn.expand('%:p')) ~= nil then
   -- Create a new note after asking for its title.
   -- This overrides the global `<leader>zn` mapping to create the note in the same directory as the current buffer.
   -- need to fix the datetime
-  map("n", "<leader>zn", "<Cmd>ZkNew { dir = vim.fn.expand('%:p:h'), title = vim.fn.input('Title: '), datetime = 'today' }<CR>", opts)
+  map("n", "<leader>zn", "<Cmd>ZkNew { title = vim.fn.input('Title: '), datetime = 'today' }<CR>", opts)
   -- Create a new note in the same directory as the current buffer, using the current selection for title.
   map("v", "<leader>znt", ":'<,'>ZkNewFromTitleSelection { dir = vim.fn.expand('%:p:h') }<CR>", opts)
   -- Create a new note in the same directory as the current buffer, using the current selection for note content and asking for its title.
@@ -32,3 +32,7 @@ if require("zk.util").notebook_root(vim.fn.expand('%:p')) ~= nil then
 end
 
 map("n", "<leader>p", ':Glow<CR>', opts);
+
+vim.cmd [[
+  set foldlevel=9999
+]]
