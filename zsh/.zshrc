@@ -87,6 +87,9 @@ plugins=(
   zsh-syntax-highlighting
 )
 
+# If have problem with fzf Ctrl-r
+# git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf ~/.fzf/install
+
 # enable z.lua
 eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
 
