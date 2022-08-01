@@ -610,6 +610,14 @@ require('packer').startup(function()
   --   end
   -- }
 
+  -- Usage:
+  -- c      s               "      '
+  -- ^      ^               ^      ^
+  -- change surround` from `"` to `'`
+  -- d      s          "
+  -- ^      ^          ^
+  -- delete surround` `"`
+  --- Finally, let's try out visual mode. Press a capital V (for linewise visual mode) followed by `S"`
   use 'tpope/vim-surround'
 
   -- Detect tabstop and shiftwidth automatically

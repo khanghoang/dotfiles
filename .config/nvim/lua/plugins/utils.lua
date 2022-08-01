@@ -28,4 +28,47 @@ M.notify_output = function(command, opts)
   })
 end
 
+M.openNearestFile = function (file)
+  -- default param https://riptutorial.com/lua/example/4081/default-parameters
+  file = file or "package.json" -- why "package.json"? idk
+  local Path = require"plenary.path"
+  local p = Path:new { vim.api.nvim_buf_get_name(0) };
+  local parents = p:parents()
+
+  -- print(parents)
+
+  -- https://github.com/ericlacerda/nvim/blob/6dd2d2cf76ed2cd9bedcb70bb023ed2cb9e9c273/plugged/plenary.nvim/tests/plenary/path_spec.lua#L585
+  for _, parent in pairs(parents) do
+    -- print(parent)
+    -- @TODO: use :joinpath
+    local x = parent..'/'.. file
+    -- print(x)
+    local exists = Path.new(x):exists()
+    -- print(exists)
+    if exists then
+      print('found '.. x)
+      vim.api.nvim_command('e'..x)
+    end
+  end
+  -- package.json not found
+end
+
+vim.keymap.set('n', '<leader>rb', ":lua require('plugins/lightline').openNearestFile()<CR>")
+
+vim.api.nvim_create_user_command("OpenNearestPackageJSON", function(opts)
+  require('plugins/lightline').openNearestPackageJSON()
+end, {
+    desc = "Install one or more packages.",
+    nargs = "+",
+    complete = "custom,v:lua.mason_completion.available_package_completion",
+  })
+
+vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('plugins.lightline').reload()<CR>", { noremap = true })
+
+M.reload = function ()
+  require("plenary.reload").reload_module("plugins.utils")
+  require("plugins.utils")
+  print('reloaded')
+end
+
 return M

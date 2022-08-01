@@ -35,7 +35,6 @@ api.nvim_set_keymap('n', 'tn', ":tabnew<CR>", { noremap = true })
 
 -- testing
 vim.api.nvim_set_keymap('n', '<leader><leader>x', ":w<CR>:source %<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('plugins.lightline').reload()<CR>", { noremap = true })
 
 -- easy save
 vim.api.nvim_set_keymap('n', 'ss', ":w!<CR>", { noremap = true })

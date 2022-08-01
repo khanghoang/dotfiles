@@ -26,12 +26,6 @@ l2
 r2
 
 # Left window history (oldest to newest):
-d/Users/khanghoang/code/brain
-	server.js
-26
-d/Users/khanghoang/code/brain/node_modules/@keystonejs/app-graphql
-	validation.js
-5
 d/Users/khanghoang/code/brain/node_modules/@keystonejs
 	app-graphql
 6
@@ -326,6 +320,12 @@ d/Users/khanghoang/.config/nvim
 d/Users/khanghoang/.config/nvim/lua
 	plugins.lua
 4
+d/Users/khanghoang/code/new-server
+	.github
+2
+d/Users/khanghoang/dotfiles/.config/nvim/lua/plugins
+	utils.lua
+15
 d
 
 # Right window history (oldest to newest):
