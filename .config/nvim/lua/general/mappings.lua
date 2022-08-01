@@ -39,7 +39,6 @@ vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('plugins.lightli
 
 -- easy save
 vim.api.nvim_set_keymap('n', 'ss', ":w!<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<leader>S', ":wq!<CR>", { noremap = true })
 
 -- fix "gg" doens't work because statusbar=3 in neovim 0.8
 vim.api.nvim_set_keymap('n', 'gg', ":0<CR>", { noremap = true })
@@ -71,6 +70,9 @@ vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc =
 
 -- Prettier current file
 api.nvim_set_keymap('n', '<leader><leader>f', ":lua vim.lsp.buf.formatting { async = true }<CR>", { noremap = true })
+
+-- Copy text
+api.nvim_set_keymap('x', '<leader>c', "\"+y", { noremap = true })
 
 -- using 'dts' as abbreviations
 -- :help :map-expression

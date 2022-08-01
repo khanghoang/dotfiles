@@ -213,6 +213,10 @@ export NODE_OPTIONS="--max-old-space-size=4096"
 export PATH="$PATH:$HOME/go/bin/bin"
 export TZ_LIST="Antarctica/Macquarie; Asia/Ho_Chi_Minh"
 
+# deno
+export DENO_INSTALL="/home/khanghoang/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
 alias luamake=/home/khanghoang/code/lua-language-server/3rd/luamake/luamake
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh="kitty +kitten ssh"
 export PATH="$HOME/.rbenv/bin:$PATH"
@@ -221,3 +225,5 @@ eval "$(rbenv init -)"
 # Aliases
 alias vi=nvim
 alias cat=bat
+
+if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khanghoang/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
