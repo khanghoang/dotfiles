@@ -35,4 +35,5 @@ map("n", "<leader>p", ':Glow<CR>', opts);
 
 vim.cmd [[
   set foldlevel=9999
+  set spell spelllang=en_us
 ]]
