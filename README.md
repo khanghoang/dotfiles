@@ -13,6 +13,6 @@ sudo apt-get install stow
 In `dotfiles` dir, run
 
 ```
-stow --verbose --target=$HOME */
+stow --verbose --target=$HOME .
 ```
 
