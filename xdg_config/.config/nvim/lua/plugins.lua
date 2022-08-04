@@ -1010,14 +1010,6 @@ require('packer').startup(function()
   }
 
   -- Display the winbar/breadcrumb
-  use({
-    "SmiteshP/nvim-gps",
-    requires = "nvim-treesitter/nvim-treesitter",
-    config = function ()
-      require("nvim-gps").setup()
-    end
-  })
-
   -- Display color for hex string
   use {
     'norcalli/nvim-colorizer.lua',
@@ -1185,13 +1177,6 @@ require('packer').startup(function()
   -- Lua
   -- Winbar
   --- {{{
-  vim.api.nvim_create_autocmd({ "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost" }, {
-    callback = function()
-      require("plugins.winbar").get_winbar()
-    end,
-  })
-  --}}}
-  
   -- Developing Lua plugins
   --- {{{
   use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
@@ -1330,6 +1315,17 @@ require('packer').startup(function()
        })
        notif_data.spinner = nil
       end
+    end
+  }
+  -- }}}
+
+  -- Greeter
+  -- {{{
+  use {
+    'goolord/alpha-nvim',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+    config = function ()
+        require'alpha'.setup(require'alpha.themes.startify'.config)
     end
   }
   -- }}}

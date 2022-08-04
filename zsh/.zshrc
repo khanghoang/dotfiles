@@ -52,7 +52,7 @@ ZSH_THEME="refined"
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -75,16 +75,16 @@ plugins=(
   # dotenv
   # urltools
   # git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-  zsh-autosuggestions
+  # zsh-autosuggestions
   # git clone git@github.com:skywind3000/z.lua.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua
   # eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
-  z.lua
+  # z.lua
   # git clone https://github.com/jeffreytse/zsh-vi-mode $ZSH_CUSTOM/plugins/zsh-vi-mode
-  zsh-vi-mode
+  # zsh-vi-mode
 
   # always put this plugin last
   # git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-  zsh-syntax-highlighting
+  # zsh-syntax-highlighting
 )
 
 # If have problem with fzf Ctrl-r
@@ -92,7 +92,7 @@ plugins=(
 
 # enable z.lua
 # brew install lua
-eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
+# eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
 
 # Doing initialization at the plugin sourcing (Instantly)
 # fix conflict key binding with fzf
@@ -182,28 +182,27 @@ set main-options = -n 1000
 # Don't show staged and unstaged changes in the main view
 set show-changes = no
 
-export PYENV_ROOT="$HOME/.pyenv" export PATH="$PYENV_ROOT/bin:$PATH"
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-fi
+# export PYENV_ROOT="$HOME/.pyenv" export PATH="$PYENV_ROOT/bin:$PATH"
+# if command -v pyenv 1>/dev/null 2>&1; then
+#   eval "$(pyenv init -)"
+# fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$PATH:/home/linuxbrew/.linuxbrew/bin"
 
 # the detailed meaning of the below three variable can be found in `man zshparam`.
 export HISTFILE=~/.zsh_history
-export HISTSIZE=1000000   # the number of items for the internal history list
-export SAVEHIST=1000000   # maximum number of items for the history file
+export HISTSIZE=1000   # the number of items for the internal history list
+export SAVEHIST=1000   # maximum number of items for the history file
 
 export DOTFILES=$HOME/.config/nvim
 
 # The meaning of these options can be found in man page of `zshoptions`.
-setopt HIST_IGNORE_ALL_DUPS  # do not put duplicated command into history list
-setopt HIST_SAVE_NO_DUPS  # do not save duplicated command
-setopt HIST_REDUCE_BLANKS  # remove unnecessary blanks
-setopt INC_APPEND_HISTORY_TIME  # append command to history file immediately after execution
-setopt EXTENDED_HISTORY  # record command start time
-
+# setopt HIST_IGNORE_ALL_DUPS  # do not put duplicated command into history list
+# setopt HIST_SAVE_NO_DUPS  # do not save duplicated command
+# setopt HIST_REDUCE_BLANKS  # remove unnecessary blanks
+# setopt INC_APPEND_HISTORY_TIME  # append command to history file immediately after execution
+# setopt EXTENDED_HISTORY  # record command start time
 
 alias luamake=/home/khanghoang/lua-language-server/3rd/luamake/luamake
 export PATH="$PATH:$(yarn global bin)"
@@ -223,8 +222,9 @@ export PATH="$DENO_INSTALL/bin:$PATH"
 
 alias luamake=/home/khanghoang/code/lua-language-server/3rd/luamake/luamake
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh="kitty +kitten ssh"
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init -)"
 
 # Aliases
 alias vi=nvim
