@@ -91,6 +91,7 @@ plugins=(
 # git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf ~/.fzf/install
 
 # enable z.lua
+# brew install lua
 eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
 
 # Doing initialization at the plugin sourcing (Instantly)
