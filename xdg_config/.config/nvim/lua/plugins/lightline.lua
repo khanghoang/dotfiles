@@ -133,7 +133,6 @@ M.reload = function ()
  print('reloaded')
 end
 
-
 require"fidget".setup{}
 
 return M
