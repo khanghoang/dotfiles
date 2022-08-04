@@ -10,9 +10,9 @@ or
 ```
 sudo apt-get install stow
 ```
-In `dotfiles` dir, run
+In `dotfiles` dir, run (Keep in mind that operation must be completed)
 
 ```
-stow --verbose --target=$HOME .
+stow --verbose --target=$HOME */
 ```
 
