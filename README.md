@@ -2,6 +2,20 @@
 
 ## Stow to symlink configs
 
+As a result, the .dotfiles directory will look like this:
+
+```
+.dotfiles
+├── bash
+│   └── .bashrc
+├── vim
+│   └── .vimrc
+├── xdg_config
+│   └── .config
+└── git
+    └── .gitconfig
+```
+
 Install `stow`
 ```
 brew install stow
