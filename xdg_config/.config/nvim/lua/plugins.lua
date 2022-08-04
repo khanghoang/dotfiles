@@ -1334,6 +1334,16 @@ require('packer').startup(function()
   }
   -- }}}
 
+  -- LSP status
+  -- {{{
+  use {
+    'j-hui/fidget.nvim',
+    config = function ()
+      -- its config is in lightline.lua
+    end
+  }
+  -- }}}
+
 end)
 
 -- When we are bootstrapping a configuration, it doesn't
