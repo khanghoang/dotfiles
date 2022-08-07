@@ -5,8 +5,10 @@ local log = require('plugins.log')
 local gls = gl.section
 local M = {}
 
--- enable log
-log.new({ level = "debug" }, true)
+-- change false to true to enable logging
+-- logs are at ~/.local/share/nvim/custom_lsp_spinner.log
+-- `tail -f ~/.local/share/nvim/custom_lsp_spinner.log`
+log.new({ level = "debug" }, false)
 
 local indicator = {
     "⠋",
@@ -23,38 +25,37 @@ local indicator = {
 
 -- { client_id: spinner }
 local spinners = {}
-local make_spinner = function ()
-  local timer = vim.loop.new_timer()
-  local status = ''
-  local i = 1
-
-  return {
-    start = function ()
-      log.debug(
-        "Spinner starts",
-        {}
-      )
-      timer:start(
-        0, -- wait
-        100, -- every
-        vim.schedule_wrap(function()
-          i = i < 10 and i + 1 or 1
-          status = ' '..indicator[i]..' '
-        end)
-      )
-    end,
-    stop = function ()
-      status = ''
-      timer:stop()
-    end,
-    get_status = function ()
-      return status
-    end
-  }
-end
-
-
 local get_spinner_data = function (client_id)
+  local make_spinner = function ()
+    local timer = vim.loop.new_timer()
+    local status = ''
+    local i = 1
+
+    return {
+      start = function ()
+        log.debug(
+          "Spinner starts",
+          {}
+        )
+        timer:start(
+          0, -- wait
+          100, -- every
+          vim.schedule_wrap(function()
+            i = i < 10 and i + 1 or 1
+            status = ' '..indicator[i]..' '
+          end)
+        )
+      end,
+      stop = function ()
+        status = ''
+        timer:stop()
+      end,
+      get_status = function ()
+        return status
+      end
+    }
+  end
+
   if not spinners[client_id] then
     spinners[client_id] = make_spinner()
     log.debug('create spinner with id', { client_id = client_id, spinner = spinners[client_id] })
