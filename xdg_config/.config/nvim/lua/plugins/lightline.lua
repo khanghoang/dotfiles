@@ -263,6 +263,7 @@ end
 -- trying to get all git dirty files
 -- local f = vim.fn.fnamemodify(vim.fn.expand '%', ':~:.')
 -- local root = utils.findNearestFile('.git')
--- print(utils.get_git_stat(root).unstaged)
+-- local git_info = utils.get_git_stat(root)
+-- print(git_info)
 
 return M

@@ -1,5 +1,7 @@
 vim.notify = require("notify")
 
+-- for lua annotation, see https://github.com/sumneko/lua-language-server/wiki/Annotations
+
 local M = {}
 
 M.notify_output = function(command, opts)
@@ -78,8 +80,6 @@ M.openNearestFile = function (file)
   -- package.json not found
 end
 
-vim.keymap.set('n', '<leader>rb', ":lua require('plugins/utils').openNearestFile()<CR>")
-
 vim.api.nvim_create_user_command("OpenNearestPackageJSON", function(opts)
   require('plugins/utils').openNearestPackageJSON()
 end, {
@@ -88,8 +88,7 @@ end, {
     complete = "custom,v:lua.mason_completion.available_package_completion",
   })
 
-vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('plugins.utils').reload()<CR>", { noremap = true })
-
+-- get current selection in visual mode
 M.get_visual_selection = function ()
   local s_start = vim.fn.getpos("'<")
   local s_end = vim.fn.getpos("'>")
@@ -104,19 +103,9 @@ M.get_visual_selection = function ()
   return table.concat(lines, '\n')
 end
 
-M.test = function ()
-  local s = M.get_visual_selection()
-  vim.notify(s)
-end
-
-vim.api.nvim_set_keymap('v', '<leader>T', ":lua require('plugins.utils').test()<CR>", { noremap = true })
-
-M.reload = function ()
-  require("plenary.reload").reload_module("plugins.utils")
-  require("plugins.utils")
-  print('reloaded')
-end
-
+---get git status with git root path
+---@param path string git path
+---@return boolean foo
 M.get_git_stat = function (path)
   local res = vim.fn.system(
     "git -C '" .. path .. "' status --porcelain --branch --ahead-behind --untracked-files --renames"
@@ -165,6 +154,16 @@ M.get_git_stat = function (path)
     end
   end
   return info
+end
+
+vim.keymap.set('n', '<leader><leader>r', ":lua require('plugins.utils').reload()<CR>", { noremap = true })
+vim.keymap.set('n', '<leader>rb', ":lua require('plugins/utils').openNearestFile()<CR>")
+
+
+M.reload = function ()
+  require("plenary.reload").reload_module("plugins.utils")
+  require("plugins.utils")
+  print('reloaded')
 end
 
 return M
