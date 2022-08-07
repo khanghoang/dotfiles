@@ -4,6 +4,50 @@ local condition = require('galaxyline.condition')
 local gls = gl.section
 local M = {}
 
+local get_notif_data = function (client_id)
+  local clients = {}
+  return clients[client_id]
+end
+
+vim.lsp.handlers["$/progress"] = function(_, result, ctx)
+ local client_id = ctx.client_id
+ local val = result.value
+
+ if not val.kind then
+   return
+ end
+
+ local notif_data = get_notif_data(client_id, result.token)
+
+ if val.kind == "begin" then
+   local message = format_message(val.message, val.percentage)
+
+   notif_data.notification = vim.notify(message, "info", {
+     title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
+     icon = spinner_frames[1],
+     timeout = false,
+     hide_from_history = false,
+   })
+
+   notif_data.spinner = 1
+   update_spinner(client_id, result.token)
+ elseif val.kind == "report" and notif_data then
+   notif_data.notification = vim.notify(format_message(val.message, val.percentage), "info", {
+     replace = notif_data.notification,
+     hide_from_history = false,
+   })
+ elseif val.kind == "end" and notif_data then
+   notif_data.notification =
+     vim.notify(val.message and format_message(val.message) or "Complete", "info", {
+       icon = "",
+       replace = notif_data.notification,
+       timeout = 3000,
+     })
+
+   notif_data.spinner = nil
+ end
+end
+
 local lspIcon = require "plugins.icons".ui.ChevronRight
 
 local i = 1
@@ -37,7 +81,24 @@ timer:start(
   end)
 )
 
-function split(pString, pPattern)
+local get_lsp_client = function (msg)
+  msg = msg or ''
+  local buf_ft = vim.api.nvim_buf_get_option(0,'filetype')
+  local clients = vim.lsp.get_active_clients()
+  if next(clients) == nil then
+    return msg
+  end
+
+  for _,client in ipairs(clients) do
+    local filetypes = client.config.filetypes
+    if filetypes and vim.fn.index(filetypes,buf_ft) ~= -1 then
+      msg = msg..' '..client.name
+    end
+  end
+  return msg
+end
+
+local function split(pString, pPattern)
    local Table = {}  -- NOTE: use {n = 0} in Lua-5.0
    local fpat = "(.-)" .. pPattern
    local last_end = 1
@@ -100,7 +161,7 @@ gls.left[6] = {
 
 gls.left[7] = {
   ShowLspClient = {
-    provider = 'GetLspClient',
+    provider = get_lsp_client,
     condition = condition.buffer_not_empty,
     icon = ' ' .. lspIcon,
     highlight = {colors.cyan,colors.bg},
