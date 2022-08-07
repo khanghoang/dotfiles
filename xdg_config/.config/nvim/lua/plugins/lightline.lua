@@ -11,17 +11,11 @@ local M = {}
 log.new({ level = "debug" }, false)
 
 local indicator = {
-    "⠋",
-    "⠙",
-    "⠹",
-    "⠸",
-    "⠼",
-    "⠴",
-    "⠦",
-    "⠧",
-    "⠇",
-    "⠏",
-  }
+  "⠲",
+  "⠴",
+  "⠦",
+  "⠖",
+}
 
 -- { client_id: spinner }
 local spinners = {}
@@ -41,7 +35,7 @@ local get_spinner_data = function (client_id)
           0, -- wait
           100, -- every
           vim.schedule_wrap(function()
-            i = i < 10 and i + 1 or 1
+            i = i < #indicator and i + 1 or 1
             status = ' '..indicator[i]..' '
           end)
         )
@@ -102,12 +96,10 @@ local get_lsp_client = function (msg)
   msg = msg or ''
   local buf_ft = vim.api.nvim_buf_get_option(0,'filetype')
   local clients = vim.lsp.get_active_clients()
-  -- if next(clients) == nil then
-  --   return msg
-  -- end
+  if next(clients) == nil then
+    return msg
+  end
 
-  -- ???
-  -- looks like all the pending/progressing lsp client get filtered out
   for _, client in ipairs(clients) do
     log.debug("client id", { client_id = client.id })
     local filetypes = client.config.filetypes
