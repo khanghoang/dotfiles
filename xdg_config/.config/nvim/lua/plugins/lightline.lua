@@ -243,6 +243,8 @@ gls.mid[2] = {
 
 vim.cmd [[hi StatusLine guibg=#352f2d guifg=#352f2d]]
 
+vim.api.nvim_set_keymap('n', '<leader><leader>q', ":lua require('plugins.lightline').reload()<CR>", { noremap = true })
+
 M.reload = function ()
   local gl = require('galaxyline')
   local gls = gl.section

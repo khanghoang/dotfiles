@@ -64,7 +64,6 @@ end, {
   })
 
 vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('plugins.utils').reload()<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<leader><leader>q', ":lua require('plugins.lightline').reload()<CR>", { noremap = true })
 
 M.get_visual_selection = function ()
   local s_start = vim.fn.getpos("'<")
