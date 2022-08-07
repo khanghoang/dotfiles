@@ -230,14 +230,7 @@ gls.mid[1] = {
 gls.mid[2] = {
   FileName = {
     provider = function ()
-      local filepath = vim.fn.fnamemodify(vim.fn.expand '%', ':~:.')
-      local table = split(filepath, '/')
-      local str = ''
-      for i = 1, #table-1, 1 do
-        str = str .. table[i]:sub(1,1) .. '/'
-      end
-        str = str .. table[#table]
-      return str
+      return vim.fn.fnamemodify(vim.fn.expand '%', ':~:.')
     end,
     -- provider = 'FilePath',
     condition = condition.buffer_not_empty,
