@@ -6,16 +6,65 @@ local M = {}
 
 local lspIcon = require "plugins.icons".ui.ChevronRight
 
--- Default colors and providers
--- https://github.com/glepnir/galaxyline.nvim#default-provider-groups
+local i = 1
+local time = 1
+local status = '';
+local spinner = {
+    "⠋",
+    "⠙",
+    "⠹",
+    "⠸",
+    "⠼",
+    "⠴",
+    "⠦",
+    "⠧",
+    "⠇",
+    "⠏",
+  }
+
+local timer = vim.loop.new_timer()
+timer:start(
+  200,
+  200,
+  vim.schedule_wrap(function()
+    i = i < 10 and i + 1 or 1
+    time = time + 1
+    status = ' '..spinner[i]..' '
+    if (time == 20) then
+      timer:stop()
+      status = ''
+    end
+  end)
+)
+
+function split(pString, pPattern)
+   local Table = {}  -- NOTE: use {n = 0} in Lua-5.0
+   local fpat = "(.-)" .. pPattern
+   local last_end = 1
+   local s, e, cap = pString:find(fpat, 1)
+   while s do
+      if s ~= 1 or cap ~= "" then
+     table.insert(Table,cap)
+      end
+      last_end = e+1
+      s, e, cap = pString:find(fpat, last_end)
+   end
+   if last_end <= #pString then
+      cap = pString:sub(last_end)
+      table.insert(Table, cap)
+   end
+   return Table
+end
 
 gls.left[3] = {
   DiagnosticError = {
     condition = condition.buffer_not_empty,
-    provider = 'DiagnosticError',
+    provider = function ()
+      return status
+    end,
     icon = ' ',
     separator = '',
-    highlight = {colors.red,colors.bg},
+    highlight = {colors.yellow,colors.bg},
     separator_highlight = {'NONE',colors.bg},
   }
 }
@@ -107,8 +156,15 @@ gls.mid[2] = {
   FileName = {
     provider = function ()
       local filepath = vim.fn.fnamemodify(vim.fn.expand '%', ':~:.')
-      return filepath
+      local table = split(filepath, '/')
+      local str = ''
+      for i = 1, #table-1, 1 do
+        str = str .. table[i]:sub(1,1) .. '/'
+      end
+        str = str .. table[#table]
+      return str
     end,
+    -- provider = 'FilePath',
     condition = condition.buffer_not_empty,
     highlight = {"#b4bdc3", "#352f2d"},
     separator = ' - ',
