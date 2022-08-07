@@ -28,6 +28,31 @@ M.notify_output = function(command, opts)
   })
 end
 
+
+M.findNearestFile = function (file)
+  -- default param https://riptutorial.com/lua/example/4081/default-parameters
+  file = file or "package.json" -- why "package.json"? idk
+  local Path = require"plenary.path"
+  local p = Path:new { vim.api.nvim_buf_get_name(0) };
+  local parents = p:parents()
+
+  -- print(parents)
+
+  -- https://github.com/ericlacerda/nvim/blob/6dd2d2cf76ed2cd9bedcb70bb023ed2cb9e9c273/plugged/plenary.nvim/tests/plenary/path_spec.lua#L585
+  for _, parent in pairs(parents) do
+    -- print(parent)
+    -- @TODO: use :joinpath
+    local x = parent..'/'.. file
+    -- print(x)
+    local exists = Path.new(x):exists()
+    -- print(exists)
+    if exists then
+      return parent
+    end
+  end
+  -- package.json not found
+end
+
 M.openNearestFile = function (file)
   -- default param https://riptutorial.com/lua/example/4081/default-parameters
   file = file or "package.json" -- why "package.json"? idk
@@ -90,6 +115,56 @@ M.reload = function ()
   require("plenary.reload").reload_module("plugins.utils")
   require("plugins.utils")
   print('reloaded')
+end
+
+M.get_git_stat = function (path)
+  local res = vim.fn.system(
+    "git -C '" .. path .. "' status --porcelain --branch --ahead-behind --untracked-files --renames"
+  )
+  local info = { ahead = 0, behind = 0, recruit = false, unmerged = 0, untracked = 0, staged = 0, unstaged = 0 }
+  if string.sub(res, 1, 7) == "fatal: " then
+    return info
+  end
+  for _, file in next, vim.fn.split(res, "\n") do
+    local staged = string.sub(file, 1, 1)
+    local unstaged = string.sub(file, 2, 2)
+    local changed = string.sub(file, 1, 2)
+    if changed == "##" then
+      local words = vim.fn.split(file, "\\.\\.\\.\\|[ \\[\\],]")
+      if #words == 2 then
+        info.branch = words[2] .. "?"
+        info.recruit = true
+      else
+        info.branch = words[2]
+        info.remote = words[3]
+        if #words > 3 then
+          local key = ""
+          for i, r in ipairs(words) do
+            if i > 3 then
+              if key ~= "" then
+                info[key] = r
+                key = ""
+              else
+                key = r
+              end
+            end
+          end
+        end
+      end
+    elseif staged == "U" or unstaged == "U" or changed == "AA" or changed == "DD" then
+      info.unmerged = info.unmerged + 1
+    elseif changed == "??" then
+      info.untracked = info.untracked + 1
+    else
+      if staged ~= " " then
+        info.staged = info.staged + 1
+      end
+      if unstaged ~= " " then
+        info.unstaged = info.unstaged + 1
+      end
+    end
+  end
+  return info
 end
 
 return M

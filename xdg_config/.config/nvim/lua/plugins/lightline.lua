@@ -2,6 +2,7 @@ local gl = require('galaxyline')
 local colors = require('galaxyline.themes.colors').default
 local condition = require('galaxyline.condition')
 local log = require('plugins.log')
+local utils = require('plugins.utils')
 local gls = gl.section
 local M = {}
 
@@ -258,5 +259,10 @@ M.reload = function ()
 
  print('reloaded')
 end
+
+-- trying to get all git dirty files
+-- local f = vim.fn.fnamemodify(vim.fn.expand '%', ':~:.')
+-- local root = utils.findNearestFile('.git')
+-- print(utils.get_git_stat(root).unstaged)
 
 return M
