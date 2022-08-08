@@ -31,6 +31,9 @@ M.notify_output = function(command, opts)
 end
 
 
+---find the closest parent of the file with filename
+---@param file? string filename or 'package.json'
+---@return string|nil parent folder path of that file
 M.findNearestFile = function (file)
   -- default param https://riptutorial.com/lua/example/4081/default-parameters
   file = file or "package.json" -- why "package.json"? idk
@@ -52,9 +55,14 @@ M.findNearestFile = function (file)
       return parent
     end
   end
+
+  return nil
   -- package.json not found
 end
 
+---find and open the closest file by name
+---@param file? string -- filename or 'package.json'
+---@return nil #
 M.openNearestFile = function (file)
   -- default param https://riptutorial.com/lua/example/4081/default-parameters
   file = file or "package.json" -- why "package.json"? idk
@@ -88,7 +96,8 @@ end, {
     complete = "custom,v:lua.mason_completion.available_package_completion",
   })
 
--- get current selection in visual mode
+---get current selection in visual mode
+---@return string
 M.get_visual_selection = function ()
   local s_start = vim.fn.getpos("'<")
   local s_end = vim.fn.getpos("'>")
@@ -104,8 +113,8 @@ M.get_visual_selection = function ()
 end
 
 ---get git status with git root path
----@param path string git path
----@return boolean foo
+---@param path string|table -- git path
+---@return {branch: string, recruit: boolean, unstaged: number, staged: number, untracked: number, unmerged: number, ahead: number}
 M.get_git_stat = function (path)
   local res = vim.fn.system(
     "git -C '" .. path .. "' status --porcelain --branch --ahead-behind --untracked-files --renames"
@@ -158,7 +167,6 @@ end
 
 vim.keymap.set('n', '<leader><leader>r', ":lua require('plugins.utils').reload()<CR>", { noremap = true })
 vim.keymap.set('n', '<leader>rb', ":lua require('plugins/utils').openNearestFile()<CR>")
-
 
 M.reload = function ()
   require("plenary.reload").reload_module("plugins.utils")
