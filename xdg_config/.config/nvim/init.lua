@@ -43,3 +43,10 @@ vim.cmd [[set scrolloff=25]]
 -- enable modeline
 -- https://vim.fandom.com/wiki/Modeline_magic
 vim.cmd [[set modeline]]
+
+vim.cmd([[
+  augroup packer_user_config
+    autocmd!
+    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
+  augroup end
+]])
