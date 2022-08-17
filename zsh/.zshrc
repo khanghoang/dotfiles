@@ -210,7 +210,7 @@ export PATH="$PATH:$(yarn global bin)"
 # setup for https://github.com/mickael-menu/zk-nvim
 export ZK_NOTEBOOK_DIR=$HOME/thoughts/brain/
 export PATH="$PATH:$HOME/.local/share/nvim/mason/bin/zk"
-export NODE_OPTIONS="--max-old-space-size=4096"
+# export NODE_OPTIONS="--max-old-space-size=4096"
 
 # Go path
 export PATH="$PATH:$HOME/go/bin/bin"

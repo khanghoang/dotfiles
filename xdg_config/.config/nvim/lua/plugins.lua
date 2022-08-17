@@ -143,73 +143,73 @@ require('packer').startup(function()
     branch = 'main'
   }
 
-  use {
-    'stevearc/aerial.nvim',
-    config = function()
-      require('aerial').setup({
-        nerd_font = false,
-
-        filter_kind = {
-          "Class",
-          "Constructor",
-          "Constant",
-          "Enum",
-          "Function",
-          "Interface",
-          "Module",
-          "Method",
-          "Struct",
-        },
-
-        icons = {
-          Text = '  ',
-          Method = '  ',
-          Function = '  ',
-          Constructor = '  ',
-          Field = '  ',
-          Variable = '  ',
-          Class = '  ',
-          Interface = '  ',
-          Module = '  ',
-          Property = '  ',
-          Unit = '  ',
-          Value = '  ',
-          Enum = '  ',
-          Keyword = '  ',
-          Snippet = '  ',
-          Color = '  ',
-          File = '  ',
-          Reference = '  ',
-          Folder = '  ',
-          EnumMember = '  ',
-          Constant = '  ',
-          Struct = '  ',
-          Event = '  ',
-          Operator = '  ',
-          TypeParameter = '  ',
-        },
-
-        -- Customize the characters used when show_guides = true
-        guides = {
-          -- When the child item has a sibling below it
-          mid_item = "├─",
-          -- When the child item is the last in the list
-          last_item = "└─",
-          -- When there are nested child guides to the right
-          nested_top = "│ ",
-          -- Raw indentation
-          whitespace = "  ",
-        },
-
-        backends = { "lsp", "treesitter", "markdown" },
-
-      })
-      local map = vim.api.nvim_set_keymap
-      local opt = {noremap = false}
-
-      map('n', 'so', ':AerialToggle<CR>',opt)
-    end
-  }
+  -- use {
+  --   'stevearc/aerial.nvim',
+  --   config = function()
+  --     require('aerial').setup({
+  --       nerd_font = false,
+  --
+  --       filter_kind = {
+  --         "Class",
+  --         "Constructor",
+  --         "Constant",
+  --         "Enum",
+  --         "Function",
+  --         "Interface",
+  --         "Module",
+  --         "Method",
+  --         "Struct",
+  --       },
+  --
+  --       icons = {
+  --         Text = '  ',
+  --         Method = '  ',
+  --         Function = '  ',
+  --         Constructor = '  ',
+  --         Field = '  ',
+  --         Variable = '  ',
+  --         Class = '  ',
+  --         Interface = '  ',
+  --         Module = '  ',
+  --         Property = '  ',
+  --         Unit = '  ',
+  --         Value = '  ',
+  --         Enum = '  ',
+  --         Keyword = '  ',
+  --         Snippet = '  ',
+  --         Color = '  ',
+  --         File = '  ',
+  --         Reference = '  ',
+  --         Folder = '  ',
+  --         EnumMember = '  ',
+  --         Constant = '  ',
+  --         Struct = '  ',
+  --         Event = '  ',
+  --         Operator = '  ',
+  --         TypeParameter = '  ',
+  --       },
+  --
+  --       -- Customize the characters used when show_guides = true
+  --       guides = {
+  --         -- When the child item has a sibling below it
+  --         mid_item = "├─",
+  --         -- When the child item is the last in the list
+  --         last_item = "└─",
+  --         -- When there are nested child guides to the right
+  --         nested_top = "│ ",
+  --         -- Raw indentation
+  --         whitespace = "  ",
+  --       },
+  --
+  --       backends = { "lsp", "treesitter", "markdown" },
+  --
+  --     })
+  --     local map = vim.api.nvim_set_keymap
+  --     local opt = {noremap = false}
+  --
+  --     map('n', 'so', ':AerialToggle<CR>',opt)
+  --   end
+  -- }
 
   use {
     'folke/trouble.nvim',
@@ -240,7 +240,7 @@ require('packer').startup(function()
         debug = false,
         sources = {
           null_ls.builtins.code_actions.refactoring,
-          null_ls.builtins.code_actions.gitsigns,
+          -- null_ls.builtins.code_actions.gitsigns,
           formatting.stylua,
           formatting.google_java_format,
         },
@@ -373,44 +373,44 @@ require('packer').startup(function()
     'ruifm/gitlinker.nvim',
     requires = 'nvim-lua/plenary.nvim',
   }
-  use {
-    'lewis6991/gitsigns.nvim',
-    requires = {
-      'nvim-lua/plenary.nvim'
-    },
-    config = function()
-      if not packer_plugins['plenary.nvim'].loaded then
-        vim.cmd [[packadd plenary.nvim]]
-      end
-      require('gitsigns').setup {
-        signs = {
-          add = { text = '│' },
-          change = { text = '│' },
-          delete = { text = '│' },
-          topdelete = { text = '│' },
-          changedelete = { text = '│' },
-        },
-        keymaps = {
-          -- Default keymap options
-          noremap = true,
-          buffer = true,
-
-          ['n ]g'] = { expr = true, "&diff ? ']g' : '<cmd>lua require\"gitsigns\".next_hunk()<CR>'"},
-          ['n [g'] = { expr = true, "&diff ? '[g' : '<cmd>lua require\"gitsigns\".prev_hunk()<CR>'"},
-
-          ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
-          ['n <leader>hu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
-          ['n <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
-          ['n <leader>hp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
-          ['n <leader>hb'] = '<cmd>lua require"gitsigns".blame_line()<CR>',
-
-          -- Text objects
-          ['o ih'] = ':<C-U>lua require"gitsigns".text_object()<CR>',
-          ['x ih'] = ':<C-U>lua require"gitsigns".text_object()<CR>'
-        },
-      }
-    end
-  }
+  -- use {
+  --   'lewis6991/gitsigns.nvim',
+  --   requires = {
+  --     'nvim-lua/plenary.nvim'
+  --   },
+  --   config = function()
+  --     if not packer_plugins['plenary.nvim'].loaded then
+  --       vim.cmd [[packadd plenary.nvim]]
+  --     end
+  --     require('gitsigns').setup {
+  --       signs = {
+  --         add = { text = '│' },
+  --         change = { text = '│' },
+  --         delete = { text = '│' },
+  --         topdelete = { text = '│' },
+  --         changedelete = { text = '│' },
+  --       },
+  --       keymaps = {
+  --         -- Default keymap options
+  --         noremap = true,
+  --         buffer = true,
+  --
+  --         ['n ]g'] = { expr = true, "&diff ? ']g' : '<cmd>lua require\"gitsigns\".next_hunk()<CR>'"},
+  --         ['n [g'] = { expr = true, "&diff ? '[g' : '<cmd>lua require\"gitsigns\".prev_hunk()<CR>'"},
+  --
+  --         ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
+  --         ['n <leader>hu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
+  --         ['n <leader>hr'] = '<cmd>lua require"gitsigns".reset_hunk()<CR>',
+  --         ['n <leader>hp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
+  --         ['n <leader>hb'] = '<cmd>lua require"gitsigns".blame_line()<CR>',
+  --
+  --         -- Text objects
+  --         ['o ih'] = ':<C-U>lua require"gitsigns".text_object()<CR>',
+  --         ['x ih'] = ':<C-U>lua require"gitsigns".text_object()<CR>'
+  --       },
+  --     }
+  --   end
+  -- }
 
   -- }}}
 
@@ -708,67 +708,52 @@ require('packer').startup(function()
             package_uninstalled = "✗"
           }
         },
-        ensure_installed = {
-          'cmake-language-server',
-          'debugpy',
-          'dockerfile-language-server',
-          'grammarly-languageserver',
-          'json-lsp',
-          'lua-language-server',
-          'node-debug2-adapter',
-          'pyright',
-          'tailwindcss-language-server',
-          'typescript-language-server',
-          'zk',
-          'prettier',
-          'sqlformatter',
-        }
       })
 
-      require'mason-tool-installer'.setup {
-        -- a list of all tools you want to ensure are installed upon
-        -- start; they should be the names Mason uses for each tool
-        ensure_installed = {
-
-          -- you can pin a tool to a particular version
-          -- { 'golangci-lint', version = '1.47.0' },
-
-          -- you can turn off/on auto_update per tool
-          { 'bash-language-server', auto_update = false },
-          'cmake-language-server',
-          'debugpy',
-          'dockerfile-language-server',
-          'grammarly-languageserver',
-          'json-lsp',
-          'lua-language-server',
-          'node-debug2-adapter',
-          'pyright',
-          'tailwindcss-language-server',
-          'typescript-language-server',
-          'zk',
-          'prettier',
-          'sql-formatter',
-        },
-
-        -- if set to true this will check each tool for updates. If updates
-        -- are available the tool will be updated.
-        -- Default: false
-        auto_update = false,
-
-        -- automatically install / update on startup. If set to false nothing
-        -- will happen on startup. You can use `:MasonToolsUpdate` to install
-        -- tools and check for updates.
-        -- Default: true
-        run_on_start = true,
-
-        -- set a delay (in ms) before the installation starts. This is only
-        -- effective if run_on_start is set to true.
-        -- e.g.: 5000 = 5 second delay, 10000 = 10 second delay, etc...
-        -- Default: 0
-        start_delay = 3000  -- 3 second delay
-      }
+    --   require'mason-tool-installer'.setup {
+    --     -- a list of all tools you want to ensure are installed upon
+    --     -- start; they should be the names Mason uses for each tool
+    --     ensure_installed = {
+    --
+    --       -- you can pin a tool to a particular version
+    --       -- { 'golangci-lint', version = '1.47.0' },
+    --
+    --       -- you can turn off/on auto_update per tool
+    --       { 'bash-language-server', auto_update = false },
+    --       'cmake-language-server',
+    --       'debugpy',
+    --       'dockerfile-language-server',
+    --       'grammarly-languageserver',
+    --       'json-lsp',
+    --       'lua-language-server',
+    --       'node-debug2-adapter',
+    --       'pyright',
+    --       'tailwindcss-language-server',
+    --       'typescript-language-server',
+    --       'zk',
+    --       'prettier',
+    --       'sql-formatter',
+    --     },
+    --
+    --     -- if set to true this will check each tool for updates. If updates
+    --     -- are available the tool will be updated.
+    --     -- Default: false
+    --     auto_update = false,
+    --
+    --     -- automatically install / update on startup. If set to false nothing
+    --     -- will happen on startup. You can use `:MasonToolsUpdate` to install
+    --     -- tools and check for updates.
+    --     -- Default: true
+    --     run_on_start = true,
+    --
+    --     -- set a delay (in ms) before the installation starts. This is only
+    --     -- effective if run_on_start is set to true.
+    --     -- e.g.: 5000 = 5 second delay, 10000 = 10 second delay, etc...
+    --     -- Default: 0
+    --     start_delay = 3000  -- 3 second delay
+    --   }
     end,
-    requires = { "WhoIsSethDaniel/mason-tool-installer" }
+    -- requires = { "WhoIsSethDaniel/mason-tool-installer" }
   }
 
   use 'mfussenegger/nvim-dap'
