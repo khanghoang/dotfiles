@@ -77,6 +77,7 @@ plugins=(
   # git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   zsh-autosuggestions
   # git clone git@github.com:skywind3000/z.lua.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua
+  # sudo apt install lua5.3
   # eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
   z.lua
   # git clone https://github.com/jeffreytse/zsh-vi-mode $ZSH_CUSTOM/plugins/zsh-vi-mode
@@ -206,7 +207,7 @@ setopt EXTENDED_HISTORY  # record command start time
 
 
 alias luamake=/home/khanghoang/lua-language-server/3rd/luamake/luamake
-export PATH="$PATH:$(yarn global bin)"
+# export PATH="$PATH:$(yarn global bin)"
 
 # setup for https://github.com/mickael-menu/zk-nvim
 export ZK_NOTEBOOK_DIR=$HOME/thoughts/brain/
@@ -221,14 +222,13 @@ export TZ_LIST="Antarctica/Macquarie; Asia/Ho_Chi_Minh"
 export DENO_INSTALL="/home/khanghoang/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
-alias luamake=/home/khanghoang/code/lua-language-server/3rd/luamake/luamake
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh="kitty +kitten ssh"
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+# export PATH="$HOME/.rbenv/bin:$PATH"
+# eval "$(rbenv init -)"
 
 # Aliases
 alias vi=nvim
-alias cat=bat
+# alias cat=bat
 
 if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khanghoang/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
