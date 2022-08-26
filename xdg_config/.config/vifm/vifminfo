@@ -6,13 +6,13 @@
 	..
 1585522917
 'b
-	/Users/khanghoang/bin/
+	/home/khanghoang/bin/
 	..
-1585522917
+1661538612
 'h
-	/Users/khanghoang/
+	/home/khanghoang/
 	..
-1585522917
+1661538612
 
 # Bookmarks:
 
@@ -26,39 +26,6 @@ l2
 r2
 
 # Left window history (oldest to newest):
-d/Users/khanghoang/code/brain/node_modules/@keystonejs
-	app-graphql
-6
-d/Users/khanghoang/code/brain
-	testGlobalSetup.js
-28
-d/Users/khanghoang/code/brain/node_modules/mongodb-memory-server
-	index.d.ts
-3
-d/Users/khanghoang/code/brain/node_modules
-	mongodb-memory-server-core
-42
-d/Users/khanghoang/code/brain/node_modules/mongodb-memory-server-core
-	lib
-1
-d/Users/khanghoang/code/brain/node_modules/mongodb-memory-server-core/lib
-	MongoMemoryServer.js
-9
-d/Users/khanghoang/code/brain
-	.github
-2
-d/Users/khanghoang/code/brain/.github
-	workflows
-1
-d/Users/khanghoang/code/brain/.github/workflows
-	node.js.yml
-1
-d/Users/khanghoang/code/brain
-	.github
-2
-d/Users/khanghoang/code/brain/.github
-	workflows
-1
 d/Users/khanghoang/code/brain/.github/workflows
 	node.js.yml
 1
@@ -326,6 +293,39 @@ d/Users/khanghoang/code/new-server
 d/Users/khanghoang/dotfiles/.config/nvim/lua/plugins
 	utils.lua
 15
+d/Users/khanghoang/dotfiles
+	.gitignore
+12
+d/Users/khanghoang/code/new-server
+	.env
+20
+d/Users/khanghoang/dotfiles
+	xdg_config
+10
+d/Users/khanghoang/dotfiles/xdg_config
+	..
+0
+d/Users/khanghoang/dotfiles
+	.config
+1
+d/Users/khanghoang/dotfiles/.config
+	nvim
+1
+d/Users/khanghoang/dotfiles/.config/nvim
+	plugin
+2
+d/Users/khanghoang/dotfiles/.config/nvim/plugin
+	..
+0
+d/Users/khanghoang/dotfiles/.config/nvim
+	plugin
+2
+d/Users/khanghoang/dotfiles/.config
+	nvim
+1
+d/home/khanghoang/dotfiles
+	..
+0
 d
 
 # Right window history (oldest to newest):
@@ -356,6 +356,9 @@ D/Users/khanghoang/code
 D/Users/khanghoang/code/Frontend-Interview-Project-master
 	server.js
 4
+D/
+	bin
+0
 D
 
 # Command line history (oldest to newest):
@@ -485,7 +488,6 @@ D
 /mod
 /keyst
 /knex
-/env
 /brain
 /h
 /keystone
@@ -500,6 +502,8 @@ D
 /compa
 /lsp
 /test
+/env
+/xl
 
 # Prompt history (oldest to newest):
 ppermission.js

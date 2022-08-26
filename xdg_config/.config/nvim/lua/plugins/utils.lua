@@ -1,5 +1,7 @@
 vim.notify = require("notify")
 
+-- for lua annotation, see https://github.com/sumneko/lua-language-server/wiki/Annotations
+
 local M = {}
 
 M.notify_output = function(command, opts)
@@ -28,6 +30,39 @@ M.notify_output = function(command, opts)
   })
 end
 
+
+---find the closest parent of the file with filename
+---@param file? string filename or 'package.json'
+---@return string|nil parent folder path of that file
+M.findNearestFile = function (file)
+  -- default param https://riptutorial.com/lua/example/4081/default-parameters
+  file = file or "package.json" -- why "package.json"? idk
+  local Path = require"plenary.path"
+  local p = Path:new { vim.api.nvim_buf_get_name(0) };
+  local parents = p:parents()
+
+  -- print(parents)
+
+  -- https://github.com/ericlacerda/nvim/blob/6dd2d2cf76ed2cd9bedcb70bb023ed2cb9e9c273/plugged/plenary.nvim/tests/plenary/path_spec.lua#L585
+  for _, parent in pairs(parents) do
+    -- print(parent)
+    -- @TODO: use :joinpath
+    local x = parent..'/'.. file
+    -- print(x)
+    local exists = Path.new(x):exists()
+    -- print(exists)
+    if exists then
+      return parent
+    end
+  end
+
+  return nil
+  -- package.json not found
+end
+
+---find and open the closest file by name
+---@param file? string -- filename or 'package.json'
+---@return nil #
 M.openNearestFile = function (file)
   -- default param https://riptutorial.com/lua/example/4081/default-parameters
   file = file or "package.json" -- why "package.json"? idk
@@ -53,8 +88,6 @@ M.openNearestFile = function (file)
   -- package.json not found
 end
 
-vim.keymap.set('n', '<leader>rb', ":lua require('plugins/utils').openNearestFile()<CR>")
-
 vim.api.nvim_create_user_command("OpenNearestPackageJSON", function(opts)
   require('plugins/utils').openNearestPackageJSON()
 end, {
@@ -63,8 +96,8 @@ end, {
     complete = "custom,v:lua.mason_completion.available_package_completion",
   })
 
-vim.api.nvim_set_keymap('n', '<leader><leader>r', ":lua require('plugins.utils').reload()<CR>", { noremap = true })
-
+---get current selection in visual mode
+---@return string
 M.get_visual_selection = function ()
   local s_start = vim.fn.getpos("'<")
   local s_end = vim.fn.getpos("'>")
@@ -79,12 +112,61 @@ M.get_visual_selection = function ()
   return table.concat(lines, '\n')
 end
 
-M.test = function ()
-  local s = M.get_visual_selection()
-  vim.notify(s)
+---get git status with git root path
+---@param path string|table -- git path
+---@return {branch: string, recruit: boolean, unstaged: number, staged: number, untracked: number, unmerged: number, ahead: number}
+M.get_git_stat = function (path)
+  local res = vim.fn.system(
+    "git -C '" .. path .. "' status --porcelain --branch --ahead-behind --untracked-files --renames"
+  )
+  local info = { ahead = 0, behind = 0, recruit = false, unmerged = 0, untracked = 0, staged = 0, unstaged = 0 }
+  if string.sub(res, 1, 7) == "fatal: " then
+    return info
+  end
+  for _, file in next, vim.fn.split(res, "\n") do
+    local staged = string.sub(file, 1, 1)
+    local unstaged = string.sub(file, 2, 2)
+    local changed = string.sub(file, 1, 2)
+    if changed == "##" then
+      local words = vim.fn.split(file, "\\.\\.\\.\\|[ \\[\\],]")
+      if #words == 2 then
+        info.branch = words[2] .. "?"
+        info.recruit = true
+      else
+        info.branch = words[2]
+        info.remote = words[3]
+        if #words > 3 then
+          local key = ""
+          for i, r in ipairs(words) do
+            if i > 3 then
+              if key ~= "" then
+                info[key] = r
+                key = ""
+              else
+                key = r
+              end
+            end
+          end
+        end
+      end
+    elseif staged == "U" or unstaged == "U" or changed == "AA" or changed == "DD" then
+      info.unmerged = info.unmerged + 1
+    elseif changed == "??" then
+      info.untracked = info.untracked + 1
+    else
+      if staged ~= " " then
+        info.staged = info.staged + 1
+      end
+      if unstaged ~= " " then
+        info.unstaged = info.unstaged + 1
+      end
+    end
+  end
+  return info
 end
 
-vim.api.nvim_set_keymap('v', '<leader>T', ":lua require('plugins.utils').test()<CR>", { noremap = true })
+vim.keymap.set('n', '<leader><leader>r', ":lua require('plugins.utils').reload()<CR>", { noremap = true })
+vim.keymap.set('n', '<leader>rb', ":lua require('plugins/utils').openNearestFile()<CR>")
 
 M.reload = function ()
   require("plenary.reload").reload_module("plugins.utils")
