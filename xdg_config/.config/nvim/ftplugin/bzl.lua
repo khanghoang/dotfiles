@@ -4,7 +4,7 @@ end
 
 -- follow https://github.com/s1n7ax/youtube-neovim-treesitter-query/blob/main/README.md
 vim.api.nvim_create_autocmd("BufWritePost", {
- group = vim.api.nvim_create_augroup("foo", { clear = true }),
+ group = vim.api.nvim_create_augroup("parse_java_file", { clear = true }),
   pattern = "*.java",
   callback = function ()
     local parser = vim.treesitter.get_parser(0, 'java')
@@ -26,7 +26,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 })
 
 vim.api.nvim_create_autocmd("BufWritePost", {
- group = vim.api.nvim_create_augroup("foo3", { clear = true }),
+ group = vim.api.nvim_create_augroup("parse_bazel_build_file", { clear = true }),
   pattern = "*.in",
   callback = function ()
     local parser = vim.treesitter.get_parser(0, 'python')
@@ -46,7 +46,7 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
 -- reload this file
 vim.api.nvim_create_autocmd("BufWritePost", {
-  group = vim.api.nvim_create_augroup("foo2", { clear = true }),
+  group = vim.api.nvim_create_augroup("reload_bzl_lua", { clear = true }),
   pattern = "bzl.lua",
   command = ":source %",
 })
