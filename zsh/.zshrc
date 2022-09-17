@@ -234,3 +234,4 @@ if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khang
 
 # https://github.com/ohmyzsh/ohmyzsh/issues/9576#issuecomment-983233425
 export GIT_TRACE=0
+eval "$(/opt/homebrew/bin/brew shellenv)"
