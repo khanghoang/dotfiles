@@ -1297,6 +1297,8 @@ require('packer').startup(function()
         require'alpha'.setup(require'alpha.themes.startify'.config)
     end
   }
+
+  use 'kyazdani42/nvim-web-devicons'
   -- }}}
 
 end)
