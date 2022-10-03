@@ -44,6 +44,10 @@ vim.cmd [[highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE g
 -- set color for number in the gutter
 vim.cmd [[highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff]]
 
+vim.cmd [[set cmdheight=0]]
+vim.cmd [[set laststatus=3]]
+vim.cmd [[highlight WinSeparator guibg=None]]
+
 -- Automatically source and re-compile packer whenever you save this init.lua
 local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
 vim.api.nvim_create_autocmd('BufWritePost', {

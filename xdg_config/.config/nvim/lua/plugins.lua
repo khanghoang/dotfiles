@@ -710,48 +710,48 @@ require('packer').startup(function()
         },
       })
 
-    --   require'mason-tool-installer'.setup {
-    --     -- a list of all tools you want to ensure are installed upon
-    --     -- start; they should be the names Mason uses for each tool
-    --     ensure_installed = {
-    --
-    --       -- you can pin a tool to a particular version
-    --       -- { 'golangci-lint', version = '1.47.0' },
-    --
-    --       -- you can turn off/on auto_update per tool
-    --       { 'bash-language-server', auto_update = false },
-    --       'cmake-language-server',
-    --       'debugpy',
-    --       'dockerfile-language-server',
-    --       'grammarly-languageserver',
-    --       'json-lsp',
-    --       'lua-language-server',
-    --       'node-debug2-adapter',
-    --       'pyright',
-    --       'tailwindcss-language-server',
-    --       'typescript-language-server',
-    --       'zk',
-    --       'prettier',
-    --       'sql-formatter',
-    --     },
-    --
-    --     -- if set to true this will check each tool for updates. If updates
-    --     -- are available the tool will be updated.
-    --     -- Default: false
-    --     auto_update = false,
-    --
-    --     -- automatically install / update on startup. If set to false nothing
-    --     -- will happen on startup. You can use `:MasonToolsUpdate` to install
-    --     -- tools and check for updates.
-    --     -- Default: true
-    --     run_on_start = true,
-    --
-    --     -- set a delay (in ms) before the installation starts. This is only
-    --     -- effective if run_on_start is set to true.
-    --     -- e.g.: 5000 = 5 second delay, 10000 = 10 second delay, etc...
-    --     -- Default: 0
-    --     start_delay = 3000  -- 3 second delay
-    --   }
+      --   require'mason-tool-installer'.setup {
+      --     -- a list of all tools you want to ensure are installed upon
+      --     -- start; they should be the names Mason uses for each tool
+      --     ensure_installed = {
+      --
+      --       -- you can pin a tool to a particular version
+      --       -- { 'golangci-lint', version = '1.47.0' },
+      --
+      --       -- you can turn off/on auto_update per tool
+      --       { 'bash-language-server', auto_update = false },
+      --       'cmake-language-server',
+      --       'debugpy',
+      --       'dockerfile-language-server',
+      --       'grammarly-languageserver',
+      --       'json-lsp',
+      --       'lua-language-server',
+      --       'node-debug2-adapter',
+      --       'pyright',
+      --       'tailwindcss-language-server',
+      --       'typescript-language-server',
+      --       'zk',
+      --       'prettier',
+      --       'sql-formatter',
+      --     },
+      --
+      --     -- if set to true this will check each tool for updates. If updates
+      --     -- are available the tool will be updated.
+      --     -- Default: false
+      --     auto_update = false,
+      --
+      --     -- automatically install / update on startup. If set to false nothing
+      --     -- will happen on startup. You can use `:MasonToolsUpdate` to install
+      --     -- tools and check for updates.
+      --     -- Default: true
+      --     run_on_start = true,
+      --
+      --     -- set a delay (in ms) before the installation starts. This is only
+      --     -- effective if run_on_start is set to true.
+      --     -- e.g.: 5000 = 5 second delay, 10000 = 10 second delay, etc...
+--     -- Default: 0
+      --     start_delay = 3000  -- 3 second delay
+      --   }
     end,
     -- requires = { "WhoIsSethDaniel/mason-tool-installer" }
   }
@@ -979,6 +979,14 @@ require('packer').startup(function()
   }
 
   -- Display the winbar/breadcrumb
+  use({
+    "SmiteshP/nvim-gps",
+    requires = "nvim-treesitter/nvim-treesitter",
+    config = function ()
+      require("nvim-gps").setup()
+    end
+  })
+
   -- Display color for hex string
   use {
     'norcalli/nvim-colorizer.lua',
@@ -1105,15 +1113,15 @@ require('packer').startup(function()
         autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
         " Source is automatically added, you just need to include it in the chain complete list
         let g:completion_chain_complete_list = {
-            \   'sql': [
-            \    {'complete_items': ['vim-dadbod-completion']},
-            \   ],
-            \ }
+        \   'sql': [
+        \    {'complete_items': ['vim-dadbod-completion']},
+        \   ],
+        \ }
         " Make sure `substring` is part of this list. Other items are optional for this completion source
         let g:completion_matching_strategy_list = ['exact', 'substring']
         " Useful if there's a lot of camel case items
         let g:completion_matching_ignore_case = 1
-      ]]
+        ]]
     end
   }
   use { "kristijanhusak/vim-dadbod-ui" }
@@ -1146,6 +1154,12 @@ require('packer').startup(function()
   -- Lua
   -- Winbar
   --- {{{
+  vim.api.nvim_create_autocmd({ "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost" }, {
+    callback = function()
+      require("plugins.winbar").get_winbar()
+    end,
+  })
+  -- }}}
   -- Developing Lua plugins
   --- {{{
   use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
@@ -1167,85 +1181,85 @@ require('packer').startup(function()
       local client_notifs = {}
 
       local function get_notif_data(client_id, token)
-       if not client_notifs[client_id] then
-         client_notifs[client_id] = {}
-       end
+        if not client_notifs[client_id] then
+          client_notifs[client_id] = {}
+        end
 
-       if not client_notifs[client_id][token] then
-         client_notifs[client_id][token] = {}
-       end
+        if not client_notifs[client_id][token] then
+          client_notifs[client_id][token] = {}
+        end
 
-       return client_notifs[client_id][token]
+        return client_notifs[client_id][token]
       end
 
 
       local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
 
       local function update_spinner(client_id, token)
-       local notif_data = get_notif_data(client_id, token)
+        local notif_data = get_notif_data(client_id, token)
 
-       if notif_data.spinner then
-         local new_spinner = (notif_data.spinner + 1) % #spinner_frames
-         notif_data.spinner = new_spinner
+        if notif_data.spinner then
+          local new_spinner = (notif_data.spinner + 1) % #spinner_frames
+          notif_data.spinner = new_spinner
 
-         notif_data.notification = vim.notify(nil, nil, {
-           hide_from_history = true,
-           icon = spinner_frames[new_spinner],
-           replace = notif_data.notification,
-         })
+          notif_data.notification = vim.notify(nil, nil, {
+            hide_from_history = true,
+            icon = spinner_frames[new_spinner],
+            replace = notif_data.notification,
+          })
 
-         vim.defer_fn(function()
-           update_spinner(client_id, token)
-         end, 100)
-       end
+          vim.defer_fn(function()
+            update_spinner(client_id, token)
+          end, 100)
+        end
       end
 
       local function format_title(title, client_name)
-       return client_name .. (#title > 0 and ": " .. title or "")
+        return client_name .. (#title > 0 and ": " .. title or "")
       end
 
       local function format_message(message, percentage)
-       return (percentage and percentage .. "%\t" or "") .. (message or "")
+        return (percentage and percentage .. "%\t" or "") .. (message or "")
       end
 
       vim.lsp.handlers["$/progress"] = function(_, result, ctx)
-       local client_id = ctx.client_id
+        local client_id = ctx.client_id
 
-       local val = result.value
+        local val = result.value
 
-       if not val.kind then
-         return
-       end
+        if not val.kind then
+          return
+        end
 
-       local notif_data = get_notif_data(client_id, result.token)
+        local notif_data = get_notif_data(client_id, result.token)
 
-       if val.kind == "begin" then
-         local message = format_message(val.message, val.percentage)
+        if val.kind == "begin" then
+          local message = format_message(val.message, val.percentage)
 
-         notif_data.notification = vim.notify(message, "info", {
-           title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
-           icon = spinner_frames[1],
-           timeout = false,
-           hide_from_history = false,
-         })
+          notif_data.notification = vim.notify(message, "info", {
+            title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
+            icon = spinner_frames[1],
+            timeout = false,
+            hide_from_history = false,
+          })
 
-         notif_data.spinner = 1
-         update_spinner(client_id, result.token)
-       elseif val.kind == "report" and notif_data then
-         notif_data.notification = vim.notify(format_message(val.message, val.percentage), "info", {
-           replace = notif_data.notification,
-           hide_from_history = false,
-         })
-       elseif val.kind == "end" and notif_data then
-         notif_data.notification =
-           vim.notify(val.message and format_message(val.message) or "Complete", "info", {
-             icon = "",
-             replace = notif_data.notification,
-             timeout = 3000,
-           })
+          notif_data.spinner = 1
+          update_spinner(client_id, result.token)
+        elseif val.kind == "report" and notif_data then
+          notif_data.notification = vim.notify(format_message(val.message, val.percentage), "info", {
+            replace = notif_data.notification,
+            hide_from_history = false,
+          })
+        elseif val.kind == "end" and notif_data then
+          notif_data.notification =
+          vim.notify(val.message and format_message(val.message) or "Complete", "info", {
+            icon = "",
+            replace = notif_data.notification,
+            timeout = 3000,
+          })
 
-         notif_data.spinner = nil
-       end
+          notif_data.spinner = nil
+        end
       end
 
       -- DAP integration
@@ -1253,36 +1267,36 @@ require('packer').startup(function()
       local dap = require"dap"
 
       dap.listeners.before['event_progressStart']['progress-notifications'] = function(session, body)
-       local notif_data = get_notif_data("dap", body.progressId)
+        local notif_data = get_notif_data("dap", body.progressId)
 
-       local message = format_message(body.message, body.percentage)
-       notif_data.notification = vim.notify(message, "info", {
-         title = format_title(body.title, session.config.type),
-         icon = spinner_frames[1],
-         timeout = false,
-         hide_from_history = false,
-       })
+        local message = format_message(body.message, body.percentage)
+        notif_data.notification = vim.notify(message, "info", {
+          title = format_title(body.title, session.config.type),
+          icon = spinner_frames[1],
+          timeout = false,
+          hide_from_history = false,
+        })
 
-       notif_data.notification.spinner = 1,
-       update_spinner("dap", body.progressId)
+        notif_data.notification.spinner = 1,
+        update_spinner("dap", body.progressId)
       end
 
       dap.listeners.before['event_progressUpdate']['progress-notifications'] = function(session, body)
-       local notif_data = get_notif_data("dap", body.progressId)
-       notif_data.notification = vim.notify(format_message(body.message, body.percentage), "info", {
-         replace = notif_data.notification,
-         hide_from_history = false,
-       })
+        local notif_data = get_notif_data("dap", body.progressId)
+        notif_data.notification = vim.notify(format_message(body.message, body.percentage), "info", {
+  replace = notif_data.notification,
+          hide_from_history = false,
+        })
       end
 
       dap.listeners.before['event_progressEnd']['progress-notifications'] = function(session, body)
-       local notif_data = client_notifs["dap"][body.progressId]
-       notif_data.notification = vim.notify(body.message and format_message(body.message) or "Complete", "info", {
+        local notif_data = client_notifs["dap"][body.progressId]
+        notif_data.notification = vim.notify(body.message and format_message(body.message) or "Complete", "info", {
           icon = "",
           replace = notif_data.notification,
           timeout = 3000
-       })
-       notif_data.spinner = nil
+        })
+        notif_data.spinner = nil
       end
     end
   }
@@ -1294,7 +1308,7 @@ require('packer').startup(function()
     'goolord/alpha-nvim',
     requires = { 'kyazdani42/nvim-web-devicons' },
     config = function ()
-        require'alpha'.setup(require'alpha.themes.startify'.config)
+      require'alpha'.setup(require'alpha.themes.startify'.config)
     end
   }
 

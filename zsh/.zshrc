@@ -235,3 +235,5 @@ if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khang
 # https://github.com/ohmyzsh/ohmyzsh/issues/9576#issuecomment-983233425
 export GIT_TRACE=0
 eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
+export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
