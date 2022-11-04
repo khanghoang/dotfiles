@@ -23,9 +23,9 @@ local on_attach = function(client, bufnr)
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'gs', '<cmd>lua require("lspsaga.signaturehelp").signature_help()<CR>', opts)
-  buf_set_keymap('n', 'ga', '<cmd>lua require("lspsaga.codeaction").code_action()<CR>', opts)
-  buf_set_keymap('v', 'ga', ':<C-U>lua require("lspsaga.codeaction").range_code_action()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua require("lspsaga.hover").render_hover_doc()<CR>', opts)
+  buf_set_keymap('n', 'ga', '<cmd>Lspsaga code_action<CR>', opts)
+  buf_set_keymap('v', 'ga', '<cmd>Lspsaga code_action<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
   buf_set_keymap('n', 'D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
@@ -34,7 +34,14 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap("n", "gr", "<cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
   buf_set_keymap('n', 'gD', ":vsp<cr><cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
-  buf_set_keymap("n", "gd", "<cmd>lua require'telescope.builtin'.lsp_definitions()<CR>", opts)
+  buf_set_keymap('n', 'cd', "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
+  buf_set_keymap('n', 'cd', "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
+  -- edit = '<C-c>o',
+  -- vsplit = '<C-c>v',
+  -- split = '<C-c>i',
+  -- tabe = '<C-c>t',
+  -- quit = 'q',
+  buf_set_keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts)
   buf_set_keymap("n", "<C-p>", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<CR>", opts)
   buf_set_keymap("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
 
