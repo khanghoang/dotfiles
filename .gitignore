@@ -2,3 +2,4 @@
 .config/nvim/spell/en.utf-8.add.spl
 .config/nvim/spell/en.utf-8.add
 xdg_config/.config/nvim/plugin/packer_compiled.lua
+xdg_config/.config/vifm/vifminfo.json
