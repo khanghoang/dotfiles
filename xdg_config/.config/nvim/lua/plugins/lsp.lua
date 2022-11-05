@@ -78,7 +78,7 @@ nvim_lsp.tsserver.setup({
   flags = {
     debounce_text_changes = 150,
   },
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
 local pyright_bin = lsp_install_path .. '/pyright-langserver'
@@ -98,7 +98,7 @@ nvim_lsp.pyright.setup({
       },
     },
   },
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
 -- LUA
@@ -129,7 +129,7 @@ nvim_lsp.sumneko_lua.setup {
     },
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
 -- unfinished config
@@ -146,7 +146,7 @@ nvim_lsp.gopls.setup({
     },
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
 -- JSON
@@ -163,7 +163,7 @@ nvim_lsp.jsonls.setup {
     }
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 -- Tailwindcss
@@ -172,7 +172,7 @@ local tailwind = lsp_install_path ..
 nvim_lsp.tailwindcss.setup {
   cmd = { tailwind, '--stdio' },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 -- Docker
@@ -180,7 +180,7 @@ local docker = lsp_install_path .. '/docker-langserver'
 nvim_lsp.dockerls.setup {
   cmd = { docker, '--stdio' },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 -- Markdown
