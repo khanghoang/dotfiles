@@ -74,6 +74,7 @@ plugins=(
   # git
   # dotenv
   # urltools
+  vi-mode
   # git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
   # zsh-autosuggestions
   # git clone git@github.com:skywind3000/z.lua.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua
@@ -229,6 +230,8 @@ alias luamake=/home/khanghoang/code/lua-language-server/3rd/luamake/luamake
 # Aliases
 alias vi=nvim
 alias cat=bat
+alias gs="git status"
+alias gco="git checkout"
 
 if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khanghoang/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
