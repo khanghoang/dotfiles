@@ -1,6 +1,10 @@
-vim.cmd [[syntax enable]]
-vim.cmd [[colorscheme OceanicNext]]
-vim.cmd [[set background=dark]]
+vim.cmd [[
+  syntax enable
+  let g:oceanic_next_terminal_bold = 1
+  let g:oceanic_next_terminal_italic = 1
+  colorscheme OceanicNext
+  set background=dark
+]]
 
 vim.g.airline_theme='oceanicnext'
 
