@@ -28,10 +28,12 @@ api.nvim_set_keymap('n', 'N', "nzzzv", { noremap = true })
 api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'echo', 'foo' })<CR>", { noremap = true })
 
 -- Tabs
+-- Go to tab number x -> xgt
+-- Go to last accessed tab x -> g<Tab>
 api.nvim_set_keymap('n', 'tc', ":tabclose<CR>", { noremap = true })
-api.nvim_set_keymap('n', 'tn', ":tabprevious<CR>", { noremap = true })
-api.nvim_set_keymap('n', 'tp', ":tabnext<CR>", { noremap = true })
-api.nvim_set_keymap('n', 'tn', ":tabnew<CR>", { noremap = true })
+api.nvim_set_keymap('n', 'tp', ":tabprevious<CR>", { noremap = true })
+api.nvim_set_keymap('n', 'tn', ":tabnext<CR>", { noremap = true })
+api.nvim_set_keymap('n', 'tN', ":tabnew<CR>", { noremap = true })
 
 -- testing
 vim.api.nvim_set_keymap('n', '<leader><leader>x', ":w<CR>:source %<CR>", { noremap = true })
