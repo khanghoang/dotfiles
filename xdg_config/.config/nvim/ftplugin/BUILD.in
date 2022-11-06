@@ -1,0 +1,4 @@
+dbx_metaserver_jest_test(
+    config="bar",
+    name="foo"
+)

@@ -1,5 +1,5 @@
 vim.cmd [[
-  set filetype=python
+  set filetype=lua
 ]]
 
 local function i(value)
@@ -11,21 +11,28 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   group = vim.api.nvim_create_augroup("foo", { clear = true }),
   pattern = "*.in",
   callback = function ()
-    local bufid = 8
-    local parser = vim.treesitter.get_parser(7, 'python')
+    -- get current buffer number by "echo bufnr('%')"
+    local bufid = 203
+    local parser = vim.treesitter.get_parser(bufid, 'python')
     local tstree = parser:parse()[1]
     local root = tstree:root()
     local query = vim.treesitter.parse_query('python', [[
-      (expression_statement
-        (call
-         function: (identifier) @annotation (#eq? @annotation "dbx_metaserver_jest_test")
-         )
+    (expression_statement
+      (call
+          function: (identifier) @func_name
+            arguments: (argument_list
+              (keyword_argument
+                  name: (identifier) @name
+                    value: (string) @value
+                )
+            )
       )
+    )
     ]])
 
     local q = require"vim.treesitter.query"
-    for id, match, metadata in query:iter_matches(root, 7) do
-      i(q.get_node_text(match[2], 7))
+    for id, match, metadata in query:iter_matches(root, bufid) do
+      i(q.get_node_text(match[3], bufid))
     end
   end,
 })
@@ -36,3 +43,17 @@ vim.api.nvim_create_autocmd("BufWritePost", {
   pattern = "bzl.lua",
   command = ":source %",
 })
+
+-- :help ui.select
+-- local fname = vim.ui.select({ 'foo', 'bar' }, {
+--   prompt = 'Select tabs or spaces:',
+--   format_item = function(item)
+--     return "I'd like to choose " .. item
+--   end,
+-- }, function(choice)
+--     if choice == 'spaces' then
+--       vim.o.expandtab = true
+--     else
+--       vim.o.expandtab = false
+--     end
+--   end)
