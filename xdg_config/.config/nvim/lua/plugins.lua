@@ -281,6 +281,7 @@ require('packer').startup(function()
           end
         }),
         sources = {
+          { name = 'nvim_lsp_signature_help' },
           { name = 'luasnip' },
           { name = 'nvim_lsp' },
           -- For vsnip user.
@@ -1299,6 +1300,73 @@ require('packer').startup(function()
     end
   }
   -- }}}
+
+  -- Test runners
+  use {
+    "klen/nvim-test",
+    config = function()
+
+      local Runner = require "nvim-test.runner"
+      local log = require "libs.log"
+
+      local query = [[
+        ((expression_statement
+          (call_expression
+            function: (identifier) @method-name
+            (#match? @method-name "^(describe|test|it)")
+            arguments: (arguments [
+              ((string) @test-name)
+              ((template_string) @test-name)
+            ]
+          )))
+        @scope-root)
+      ]]
+
+      local jest = Runner:init({
+        command = { "./node_modules/.bin/jest", "jest" },
+        file_pattern = "\\v(__tests__/.*|(spec|test))\\.(js|jsx|coffee|ts|tsx)$",
+        find_files = { "{name}.test.{ext}", "{name}.spec.{ext}" },
+      }, {
+          javascript = query,
+          typescript = query,
+        })
+
+      function jest:parse_testname(name)
+        return name:gsub("^[\"'`]", ""):gsub("[\"'`]$", "")
+      end
+
+      function jest:build_test_args(args, tests)
+        table.insert(args, "-t")
+        table.insert(args, "^" .. table.concat(tests, " ") .. "$")
+        log.info('build_test_args -> args', vim.inspect(args));
+        log.info('build_test_args -> tests', vim.inspect(tests));
+      end
+ 
+      require('nvim-test').setup({
+        runners = {               -- setup tests runners
+          cs = "nvim-test.runners.dotnet",
+          go = "nvim-test.runners.go-test",
+          haskell = "nvim-test.runners.hspec",
+          javacriptreact = "nvim-test.runners.jest",
+          javascript = "nvim-test.runners.jest",
+          lua = "nvim-test.runners.busted",
+          python = "nvim-test.runners.pytest",
+          ruby = "nvim-test.runners.rspec",
+          rust = "nvim-test.runners.cargo-test",
+          typescript = jest,
+          typescriptreact = jest,
+          -- typescript = "nvim-test.runners.jest",
+          -- typescriptreact = "nvim-test.runners.jest",
+        }
+      })
+    end
+  }
+
+  use {
+    "hrsh7th/cmp-nvim-lsp-signature-help",
+    config = function ()
+    end
+  }
 
 end)
 
