@@ -12,6 +12,47 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
   }
 }
 
+local function setup()
+  local signs = {
+    { name = "DiagnosticSignError", text = "" },
+    { name = "DiagnosticSignWarn", text = "" },
+    { name = "DiagnosticSignHint", text = "" },
+    { name = "DiagnosticSignInfo", text = "" },
+  }
+
+  for _, sign in ipairs(signs) do
+    vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
+  end
+
+  local config = {
+    virtual_text = false, -- disable virtual text
+    signs = {
+      active = signs, -- show signs
+    },
+    update_in_insert = true,
+    underline = true,
+    severity_sort = true,
+    float = {
+      focusable = true,
+      style = "minimal",
+      border = "rounded",
+      source = "always",
+      header = "",
+      prefix = "",
+    },
+  }
+
+  vim.diagnostic.config(config)
+
+  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+    border = "rounded",
+  })
+
+  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+    border = "rounded",
+  })
+end
+
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
 
@@ -22,7 +63,6 @@ local on_attach = function(client, bufnr)
   local opts = { noremap = true, silent = true }
 
   -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'gs', '<cmd>lua require("lspsaga.signaturehelp").signature_help()<CR>', opts)
   buf_set_keymap('n', 'ga', '<cmd>Lspsaga code_action<CR>', opts)
   buf_set_keymap('v', 'ga', '<cmd>Lspsaga code_action<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
@@ -36,6 +76,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'gD', ":vsp<cr><cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
   buf_set_keymap('n', 'cd', "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
   buf_set_keymap('n', 'cd', "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
+  buf_set_keymap('n', 'gs', ":lua vim.lsp.buf.signature_help()<CR>", opts)
   -- edit = '<C-c>o',
   -- vsplit = '<C-c>v',
   -- split = '<C-c>i',
@@ -48,6 +89,8 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+
+  setup()
 
   -- setup vim aerial
   local require_aerial_ok, aerial = pcall(require, 'aerial')
@@ -83,7 +126,7 @@ nvim_lsp.tsserver.setup({
 
 local pyright_bin = lsp_install_path .. '/pyright-langserver'
 nvim_lsp.pyright.setup({
-  cmd = { pyright_bin, '--stdio' },
+  cmd = vim.lsp.rpc.connect('127.0.0.1', '2704'),
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,
