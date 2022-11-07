@@ -281,6 +281,7 @@ require('packer').startup(function()
           end
         }),
         sources = {
+          { name = 'nvim_lsp_signature_help' },
           { name = 'luasnip' },
           { name = 'nvim_lsp' },
           -- For vsnip user.
@@ -1374,6 +1375,12 @@ require('packer').startup(function()
           -- typescriptreact = "nvim-test.runners.jest",
         }
       })
+    end
+  }
+
+  use {
+    "hrsh7th/cmp-nvim-lsp-signature-help",
+    config = function ()
     end
   }
 
