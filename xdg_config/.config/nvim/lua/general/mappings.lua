@@ -54,9 +54,9 @@ pcall(require('telescope').load_extension, 'fzf')
 
 -- Using netrw instead of vifm
 -- https://vonheikemen.github.io/devlog/tools/using-netrw-vim-builtin-file-explorer/
-vim.api.nvim_set_keymap('i', '<leader>nt', ":Vexplore<CR>", { noremap = true })
-vim.api.nvim_set_keymap('n', '<leader>nt', ":Vexplore<CR>", { noremap = true })
-vim.api.nvim_set_keymap('v', '<leader>nt', ":Vexplore<CR>", { noremap = true })
+vim.api.nvim_set_keymap('i', '<leader>nt', ":Lexplore<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>nt', ":Lexplore<CR>", { noremap = true })
+vim.api.nvim_set_keymap('v', '<leader>nt', ":Lexplore<CR>", { noremap = true })
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
