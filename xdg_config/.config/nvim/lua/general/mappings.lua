@@ -52,6 +52,12 @@ vim.api.nvim_set_keymap('i', '<F5>', "<C-R>=strftime('%c')<CR>", { noremap = tru
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
 
+-- Using netrw instead of vifm
+-- https://vonheikemen.github.io/devlog/tools/using-netrw-vim-builtin-file-explorer/
+vim.api.nvim_set_keymap('i', '<leader>nt', ":Vexplore<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', '<leader>nt', ":Vexplore<CR>", { noremap = true })
+vim.api.nvim_set_keymap('v', '<leader>nt', ":Vexplore<CR>", { noremap = true })
+
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = '[ ] Find find in current git dir' })

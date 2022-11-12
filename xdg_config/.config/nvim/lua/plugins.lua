@@ -56,7 +56,7 @@ require('packer').startup(function()
 
   -- Navigation
   -- {{{
-  use 'vifm/vifm.vim'
+  -- use 'vifm/vifm.vim'
   use 'rbgrouleff/bclose.vim'
   use 'easymotion/vim-easymotion'
   use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
