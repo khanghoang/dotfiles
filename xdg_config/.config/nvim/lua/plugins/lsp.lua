@@ -85,7 +85,9 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts)
   buf_set_keymap("n", "<C-p>", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<CR>", opts)
   buf_set_keymap("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
+  buf_set_keymap('n', 'll', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
 
+  -- almost never used
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
@@ -225,6 +227,34 @@ nvim_lsp.dockerls.setup {
   on_attach = on_attach,
   capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
+
+nvim_lsp.ltex.setup({
+  cmd = {'ltex-ls'},
+  filetypes = {'markdown'},
+  root_dir = nvim_lsp.util.find_git_ancestor,
+  settings = {
+    ltex = {
+      enabled = {'markdown'},
+      checkFrequency = 'save',
+      language = 'en-US',
+      diagnosticSeverity = 'information',
+      setenceCacheSize = 2000,
+      additionalRules = {
+        enablePickyRules = true,
+        motherTongue = 'en-US',
+      },
+      dictionary = {},
+      disabledRules = {
+        ['en-US'] = {'EN_QUOTES'},
+      },
+      hiddenFalsePositives = {},
+    },
+  },
+
+  on_attach = on_attach,
+  capabilities = capabilities,
+  flags = {debounce_text_changes = 150}
+})
 
 -- Markdown
 -- LspInstall markdown marksman
