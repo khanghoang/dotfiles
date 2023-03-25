@@ -208,7 +208,8 @@ require('packer').startup(function()
       local opt = {noremap = false}
 
       map('n', 'so', ':AerialToggle<CR>',opt)
-      map('n', 'do', ':call aerial#fzf()',opt)
+      -- map('n', 'do', ':call aerial#fzf()<cr>',opt)
+      map('n', 'do', '<cmd>call aerial#fzf()<cr>', opt)
     end
   }
 
@@ -1302,6 +1303,7 @@ require('packer').startup(function()
   -- }}}
 
   -- Test runners
+  -- {{{
   use {
     "klen/nvim-test",
     config = function()
@@ -1361,14 +1363,31 @@ require('packer').startup(function()
       })
     end
   }
+  -- }}}
 
+  -- Marks management
+  -- {{{
+  use 'MattesGroeger/vim-bookmarks'
   use {
-    "hrsh7th/cmp-nvim-lsp-signature-help",
+    'khanghoang/telescope-vim-bookmarks.nvim',
     config = function ()
+      require('telescope').load_extension('vim_bookmarks')
+
+      local bookmark_actions = require('telescope').extensions.vim_bookmarks.actions
+      require('telescope').extensions.vim_bookmarks.all {
+        attach_mappings = function(_, map)
+
+          -- this doesn't work :(
+          map('n', 'dd', bookmark_actions.delete_selected_or_at_cursor)
+          return true
+        end
+      }
+
     end
   }
+  -- }}}
 
-end)
+  end)
 
 -- When we are bootstrapping a configuration, it doesn't
 -- make sense to execute the rest of the init.lua.
