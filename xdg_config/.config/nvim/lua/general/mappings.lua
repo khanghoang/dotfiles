@@ -68,6 +68,10 @@ vim.keymap.set('n', '<leader>lg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc = '[S]earch [B]uffers' })
 
+-- For marks management
+vim.keymap.set('n', '<leader>a', ':Telescope vim_bookmarks all<CR>', { noremap = true })
+vim.keymap.set('n', 'ql', ':cclose<CR>', { noremap = true })
+
 -- Prettier current file
 api.nvim_set_keymap('n', '<leader><leader>f', ":lua vim.lsp.buf.formatting { async = true }<CR>", { noremap = true })
 
