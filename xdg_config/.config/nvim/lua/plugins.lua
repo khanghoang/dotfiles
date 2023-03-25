@@ -1307,7 +1307,7 @@ require('packer').startup(function()
     config = function()
 
       local Runner = require "nvim-test.runner"
-      local log = require "libs.log"
+      -- local log = require "libs.log"
 
       local query = [[
         ((expression_statement
@@ -1338,8 +1338,8 @@ require('packer').startup(function()
       function jest:build_test_args(args, tests)
         table.insert(args, "-t")
         table.insert(args, "^" .. table.concat(tests, " ") .. "$")
-        log.info('build_test_args -> args', vim.inspect(args));
-        log.info('build_test_args -> tests', vim.inspect(tests));
+        -- log.info('build_test_args -> args', vim.inspect(args));
+        -- log.info('build_test_args -> tests', vim.inspect(tests));
       end
  
       require('nvim-test').setup({
