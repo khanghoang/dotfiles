@@ -13,6 +13,7 @@ require('plugins/gitlinker')
 require('plugins/telescope')
 require('plugins/find_dotfiles')
 require('plugins/lightline')
+require('plugins/query_sourcegraph')
 
 require('colorschemes/lua/oceannext')
 require('general/mappings')
