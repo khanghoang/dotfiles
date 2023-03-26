@@ -1,3 +1,15 @@
+local finders = require('telescope.finders')
+local pickers = require('telescope.pickers')
+local entry_display = require('telescope.pickers.entry_display')
+local conf = require('telescope.config').values
+local make_entry = require('telescope.make_entry')
+local log        = require('plugins.log')
+
+local utils = require('telescope.utils')
+
+local actions = require('telescope.actions')
+local action_state = require('telescope.actions.state')
+
 local function parseLocationFromJson(json)
   if json.Results == nil then
     return {}
@@ -90,6 +102,112 @@ local function parseJsonFromCmd(cmd, args)
   return vim.fn.json_decode(stdout)
 end
 
+-- local function make_entry_from_bookmarks(opts)
+--     opts = opts or {}
+--     opts.tail_path = vim.F.if_nil(opts.tail_path, true)
+--
+--     local displayer = entry_display.create {
+--         separator = "▏",
+--         items = {
+--             { width = opts.width_line or 5 },
+--             { width = opts.width_text or 60 },
+--             { remaining = true }
+--         }
+--     }
+--
+--     local make_display = function(entry)
+--         local filename
+--         if not opts.path_display then
+--             filename = entry.filename
+--             if opts.tail_path then
+--                 filename = utils.path_tail(filename)
+--             elseif opts.shorten_path then
+--                 filename = utils.path_shorten(filename)
+--             end
+--         end
+--
+--         local line_info = {entry.lnum, "TelescopeResultsLineNr"}
+--
+--         return displayer {
+--             line_info,
+--             entry.text:gsub(".* | ", ""),
+--             filename,
+--         }
+--     end
+--
+--     return function(entry)
+--         return {
+--             valid = true,
+--
+--             value = entry,
+--             ordinal = (
+--             not opts.ignore_filename and filename
+--             or ''
+--             ) .. ' ' .. entry.text,
+--             display = make_display,
+--
+--             filename = entry.filename,
+--             lnum = entry.lnum,
+--             col = 1,
+--             text = entry.text,
+--         }
+--     end
+--
+-- end
+
+local function make_entry_from_sg_cli_results(opts)
+    opts = opts or {}
+    opts.tail_path = vim.F.if_nil(opts.tail_path, true)
+
+    local displayer = entry_display.create {
+        separator = "▏",
+        items = {
+            { width = opts.width_line or 5 },
+            { width = opts.width_text or 60 },
+            { remaining = true }
+        }
+    }
+
+    local make_display = function(entry)
+        local filename
+        if not opts.path_display then
+            filename = entry.filename
+            if opts.tail_path then
+                filename = utils.path_tail(filename)
+            elseif opts.shorten_path then
+                filename = utils.path_shorten(filename)
+            end
+        end
+
+        local line_info = {entry.lnum, "TelescopeResultsLineNr"}
+
+        return displayer {
+            line_info,
+            entry.text:gsub(".* | ", ""),
+            filename,
+        }
+    end
+
+    return function(entry)
+        return {
+            valid = true,
+
+            value = entry,
+            ordinal = (
+            not opts.ignore_filename and entry.path
+            or ''
+            ) .. ' ' .. entry.preview,
+            display = make_display,
+
+            filename = entry.path,
+            lnum = entry.lineNumber,
+            col = 1,
+            text = entry.preview,
+        }
+    end
+end
+
+
 -- get input
 local function querySrc()
   local query = vim.fn.input("src query: ")
@@ -98,7 +216,27 @@ local function querySrc()
   end
   local json = parseJsonFromCmd("src", { "search", "-json", query })
   local locations = parseLocationFromJson(json)
-  sendToQuickfix(locations)
+
+  local make_finder = function()
+    if vim.tbl_isempty(locations) then
+      print("Not found!")
+      return
+    end
+
+    return finders.new_table {
+      results = locations,
+      entry_maker = make_entry_from_sg_cli_results(opts or {}),
+    }
+  end
+
+  local initial_finder = make_finder()
+
+  pickers.new({}, {
+      prompt_title = 'Search source graph',
+      finder = initial_finder,
+      previewer = conf.qflist_previewer({}),
+      sorter = conf.generic_sorter({}),
+  }):find()
 end
 
 vim.keymap.set('n', '<leader>S', querySrc, { desc = "Search source graph" })
