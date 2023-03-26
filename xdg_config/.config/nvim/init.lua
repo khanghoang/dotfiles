@@ -14,6 +14,7 @@ require('plugins/telescope')
 require('plugins/find_dotfiles')
 require('plugins/lightline')
 require('plugins/query_sourcegraph')
+require('plugins/dap')
 
 require('colorschemes/lua/oceannext')
 require('general/mappings')
