@@ -4,6 +4,8 @@ local entry_display = require('telescope.pickers.entry_display')
 local conf = require('telescope.config').values
 local make_entry = require('telescope.make_entry')
 local log        = require('plugins.log')
+local fs_utils = require('plugins.fs_utils')
+local vim_utils = require('plugins.vim_utils')
 
 local utils = require('telescope.utils')
 
@@ -73,33 +75,14 @@ local function sendToQuickfix(lines)
   vim.cmd(":copen")
 end
 
-local job = require("plenary.job")
-local function runJob(cmd, args)
-  local stdout = ""
-  local stderr = ""
-  job
-    :new({
-      command = cmd,
-      args = args,
-      on_stdout = function(_, data)
-        stdout = stdout .. "\n" .. data
-      end,
-      on_stderr = function(_, data)
-        stderr = stderr .. data
-      end,
-    })
-    :sync()
-  return stdout, stderr
-end
-
 local function parseJsonFromCmd(cmd, args)
-  local stdout, stderr = runJob(cmd, args)
+  local stdout, stderr = vim_utils.run_job(cmd, args)
   if stderr ~= "" then
     error(stderr)
     return nil
   end
 
-  return vim.fn.json_decode(stdout)
+  return vim_utils.json_decode(stdout)
 end
 
 -- local function make_entry_from_bookmarks(opts)
@@ -207,13 +190,13 @@ local function make_entry_from_sg_cli_results(opts)
     end
 end
 
-
 -- get input
 local function querySrc()
   local query = vim.fn.input("src query: ")
   if query == nil or query == "" then
     return nil
   end
+
   local json = parseJsonFromCmd("src", { "search", "-json", query })
   local locations = parseLocationFromJson(json)
 
@@ -230,6 +213,15 @@ local function querySrc()
   end
 
   local initial_finder = make_finder()
+
+  local p = string.format('%s/source_graph', vim.api.nvim_call_function('stdpath', {'cache'}))
+  if not fs_utils.is_dir(p) then
+    fs_utils.mkdir(p)
+  end
+
+  -- make file
+  local outfile = string.format('%s/source_graph/%s', vim.api.nvim_call_function('stdpath', {'cache'}), query)
+  fs_utils.write_file(outfile, json, 'a')
 
   pickers.new({}, {
       prompt_title = 'Search source graph',
