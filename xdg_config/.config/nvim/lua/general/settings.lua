@@ -51,3 +51,7 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   group = packer_group,
   pattern = "plugins.lua"
 })
+
+-- save and restore folds
+vim.cmd [[autocmd BufWinLeave *.* mkview]]
+vim.cmd [[autocmd BufWinEnter *.* silent loadview]]
