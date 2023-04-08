@@ -192,7 +192,11 @@ end
 
 -- get input
 local function querySrc()
-  local query = vim.fn.input("src query: ")
+  local query = vim.fn.input({ prompt = 'Search sourcegrap: ' })
+  -- vim.ui.input({ prompt = 'Search sourcegraph: ' }, function(input)
+  --   query = input
+  -- end)
+
   if query == nil or query == "" then
     return nil
   end

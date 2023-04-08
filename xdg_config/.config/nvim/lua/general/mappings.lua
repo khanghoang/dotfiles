@@ -8,7 +8,8 @@ api.nvim_set_keymap('n', 'qq', ':q<cr>', { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<leader>ev', ':lua require("plugins/find_dotfiles").find_dotfiles()<CR>',
   { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<leader>rv', ':source $MYVIMRC<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<leader><space>', ':GitFiles<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<leader><space>', ':FZF<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
 
 api.nvim_set_keymap('n', '<leader>cp', ":let @+=expand('%:p')<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<leader>gf', '<C-w>vgf', { noremap = true })
@@ -24,15 +25,15 @@ api.nvim_set_keymap('n', 'n', "nzzzv", { noremap = true })
 api.nvim_set_keymap('n', 'N', "nzzzv", { noremap = true })
 
 -- Reload bazel
--- api.nvim_set_keymap('n', '<leader>R', ":Dispatch! bzl itest-reload-current<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<leader>R', ":Dispatch! mbzl itest-reload-current<CR>", { noremap = true })
 -- api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'mbzl', 'itest-reload-current' })<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'echo', 'foo' })<CR>", { noremap = true })
+-- api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'echo', 'foo' })<CR>", { noremap = true })
 
 -- Tabs
 api.nvim_set_keymap('n', 'tc', ":tabclose<CR>", { noremap = true })
 api.nvim_set_keymap('n', 'tn', ":tabprevious<CR>", { noremap = true })
 api.nvim_set_keymap('n', 'tp', ":tabnext<CR>", { noremap = true })
-api.nvim_set_keymap('n', 'tn', ":tabnew<CR>", { noremap = true })
+api.nvim_set_keymap('n', 'tN', ":tabnew<CR>", { noremap = true })
 
 -- testing
 vim.api.nvim_set_keymap('n', '<leader><leader>x', ":w<CR>:source %<CR>", { noremap = true })
@@ -52,7 +53,7 @@ pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = '[ ] Find find in current git dir' })
+-- vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = '[ ] Find find in current git dir' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
@@ -87,3 +88,6 @@ vim.cmd [[set iskeyword+=/]]
 
 -- get current datetime by '/today'
 vim.cmd [[iab <expr> /today strftime("%c")]]
+
+-- copy current absolute path of current active buffer
+vim.keymap.set('n', '<leader>ca', ':let @*=expand("%:p")<CR>', { desc = "[C]opy [A]bsolute path of current file"})

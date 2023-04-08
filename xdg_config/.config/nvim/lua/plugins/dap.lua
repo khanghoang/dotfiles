@@ -97,22 +97,27 @@ dapui.setup({
   },
 })
 
-vim.keymap.set('n', '<leader>dh', ":lua require('dapui').toggle()<CR>", { noremap = true })
+vim.keymap.set('n', '<leader>dh', ":lua require('dapui').toggle()<CR>", { noremap = true, desc = "Toggle debug UI" })
+vim.keymap.set('n', '<leader>de', ":lua require('dap').terminate()<CR>", { noremap = true, desc = "[D]ebug [E]xit" })
+vim.keymap.set('n', '<leader>dj', ":lua require('dap').step_in()<CR>", { noremap = true, desc = "Step in" })
+vim.keymap.set('n', '<leader>dk', ":lua require('dap').step_out()<CR>", { noremap = true, desc = "Step out" })
+vim.keymap.set('n', '<leader>dl', ":lua require('dap').step_over()<CR>", { noremap = true, desc = "Step over" })
+vim.keymap.set('n', '<leader>drc', ":lua require('dap').run_to_cursor()<CR>", { noremap = true, desc = "[D]ebug [R]un to [C]ursor" })
+vim.keymap.set('n', '<leader>drl', ":lua require('dap').run_last()<CR>", { noremap = true, desc = "[D]ebug [R]un to [L]ast" })
 
-dap.listeners.after.event_initialized['dapui_config'] = function()
-  dapui.open()
-end
-dap.listeners.before.event_exited['dapui_config'] = function()
-  dapui.close()
-end
-dap.listeners.before.event_stopped['dapui_config'] = function()
-  dapui.close()
-end
-
--- dbx remote debugging needs these two config to close dap-ui
-dap.listeners.before.disconnect["dapui_config"] = function()
-  dapui.close()
-end
-dap.listeners.after.event_terminated['dapui_config'] = function()
-  dapui.close()
-end
+-- dap.listeners.after.event_initialized['dapui_config'] = function()
+--   dapui.open()
+-- end
+-- dap.listeners.before.event_exited['dapui_config'] = function()
+--   dapui.close()
+-- end
+-- dap.listeners.before.event_stopped['dapui_config'] = function()
+--   dapui.close()
+-- end
+-- -- dbx remote debugging needs these two config to close dap-ui
+-- dap.listeners.before.disconnect["dapui_config"] = function()
+--   dapui.close()
+-- end
+-- dap.listeners.after.event_terminated['dapui_config'] = function()
+--   dapui.close()
+-- end

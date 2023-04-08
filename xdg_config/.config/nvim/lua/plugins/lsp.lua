@@ -83,20 +83,20 @@ local on_attach = function(client, bufnr)
   -- tabe = '<C-c>t',
   -- quit = 'q',
   buf_set_keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts)
-  buf_set_keymap("n", "<C-p>", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<CR>", opts)
+  -- buf_set_keymap("n", "<C-p>", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<CR>", opts)
   buf_set_keymap("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
 
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-  setup()
+  -- setup()
 
-  -- setup vim aerial
-  local require_aerial_ok, aerial = pcall(require, 'aerial')
-  if require_aerial_ok then
-    require("aerial").on_attach(client, bufnr)
-  end
+  -- -- setup vim aerial
+  -- local require_aerial_ok, aerial = pcall(require, 'aerial')
+  -- if require_aerial_ok then
+  --   require("aerial").on_attach(client, bufnr)
+  -- end
 end
 
 vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -121,12 +121,14 @@ nvim_lsp.tsserver.setup({
   flags = {
     debounce_text_changes = 150,
   },
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
 local pyright_bin = lsp_install_path .. '/pyright-langserver'
 nvim_lsp.pyright.setup({
-  cmd = vim.lsp.rpc.connect('127.0.0.1', '2704'),
+  cmd = { pyright_bin, '--stdio' },
+  -- cmd = vim.lsp.rpc.connect('127.0.0.1', '2704'),
   on_attach = on_attach,
   flags = {
     debounce_text_changes = 150,
@@ -141,13 +143,13 @@ nvim_lsp.pyright.setup({
       },
     },
   },
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
 -- LUA
 -- LspInstall lua
 local sumneko_binary = lsp_install_path .. '/lua-language-server'
-nvim_lsp.sumneko_lua.setup {
+nvim_lsp.lua_ls.setup {
   cmd = { sumneko_binary };
   settings = {
     Lua = {
@@ -172,11 +174,11 @@ nvim_lsp.sumneko_lua.setup {
     },
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 }
 
 -- unfinished config
-local gopls = lsp_install_path .. '/go'
+local gopls = lsp_install_path
 local gopls_path = gopls .. '/gopls'
 nvim_lsp.gopls.setup({
   cmd = { gopls_path, "serve" },
@@ -189,7 +191,7 @@ nvim_lsp.gopls.setup({
     },
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
 
 -- JSON
@@ -206,26 +208,34 @@ nvim_lsp.jsonls.setup {
     }
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
 -- Tailwindcss
-local tailwind = lsp_install_path ..
-    '/tailwindcss-language-server'
-nvim_lsp.tailwindcss.setup {
-  cmd = { tailwind, '--stdio' },
-  on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-}
+-- local tailwind = lsp_install_path ..
+--     '/tailwindcss-language-server'
+-- nvim_lsp.tailwindcss.setup {
+--   cmd = { tailwind, '--stdio' },
+--   on_attach = on_attach,
+--   capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+-- }
 
 -- Docker
 local docker = lsp_install_path .. '/docker-langserver'
 nvim_lsp.dockerls.setup {
   cmd = { docker, '--stdio' },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
 }
 
+-- require("sg").setup {
+--   -- Pass your own custom attach function
+--   --    If you do not pass your own attach function, then the following maps are provide:
+--   --        - gd -> goto definition
+--   --        - gr -> goto references
+--   on_attach = on_attach
+-- }
+--
 -- Markdown
 -- LspInstall markdown marksman
 -- local markdown = lsp_install_path..'/marksman/marksman'
