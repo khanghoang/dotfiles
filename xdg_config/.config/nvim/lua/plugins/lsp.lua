@@ -75,7 +75,7 @@ local on_attach = function(client, bufnr)
   -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'ga', '<cmd>Lspsaga code_action<CR>', opts)
   buf_set_keymap('v', 'ga', '<cmd>Lspsaga code_action<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
+  -- buf_set_keymap('n', 'K', '<cmd>Lspsaga hover_doc<CR>', opts)
   buf_set_keymap('n', 'D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
@@ -96,6 +96,14 @@ local on_attach = function(client, bufnr)
   -- buf_set_keymap("n", "<C-p>", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<CR>", opts)
   buf_set_keymap("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
   -- buf_set_keymap('n', 'll', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+
+  vim.keymap.set('n', 'K', function()
+    local winid = require('ufo').peekFoldedLinesUnderCursor()
+    if not winid then
+      -- choose one of coc.nvim and nvim lsp
+      vim.lsp.buf.hover()
+    end
+  end, opts)
 
   -- almost never used
   buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
