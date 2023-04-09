@@ -8,7 +8,8 @@ api.nvim_set_keymap('n', 'qq', ':q<cr>', { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<leader>ev', ':lua require("plugins/find_dotfiles").find_dotfiles()<CR>',
   { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<leader>rv', ':source $MYVIMRC<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<leader><space>', ':GitFiles<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<leader><space>', ':FZF<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
 
 api.nvim_set_keymap('n', '<leader>cp', ":let @+=expand('%:p')<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<leader>gf', '<C-w>vgf', { noremap = true })
@@ -24,16 +25,16 @@ api.nvim_set_keymap('n', 'n', "nzzzv", { noremap = true })
 api.nvim_set_keymap('n', 'N', "nzzzv", { noremap = true })
 
 -- Reload bazel
--- api.nvim_set_keymap('n', '<leader>R', ":Dispatch! bzl itest-reload-current<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<leader>R', ":Dispatch! mbzl itest-reload-current<CR>", { noremap = true })
 -- api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'mbzl', 'itest-reload-current' })<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'echo', 'foo' })<CR>", { noremap = true })
+-- api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'echo', 'foo' })<CR>", { noremap = true })
 
 -- Tabs
 -- Go to tab number x -> xgt
 -- Go to last accessed tab x -> g<Tab>
 api.nvim_set_keymap('n', 'tc', ":tabclose<CR>", { noremap = true })
-api.nvim_set_keymap('n', 'tp', ":tabprevious<CR>", { noremap = true })
-api.nvim_set_keymap('n', 'tn', ":tabnext<CR>", { noremap = true })
+api.nvim_set_keymap('n', 'tn', ":tabprevious<CR>", { noremap = true })
+api.nvim_set_keymap('n', 'tp', ":tabnext<CR>", { noremap = true })
 api.nvim_set_keymap('n', 'tN', ":tabnew<CR>", { noremap = true })
 
 -- testing
@@ -60,7 +61,7 @@ vim.api.nvim_set_keymap('v', '<leader>nt', ":Lexplore<CR>", { noremap = true })
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
-vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = '[ ] Find find in current git dir' })
+-- vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = '[ ] Find find in current git dir' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
@@ -75,6 +76,10 @@ vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { de
 vim.keymap.set('n', '<leader>lg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc = '[S]earch [B]uffers' })
+
+-- For marks management
+vim.keymap.set('n', '<leader>a', ':Telescope vim_bookmarks all<CR>', { noremap = true })
+vim.keymap.set('n', 'ql', ':cclose<CR>', { noremap = true })
 
 -- Prettier current file
 api.nvim_set_keymap('n', '<leader><leader>f', ":lua vim.lsp.buf.formatting { async = true }<CR>", { noremap = true })
@@ -91,3 +96,6 @@ vim.cmd [[set iskeyword+=/]]
 
 -- get current datetime by '/today'
 vim.cmd [[iab <expr> /today strftime("%c")]]
+
+-- copy current absolute path of current active buffer
+vim.keymap.set('n', '<leader>ca', ':let @*=expand("%:p")<CR>', { desc = "[C]opy [A]bsolute path of current file"})

@@ -1,4 +1,5 @@
 vim.notify = require("notify")
+local query_sg = require('plugins/query_sourcegraph')
 
 local M = {}
 
@@ -54,6 +55,7 @@ M.openNearestFile = function (file)
 end
 
 vim.keymap.set('n', '<leader>rb', ":lua require('plugins/utils').openNearestFile()<CR>")
+vim.keymap.set('n', '<leader>s', query_sg, { desc = "Search source graph" })
 
 vim.api.nvim_create_user_command("OpenNearestPackageJSON", function(opts)
   require('plugins/utils').openNearestPackageJSON()

@@ -140,75 +140,17 @@ require('packer').startup(function()
   use {
     'glepnir/lspsaga.nvim',
     -- branch = 'nvim6.0'
-    branch = 'main'
+    branch = 'main',
+    event = "LspAttach",
+    config = function()
+      require("lspsaga").setup({})
+    end,
   }
 
   use {
     'stevearc/aerial.nvim',
     config = function()
-      require('aerial').setup({
-        nerd_font = false,
-
-        filter_kind = {
-          "Class",
-          "Constructor",
-          "Constant",
-          "Enum",
-          "Function",
-          "Interface",
-          "Module",
-          "Method",
-          "Struct",
-        },
-
-        icons = {
-          Text = '  ',
-          Method = '  ',
-          Function = '  ',
-          Constructor = '  ',
-          Field = '  ',
-          Variable = '  ',
-          Class = '  ',
-          Interface = '  ',
-          Module = '  ',
-          Property = '  ',
-          Unit = '  ',
-          Value = '  ',
-          Enum = '  ',
-          Keyword = '  ',
-          Snippet = '  ',
-          Color = '  ',
-          File = '  ',
-          Reference = '  ',
-          Folder = '  ',
-          EnumMember = '  ',
-          Constant = '  ',
-          Struct = '  ',
-          Event = '  ',
-          Operator = '  ',
-          TypeParameter = '  ',
-        },
-
-        -- Customize the characters used when show_guides = true
-        guides = {
-          -- When the child item has a sibling below it
-          mid_item = "├─",
-          -- When the child item is the last in the list
-          last_item = "└─",
-          -- When there are nested child guides to the right
-          nested_top = "│ ",
-          -- Raw indentation
-          whitespace = "  ",
-        },
-
-        backends = { "lsp", "treesitter", "markdown" },
-
-      })
-      local map = vim.api.nvim_set_keymap
-      local opt = {noremap = false}
-
-      map('n', 'so', ':AerialToggle<CR>',opt)
-      map('n', 'do', ':call aerial#fzf()',opt)
+      require('plugins.aerial')
     end
   }
 
@@ -417,6 +359,13 @@ require('packer').startup(function()
   -- }}}
 
   -- Language support
+  -- {{{
+  use {
+    "hrsh7th/cmp-nvim-lsp-signature-help",
+    config = function ()
+    end
+  }
+  -- }}}
 
   -- TreeSitter
   -- {{{
@@ -763,219 +712,7 @@ require('packer').startup(function()
     "rcarriga/nvim-dap-ui",
     requires = {"mfussenegger/nvim-dap"},
     config =function ()
-      local dap = require('dap')
-      local dapui = require('dapui')
-
-      local api = vim.api
-      local installation_path = vim.fn.stdpath('data') .. '/mason/bin'
-
-      -- May need to symlink manually, for example
-      -- ln -sf ~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3 ~/.local/share/nvim/mason/bin/
-      -- Though for debugpy, it needs the full path of the even python3, and
-      -- I still don't know why
-      dap.adapters.python = function(cb, config)
-        if config.request == 'attach' then
-          local port = (config.connect or config).port
-          cb({
-            type = 'server';
-            port = assert(port, '`connect.port` is required for a python `attach` configuration');
-            host = (config.connect or config).host or '127.0.0.1';
-            options = {
-              source_filetype = 'python',
-            }
-          })
-        else
-          cb({
-            type = 'executable';
-            command = 'foo';
-            args = { '-m', 'debugpy.adapter' };
-            options = {
-              source_filetype = 'python',
-            }
-          })
-        end
-      end
-
-      dap.configurations.python = {
-        {
-          type = 'python';
-          request = 'attach';
-          name = 'Attach remote';
-          connect = function()
-            local host = vim.fn.input('Host [127.0.0.1]: ')
-            host = host ~= '' and host or 'khang-dbx'
-            local port = tonumber(vim.fn.input('Port [5678]: ')) or 56237
-            return { host = host, port = port }
-          end;
-        }
-      }
-
-      -- this one works with nextjs, the previous one doesn't
-      require('dap-vscode-js').setup({
-        node_path = 'node',
-        debugger_path = os.getenv('HOME') .. '/.DAP/vscode-js-debug',
-        adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' },
-      })
-
-      local exts = {
-        'javascript',
-        'typescript',
-        'javascriptreact',
-        'typescriptreact',
-        -- using pwa-chrome
-        'vue',
-        'svelte',
-      }
-
-      for i, ext in ipairs(exts) do
-        dap.configurations[ext] = {
-          -- this one works with nextjs
-          {
-            type = 'pwa-node',
-            request = 'attach',
-            name = 'Attach Program (pwa-node)',
-            cwd = vim.fn.getcwd(),
-            -- processId = require('dap.utils').pick_process,
-            skipFiles = { '<node_internals>/**' },
-            host = 'localhost',
-            port = 9229,
-          },
-          {
-            type = 'pwa-node',
-            request = 'launch',
-            name = 'Launch Current File (pwa-node)',
-            cwd = vim.fn.getcwd(),
-            args = { '${file}' },
-            sourceMaps = true,
-            protocol = 'inspector',
-          },
-          {
-            type = 'pwa-node',
-            request = 'launch',
-            name = 'Launch Current File (pwa-node with ts-node)',
-            cwd = vim.fn.getcwd(),
-            runtimeArgs = { '--loader', 'ts-node/esm' },
-            runtimeExecutable = 'node',
-            args = { '${file}' },
-            sourceMaps = true,
-            protocol = 'inspector',
-            skipFiles = { '<node_internals>/**', 'node_modules/**' },
-            resolveSourceMapLocations = {
-              "${workspaceFolder}/**",
-              "!**/node_modules/**",
-            },
-          },
-          {
-            type = 'pwa-node',
-            request = 'launch',
-            name = 'Launch Current File (pwa-node with deno)',
-            cwd = vim.fn.getcwd(),
-            runtimeArgs = { 'run', '--inspect-brk', '--allow-all', '${file}' },
-            runtimeExecutable = 'deno',
-            attachSimplePort = 9229,
-          },
-          {
-            type = 'pwa-node',
-            request = 'launch',
-            name = 'Launch Test Current File (pwa-node with jest)',
-            cwd = vim.fn.getcwd(),
-            runtimeArgs = { '${workspaceFolder}/node_modules/.bin/jest' },
-            runtimeExecutable = 'node',
-            args = { '${file}', '--coverage', 'false'},
-            rootPath = '${workspaceFolder}',
-            sourceMaps = true,
-            console = 'integratedTerminal',
-            internalConsoleOptions = 'neverOpen',
-            skipFiles = { '<node_internals>/**', 'node_modules/**' },
-          },
-          {
-            type = 'pwa-node',
-            request = 'launch',
-            name = 'Launch Test Current File (pwa-node with vitest)',
-            cwd = vim.fn.getcwd(),
-            program = '${workspaceFolder}/node_modules/vitest/vitest.mjs',
-            args = { '--inspect-brk', '--threads', 'false', 'run', '${file}' },
-            autoAttachChildProcesses = true,
-            smartStep = true,
-            console = 'integratedTerminal',
-            skipFiles = { '<node_internals>/**', 'node_modules/**' },
-          },
-          {
-            type = 'pwa-node',
-            request = 'launch',
-            name = 'Launch Test Current File (pwa-node with deno)',
-            cwd = vim.fn.getcwd(),
-            runtimeArgs = { 'test', '--inspect-brk', '--allow-all', '${file}' },
-            runtimeExecutable = 'deno',
-            attachSimplePort = 9229,
-          },
-          {
-            type = 'pwa-chrome',
-            request = 'attach',
-            name = 'Attach Program (pwa-chrome = { port: 9222 })',
-            program = '${file}',
-            cwd = vim.fn.getcwd(),
-            sourceMaps = true,
-            port = 9222,
-            webRoot = '${workspaceFolder}',
-          },
-          {
-            type = 'node2',
-            request = 'attach',
-            name = 'Attach Program (Node2)',
-            processId = require('dap.utils').pick_process,
-          },
-          {
-            type = 'node2',
-            request = 'attach',
-            name = 'Attach Program (Node2 with ts-node)',
-            cwd = vim.fn.getcwd(),
-            sourceMaps = true,
-            skipFiles = { '<node_internals>/**' },
-            port = 9229,
-          },
-        }
-      end
-
-      vim.fn.sign_define('DapBreakpoint', {text = '●', texthl = 'GruvboxRed', linehl = '', numhl = ''})
-
-      api.nvim_set_keymap('n', '<leader>dd', ":lua require('dap').continue()<CR>", {noremap = true})
-      api.nvim_set_keymap('n', '<leader>dbp', ":lua require('dap').toggle_breakpoint()<CR>", {noremap = true})
-      api.nvim_set_keymap('n', '<leader>de', ":lua require('dap').terminate()<CR>", {noremap = true})
-      api.nvim_set_keymap('n', '<leader>dc', ":lua require('dap').continue()<CR>", {noremap = true})
-      api.nvim_set_keymap('n', '<leader>dr', ":lua require('dap').repl.open({}, 'vsplit')<CR><C-w>la", {noremap = true})
-
-      api.nvim_set_keymap('n', 'J', ":lua require('debug-helper').step_over({fallback = 'J'})<CR>", {noremap = true})
-      api.nvim_set_keymap('n', 'L', ":lua require('debug-helper').step_into({fallback = 'L'})<CR>", {noremap = true})
-      api.nvim_set_keymap('n', 'K', ":lua require('debug-helper').step_out({fallback = 'K'})<CR>", {noremap = true})
-
-      dapui.setup({
-        layouts = {
-          {
-            elements = {
-              'scopes',
-              'breakpoints',
-              'stacks',
-              'watches',
-            },
-            size = 30,
-            position = 'left',
-          },
-          {
-            elements = {
-              'repl',
-              'console',
-            },
-            size = 10,
-            position = 'bottom',
-          },
-        },
-      })
-
-      dap.listeners.after.event_initialized['dapui_config'] = function() dapui.open() end
-      dap.listeners.before.event_terminated['dapui_config'] = function() dapui.close() end
-      dap.listeners.before.event_exited['dapui_config'] = function() dapui.close() end
-
+      require("plugins.dap")
     end
   }
   -- }}}
@@ -1000,6 +737,8 @@ require('packer').startup(function()
     end,
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
+
+  use { 'kyazdani42/nvim-web-devicons' }
 
   use {
     'lukas-reineke/indent-blankline.nvim',
@@ -1100,18 +839,26 @@ require('packer').startup(function()
     run = "npm install --legacy-peer-deps && npm run compile",
   }
 
+  -- replaced by vim illuminate
+  -- use {
+  --   'itchyny/vim-cursorword',
+  --   event = {'BufReadPre','BufNewFile'},
+  --   config = function()
+  --     vim.api.nvim_command('augroup user_plugin_cursorword')
+  --     vim.api.nvim_command('autocmd!')
+  --     vim.api.nvim_command('autocmd FileType NvimTree,lspsagafinder,dashboard,vista let b:cursorword = 0')
+  --     vim.api.nvim_command('autocmd WinEnter * if &diff || &pvw | let b:cursorword = 0 | endif')
+  --     vim.api.nvim_command('autocmd InsertEnter * let b:cursorword = 0')
+  --     vim.api.nvim_command('autocmd InsertLeave * let b:cursorword = 1')
+  --     vim.api.nvim_command('augroup END')
+  --   end,
+  -- }
+
   use {
-    'itchyny/vim-cursorword',
-    event = {'BufReadPre','BufNewFile'},
-    config = function()
-      vim.api.nvim_command('augroup user_plugin_cursorword')
-      vim.api.nvim_command('autocmd!')
-      vim.api.nvim_command('autocmd FileType NvimTree,lspsagafinder,dashboard,vista let b:cursorword = 0')
-      vim.api.nvim_command('autocmd WinEnter * if &diff || &pvw | let b:cursorword = 0 | endif')
-      vim.api.nvim_command('autocmd InsertEnter * let b:cursorword = 0')
-      vim.api.nvim_command('autocmd InsertLeave * let b:cursorword = 1')
-      vim.api.nvim_command('augroup END')
-    end,
+    "RRethy/vim-illuminate",
+    config = function ()
+      require('plugins.illuminate')
+    end
   }
 
   -- Display the winbar/breadcrumb
@@ -1304,138 +1051,139 @@ require('packer').startup(function()
     require('packer').sync()
   end
   --- }}}
+  --- }}}
 
   -- Notify
   -- {{{
-  use {
-    'rcarriga/nvim-notify',
-    config = function ()
-      -- LSP integration
-      -- Make sure to also have the snippet with the common helper functions in your config!
-      -- Utility functions shared between progress reports for LSP and DAP
-      vim.notify = require('notify')
-      local client_notifs = {}
-
-      local function get_notif_data(client_id, token)
-        if not client_notifs[client_id] then
-          client_notifs[client_id] = {}
-        end
-
-        if not client_notifs[client_id][token] then
-          client_notifs[client_id][token] = {}
-        end
-
-        return client_notifs[client_id][token]
-      end
-
-
-      local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
-
-      local function update_spinner(client_id, token)
-        local notif_data = get_notif_data(client_id, token)
-
-        if notif_data.spinner then
-          local new_spinner = (notif_data.spinner + 1) % #spinner_frames
-          notif_data.spinner = new_spinner
-
-          notif_data.notification = vim.notify(nil, nil, {
-            hide_from_history = true,
-            icon = spinner_frames[new_spinner],
-            replace = notif_data.notification,
-          })
-
-          vim.defer_fn(function()
-            update_spinner(client_id, token)
-          end, 100)
-        end
-      end
-
-      local function format_title(title, client_name)
-        return client_name .. (#title > 0 and ": " .. title or "")
-      end
-
-      local function format_message(message, percentage)
-        return (percentage and percentage .. "%\t" or "") .. (message or "")
-      end
-
-      vim.lsp.handlers["$/progress"] = function(_, result, ctx)
-        local client_id = ctx.client_id
-
-        local val = result.value
-
-        if not val.kind then
-          return
-        end
-
-        local notif_data = get_notif_data(client_id, result.token)
-
-        if val.kind == "begin" then
-          local message = format_message(val.message, val.percentage)
-
-          notif_data.notification = vim.notify(message, "info", {
-            title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
-            icon = spinner_frames[1],
-            timeout = false,
-            hide_from_history = false,
-          })
-
-          notif_data.spinner = 1
-          update_spinner(client_id, result.token)
-        elseif val.kind == "report" and notif_data then
-          notif_data.notification = vim.notify(format_message(val.message, val.percentage), "info", {
-            replace = notif_data.notification,
-            hide_from_history = false,
-          })
-        elseif val.kind == "end" and notif_data then
-          notif_data.notification =
-          vim.notify(val.message and format_message(val.message) or "Complete", "info", {
-            icon = "",
-            replace = notif_data.notification,
-            timeout = 3000,
-          })
-
-          notif_data.spinner = nil
-        end
-      end
-
-      -- DAP integration
-      -- Make sure to also have the snippet with the common helper functions in your config!
-      local dap = require"dap"
-
-      dap.listeners.before['event_progressStart']['progress-notifications'] = function(session, body)
-        local notif_data = get_notif_data("dap", body.progressId)
-
-        local message = format_message(body.message, body.percentage)
-        notif_data.notification = vim.notify(message, "info", {
-          title = format_title(body.title, session.config.type),
-          icon = spinner_frames[1],
-          timeout = false,
-          hide_from_history = false,
-        })
-
-        notif_data.notification.spinner = 1,
-        update_spinner("dap", body.progressId)
-      end
-
-      dap.listeners.before['event_progressUpdate']['progress-notifications'] = function(session, body)
-        local notif_data = get_notif_data("dap", body.progressId)
-        notif_data.notification = vim.notify(format_message(body.message, body.percentage), "info", {
-  replace = notif_data.notification,
-          hide_from_history = false,
-        })
-      end
-
-      dap.listeners.before['event_progressEnd']['progress-notifications'] = function(session, body)
-        local notif_data = client_notifs["dap"][body.progressId]
-        notif_data.notification = vim.notify(body.message and format_message(body.message) or "Complete", "info", {
-          icon = "",
-          replace = notif_data.notification,
-          timeout = 3000
-        })
-        notif_data.spinner = nil
-      end
-    end
-  }
+  -- use {
+  --   'rcarriga/nvim-notify',
+  --   config = function ()
+  --     -- LSP integration
+  --     -- Make sure to also have the snippet with the common helper functions in your config!
+  --     -- Utility functions shared between progress reports for LSP and DAP
+  --     vim.notify = require('notify')
+  --     local client_notifs = {}
+  --
+  --     local function get_notif_data(client_id, token)
+  --      if not client_notifs[client_id] then
+  --        client_notifs[client_id] = {}
+  --      end
+  --
+  --      if not client_notifs[client_id][token] then
+  --        client_notifs[client_id][token] = {}
+  --      end
+  --
+  --      return client_notifs[client_id][token]
+  --     end
+  --
+  --
+  --     local spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
+  --
+  --     local function update_spinner(client_id, token)
+  --      local notif_data = get_notif_data(client_id, token)
+  --
+  --      if notif_data.spinner then
+  --        local new_spinner = (notif_data.spinner + 1) % #spinner_frames
+  --        notif_data.spinner = new_spinner
+  --
+  --        notif_data.notification = vim.notify(nil, nil, {
+  --          hide_from_history = true,
+  --          icon = spinner_frames[new_spinner],
+  --          replace = notif_data.notification,
+  --        })
+  --
+  --        vim.defer_fn(function()
+  --          update_spinner(client_id, token)
+  --        end, 100)
+  --      end
+  --     end
+  --
+  --     local function format_title(title, client_name)
+  --      return client_name .. (#title > 0 and ": " .. title or "")
+  --     end
+  --
+  --     local function format_message(message, percentage)
+  --      return (percentage and percentage .. "%\t" or "") .. (message or "")
+  --     end
+  --
+  --     vim.lsp.handlers["$/progress"] = function(_, result, ctx)
+  --      local client_id = ctx.client_id
+  --
+  --      local val = result.value
+  --
+  --      if not val.kind then
+  --        return
+  --      end
+  --
+  --      local notif_data = get_notif_data(client_id, result.token)
+  --
+  --      if val.kind == "begin" then
+  --        local message = format_message(val.message, val.percentage)
+  --
+  --        notif_data.notification = vim.notify(message, "info", {
+  --          title = format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
+  --          icon = spinner_frames[1],
+  --          timeout = false,
+  --          hide_from_history = false,
+  --        })
+  --
+  --        notif_data.spinner = 1
+  --        update_spinner(client_id, result.token)
+  --      elseif val.kind == "report" and notif_data then
+  --        notif_data.notification = vim.notify(format_message(val.message, val.percentage), "info", {
+  --          replace = notif_data.notification,
+  --          hide_from_history = false,
+  --        })
+  --      elseif val.kind == "end" and notif_data then
+  --        notif_data.notification =
+  --          vim.notify(val.message and format_message(val.message) or "Complete", "info", {
+  --            icon = "",
+  --            replace = notif_data.notification,
+  --            timeout = 3000,
+  --          })
+  --
+  --        notif_data.spinner = nil
+  --      end
+  --     end
+  --
+  --     -- DAP integration
+  --     -- Make sure to also have the snippet with the common helper functions in your config!
+  --     local dap = require"dap"
+  --
+  --     dap.listeners.before['event_progressStart']['progress-notifications'] = function(session, body)
+  --      local notif_data = get_notif_data("dap", body.progressId)
+  --
+  --      local message = format_message(body.message, body.percentage)
+  --      notif_data.notification = vim.notify(message, "info", {
+  --        title = format_title(body.title, session.config.type),
+  --        icon = spinner_frames[1],
+  --        timeout = false,
+  --        hide_from_history = false,
+  --      })
+  --
+  --      notif_data.notification.spinner = 1,
+  --      update_spinner("dap", body.progressId)
+  --     end
+  --
+  --     dap.listeners.before['event_progressUpdate']['progress-notifications'] = function(session, body)
+  --      local notif_data = get_notif_data("dap", body.progressId)
+  --      notif_data.notification = vim.notify(format_message(body.message, body.percentage), "info", {
+  --        replace = notif_data.notification,
+  --        hide_from_history = false,
+  --      })
+  --     end
+  --
+  --     dap.listeners.before['event_progressEnd']['progress-notifications'] = function(session, body)
+  --      local notif_data = client_notifs["dap"][body.progressId]
+  --      notif_data.notification = vim.notify(body.message and format_message(body.message) or "Complete", "info", {
+  --         icon = "",
+  --         replace = notif_data.notification,
+  --         timeout = 3000
+  --      })
+  --      notif_data.spinner = nil
+  --     end
+  --   end
+  -- }
   -- }}}
 
   -- Greeter
@@ -1452,12 +1200,12 @@ require('packer').startup(function()
   -- }}}
 
   -- Test runners
+  -- {{{
   use {
     "klen/nvim-test",
     config = function()
 
       local Runner = require "nvim-test.runner"
-      local log = require "libs.log"
 
       local query = [[
         ((expression_statement
@@ -1488,8 +1236,8 @@ require('packer').startup(function()
       function jest:build_test_args(args, tests)
         table.insert(args, "-t")
         table.insert(args, "^" .. table.concat(tests, " ") .. "$")
-        log.info('build_test_args -> args', vim.inspect(args));
-        log.info('build_test_args -> tests', vim.inspect(tests));
+        -- log.info('build_test_args -> args', vim.inspect(args));
+        -- log.info('build_test_args -> tests', vim.inspect(tests));
       end
  
       require('nvim-test').setup({
@@ -1512,13 +1260,93 @@ require('packer').startup(function()
     end
   }
 
+  -- }}}
+
+  -- Marks management
+  -- {{{
+  use 'MattesGroeger/vim-bookmarks'
   use {
-    "hrsh7th/cmp-nvim-lsp-signature-help",
+    'khanghoang/telescope-vim-bookmarks.nvim',
     config = function ()
+      require('telescope').load_extension('vim_bookmarks')
+
+      local bookmark_actions = require('telescope').extensions.vim_bookmarks.actions
+      require('telescope').extensions.vim_bookmarks.all {
+        attach_mappings = function(_, map)
+
+          -- this doesn't work :(
+          map('n', 'dd', bookmark_actions.delete_selected_or_at_cursor)
+          return true
+        end
+      }
+
+    end
+  }
+  -- }}}
+
+  -- Fold
+  -- {{{
+  use {
+    'luukvbaal/statuscol.nvim',
+    config = function ()
+      local builtin = require("statuscol.builtin")
+      local cfg = {
+        -- Whether to set the 'statuscolumn' option, may be set to false for those who
+        -- want to use the click handlers in their own 'statuscolumn': _G.Sc[SFL]a().
+        -- Although I recommend just using the segments field below to build your
+        -- statuscolumn to benefit from the performance optimizations in this plugin.
+        setopt = true,
+        -- builtin.lnumfunc number string options
+        thousands = false,     -- or line number thousands separator string ("." / ",")
+        relculright = false,   -- whether to right-align the cursor line number with 'relativenumber' set
+        -- Builtin 'statuscolumn' options
+        ft_ignore = nil,       -- lua table with filetypes for which 'statuscolumn' will be unset
+        bt_ignore = nil,       -- lua table with 'buftype' values for which 'statuscolumn' will be unset
+        -- Default segments (fold -> sign -> line number + separator), explained below
+        segments = {
+          { text = { "%s" }, click = "v:lua.scsa",  },
+          { text = { builtin.lnumfunc }, click = "v:lua.scla", },
+          {
+            text = { builtin.foldfunc },
+            -- condition = { builtin.not_empty, true, builtin.not_empty },
+            click = "v:lua.scfa"
+          },
+        },
+        clickhandlers = {       -- builtin click handlers
+          Lnum                   = builtin.lnum_click,
+          FoldClose              = builtin.foldclose_click,
+          FoldOpen               = builtin.foldopen_click,
+          FoldOther              = builtin.foldother_click,
+          DapBreakpointRejected  = builtin.toggle_breakpoint,
+          DapBreakpoint          = builtin.toggle_breakpoint,
+          DapBreakpointCondition = builtin.toggle_breakpoint,
+          DiagnosticSignError    = builtin.diagnostic_click,
+          DiagnosticSignHint     = builtin.diagnostic_click,
+          DiagnosticSignInfo     = builtin.diagnostic_click,
+          DiagnosticSignWarn     = builtin.diagnostic_click,
+          GitSignsTopdelete      = builtin.gitsigns_click,
+          GitSignsUntracked      = builtin.gitsigns_click,
+          GitSignsAdd            = builtin.gitsigns_click,
+          GitSignsChange         = builtin.gitsigns_click,
+          GitSignsChangedelete   = builtin.gitsigns_click,
+          GitSignsDelete         = builtin.gitsigns_click,
+        }
+      }
+
+      require("statuscol").setup(cfg)
     end
   }
 
-end)
+  use {
+    'kevinhwang91/nvim-ufo',
+    requires = {'kevinhwang91/promise-async'},
+    config = function ()
+      require("plugins.fold")
+    end
+  }
+  -- }}}
+
+  end)
 
 -- When we are bootstrapping a configuration, it doesn't
 -- make sense to execute the rest of the init.lua.

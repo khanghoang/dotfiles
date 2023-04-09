@@ -101,7 +101,8 @@ plugins=(
 # https://github.com/jeffreytse/zsh-vi-mode/issues/113#issue-935789567
 #
 # TLDR: Need to source zsh-vi-mode before oh-my-zsh
-ZVM_INIT_MODE=sourcing
+# @TODO looks like we don't need this
+# ZVM_INIT_MODE=sourcing
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
@@ -221,6 +222,9 @@ export TZ_LIST="Antarctica/Macquarie; Asia/Ho_Chi_Minh"
 export DENO_INSTALL="/home/khanghoang/.deno"
 export PATH="$DENO_INSTALL/bin:$PATH"
 
+# for "arc" commands
+export PATH="/usr/local/opt/php@7.4/bin:$PATH"
+
 alias luamake=/home/khanghoang/code/lua-language-server/3rd/luamake/luamake
 [[ "$TERM" == "xterm-kitty" ]] && alias ssh="kitty +kitten ssh"
 
@@ -237,6 +241,15 @@ if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khang
 
 # https://github.com/ohmyzsh/ohmyzsh/issues/9576#issuecomment-983233425
 export GIT_TRACE=0
+
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(lua ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/z.lua/z.lua --init zsh enhanced once fzf)"
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+
+# load dbx keys and stuffs
+if [ -f ~/dbx-secret-config ]; then
+    source ~/dbx-secret-config
+    export NODE_OPTIONS="--max-old-space-size=16384"
+else
+    print "404: ~/dbx-secret-config not found."
+fi
