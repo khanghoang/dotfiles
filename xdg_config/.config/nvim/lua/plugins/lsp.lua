@@ -199,10 +199,17 @@ nvim_lsp.gopls.setup({
 
 local clangd = lsp_install_path
 local clangd_path = clangd .. '/clangd'
+
+capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- fix issue with clangd
+-- https://www.reddit.com/r/neovim/comments/wmj8kb/i_have_nullls_and_clangd_attached_to_a_buffer_c/
+capabilities.offsetEncoding = 'utf-8'
+
 require'lspconfig'.clangd.setup{
   cmd = { clangd_path },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = capabilities
 }
 
 -- JSON
