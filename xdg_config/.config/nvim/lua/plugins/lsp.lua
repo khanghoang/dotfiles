@@ -102,6 +102,31 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
+  -- use null-ls for formatting
+  local lsp_formatting = function(bufnr)
+    vim.lsp.buf.format({
+      filter = function(client)
+        -- apply whatever logic you want (in this example, we'll only use null-ls)
+        return client.name == "null-ls"
+      end,
+      bufnr = bufnr,
+    })
+  end
+
+  -- formatting on save, you can use this as a callback
+  local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+  if client.supports_method("textDocument/formatting") then
+    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = augroup,
+      buffer = bufnr,
+      callback = function()
+        lsp_formatting(bufnr)
+      end,
+    })
+  end
+
   -- setup()
 
   -- -- setup vim aerial

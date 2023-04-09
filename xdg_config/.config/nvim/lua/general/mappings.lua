@@ -41,7 +41,7 @@ api.nvim_set_keymap('n', 'tN', ":tabnew<CR>", { noremap = true })
 vim.api.nvim_set_keymap('n', '<leader><leader>x', ":w<CR>:source %<CR>", { noremap = true })
 
 -- easy save
-vim.api.nvim_set_keymap('n', 'ss', ":w!<CR>", { noremap = true })
+vim.api.nvim_set_keymap('n', 'ss', ":w<CR>", { noremap = true })
 
 -- fix "gg" doens't work because statusbar=3 in neovim 0.8
 vim.api.nvim_set_keymap('n', 'gg', ":0<CR>", { noremap = true })
