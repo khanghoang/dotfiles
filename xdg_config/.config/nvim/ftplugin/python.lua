@@ -1,1 +1,1 @@
-vim.cmd [[set foldmethod=manual]]
+-- vim.cmd [[set foldmethod=manual]]

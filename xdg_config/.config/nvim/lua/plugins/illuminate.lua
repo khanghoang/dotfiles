@@ -46,6 +46,6 @@ require('illuminate').configure({
 })
 
 -- change highlight color
-vim.cmd [[hi IlluminatedWordRead guibg=#525252]]
+vim.cmd [[hi IlluminatedWordRead guibg=#666666]]
 vim.api.nvim_set_keymap('n', '<C-n>', ":lua require('illuminate').goto_next_reference()<cr>", {noremap = false, desc = "Go to next reference"})
 vim.api.nvim_set_keymap('n', '<C-p>', ":lua require('illuminate').goto_prev_reference()<cr>", {noremap = false, desc = "Go to previous reference"})
