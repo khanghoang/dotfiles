@@ -12,6 +12,16 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
   }
 }
 
+-- config for https://github.com/kevinhwang91/nvim-ufo
+capabilities.textDocument.foldingRange = {
+    dynamicRegistration = false,
+    lineFoldingOnly = true
+}
+
+-- fix issue with clangd
+-- https://www.reddit.com/r/neovim/comments/wmj8kb/i_have_nullls_and_clangd_attached_to_a_buffer_c/
+capabilities.offsetEncoding = 'utf-8'
+
 local function setup()
   local signs = {
     { name = "DiagnosticSignError", text = "" },
@@ -92,7 +102,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-  setup()
+  -- setup()
 
   -- -- setup vim aerial
   -- local require_aerial_ok, aerial = pcall(require, 'aerial')
@@ -123,7 +133,7 @@ nvim_lsp.tsserver.setup({
   flags = {
     debounce_text_changes = 150,
   },
-  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = capabilities
 })
 
 local pyright_bin = lsp_install_path .. '/pyright-langserver'
@@ -146,7 +156,7 @@ nvim_lsp.pyright.setup({
       },
     },
   },
-  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = capabilities
 })
 
 -- LUA
@@ -177,7 +187,7 @@ nvim_lsp.lua_ls.setup {
     },
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = capabilities
 }
 
 -- unfinished config
@@ -194,17 +204,13 @@ nvim_lsp.gopls.setup({
     },
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities = capabilities
 })
 
 local clangd = lsp_install_path
 local clangd_path = clangd .. '/clangd'
 
 capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
--- fix issue with clangd
--- https://www.reddit.com/r/neovim/comments/wmj8kb/i_have_nullls_and_clangd_attached_to_a_buffer_c/
-capabilities.offsetEncoding = 'utf-8'
 
 require'lspconfig'.clangd.setup{
   cmd = { clangd_path },
@@ -226,7 +232,7 @@ nvim_lsp.jsonls.setup {
     }
   },
   on_attach = on_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities()),
+  capabilities = capabilities
 }
 
 -- Tailwindcss
@@ -311,6 +317,7 @@ require("zk").setup({
       cmd = { "zk", "lsp" },
       name = "zk",
       on_attach = on_attach,
+      capabilities = capabilities,
       -- etc, see `:h vim.lsp.start_client()`
     },
 
@@ -320,4 +327,5 @@ require("zk").setup({
       filetypes = { "markdown" },
     },
   },
+  capabilities = capabilities,
 })

@@ -135,17 +135,26 @@ require('packer').startup(function()
 
   use {
     'neovim/nvim-lspconfig',
-    'williamboman/nvim-lsp-installer',
+    config = function ()
+      require('plugins.lsp')
+    end,
+    requires = {'williamboman/nvim-lsp-installer'},
   }
 
   use {
     'glepnir/lspsaga.nvim',
     -- branch = 'nvim6.0'
+    opt = true,
     branch = 'main',
     event = "LspAttach",
     config = function()
       require("lspsaga").setup({})
     end,
+    requires = {
+      {"nvim-tree/nvim-web-devicons"},
+      --Please make sure you install markdown and markdown_inline parser
+      {"nvim-treesitter/nvim-treesitter"}
+    }
   }
 
   use {
@@ -1303,15 +1312,43 @@ require('packer').startup(function()
         thousands = false,     -- or line number thousands separator string ("." / ",")
         relculright = false,   -- whether to right-align the cursor line number with 'relativenumber' set
         -- Builtin 'statuscolumn' options
-        ft_ignore = nil,       -- lua table with filetypes for which 'statuscolumn' will be unset
-        bt_ignore = nil,       -- lua table with 'buftype' values for which 'statuscolumn' will be unset
+        ft_ignore = {
+          "startify",
+          "dashboard",
+          "dotooagenda",
+          "log",
+          "fugitive",
+          "gitcommit",
+          "packer",
+          "vimwiki",
+          "markdown",
+          "json",
+          "txt",
+          "vista",
+          "help",
+          "todoist",
+          "NvimTree",
+          "peekaboo",
+          "git",
+          "TelescopePrompt",
+          "undotree",
+          "flutterToolsOutline",
+          "dbui",
+          "dbout",
+          "sql",
+          "" -- for all buffers without a file type
+        },       -- lua table with filetypes for which 'statuscolumn' will be unset
+        bt_ignore = { "nofile" },       -- lua table with 'buftype' values for which 'statuscolumn' will be unset
         -- Default segments (fold -> sign -> line number + separator), explained below
         segments = {
           { text = { "%s" }, click = "v:lua.scsa",  },
-          { text = { builtin.lnumfunc }, click = "v:lua.scla", },
+          {
+            text = { builtin.lnumfunc }, click = "v:lua.scla",
+            condition = { builtin.not_empty, true, builtin.not_empty },
+          },
           {
             text = { builtin.foldfunc },
-            -- condition = { builtin.not_empty, true, builtin.not_empty },
+            condition = { builtin.not_empty, true, builtin.not_empty },
             click = "v:lua.scfa"
           },
         },
