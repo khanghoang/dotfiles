@@ -121,6 +121,7 @@ require('packer').startup(function()
         Event = '  ',
         Operator = '  ',
         TypeParameter = '  ',
+        Copilot = "",
       }
 
       lsp_status.config({
@@ -223,6 +224,9 @@ require('packer').startup(function()
           end
         }),
         sources = {
+          -- Copilot Source
+          { name = "copilot", group_index = 2 },
+          -- other sources
           { name = 'nvim_lsp_signature_help' },
           { name = 'luasnip' },
           { name = 'nvim_lsp' },
@@ -259,6 +263,7 @@ require('packer').startup(function()
               Event = '  ',
               Operator = '  ',
               TypeParameter = '  ',
+              Copilot = "",
             }
             vim_item.kind = string.format("%s %s", LSP_KIND_ICONS[vim_item.kind], vim_item.kind)
             return vim_item
@@ -737,8 +742,6 @@ require('packer').startup(function()
     end,
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
-
-  use { 'kyazdani42/nvim-web-devicons' }
 
   use {
     'lukas-reineke/indent-blankline.nvim',
@@ -1345,6 +1348,69 @@ require('packer').startup(function()
     end
   }
   -- }}}
+
+  -- Copilot
+  use {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        panel = {
+          enabled = true,
+          auto_refresh = false,
+          keymap = {
+            jump_prev = "[[",
+            jump_next = "]]",
+            accept = "<CR>",
+            refresh = "gr",
+            open = "<M-CR>"
+          },
+          layout = {
+            position = "bottom", -- | top | left | right
+            ratio = 0.4
+          },
+        },
+        suggestion = {
+          enabled = true,
+          auto_trigger = false,
+          debounce = 75,
+          keymap = {
+            accept = "<M-l>",
+            accept_word = false,
+            accept_line = false,
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-]>",
+          },
+        },
+        filetypes = {
+          yaml = false,
+          markdown = false,
+          help = false,
+          gitcommit = false,
+          gitrebase = false,
+          hgcommit = false,
+          svn = false,
+          cvs = false,
+          ["."] = false,
+        },
+        copilot_node_command = 'node', -- Node.js version must be > 16.x
+        server_opts_overrides = {},
+      })
+    end,
+  }
+
+  use {
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua" },
+    config = function ()
+      require("copilot_cmp").setup({
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      })
+    end
+  }
 
   end)
 
