@@ -18,9 +18,6 @@ require('plugins/dap')
 
 require('colorschemes/lua/oceannext')
 require('general/mappings')
-vim.cmd [[
-  let g:vimspector_base_dir='/home/khanghoang/.local/share/nvim/site/pack/packer/start/vimspector'
-]]
 
 -- Make the pane border thinner
 vim.cmd [[highlight WinSeparator guibg=None]]
@@ -45,6 +42,18 @@ vim.cmd [[set laststatus=3]]
 -- enable modeline
 -- https://vim.fandom.com/wiki/Modeline_magic
 vim.cmd [[set modeline]]
+
+-- highlight line number
+vim.cmd [[set cursorline]]
+-- set the whole current line
+vim.cmd [[highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE]]
+-- set color for number in the gutter
+vim.cmd [[highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff]]
+
+vim.cmd [[set cmdheight=0]]
+vim.cmd [[set laststatus=3]]
+vim.cmd [[highlight WinSeparator guibg=None]]
+
 
 vim.cmd([[
   augroup packer_user_config

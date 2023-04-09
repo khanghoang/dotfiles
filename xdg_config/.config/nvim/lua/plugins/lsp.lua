@@ -92,7 +92,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
   buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
 
-  -- setup()
+  setup()
 
   -- -- setup vim aerial
   -- local require_aerial_ok, aerial = pcall(require, 'aerial')
@@ -196,6 +196,14 @@ nvim_lsp.gopls.setup({
   on_attach = on_attach,
   capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 })
+
+local clangd = lsp_install_path
+local clangd_path = clangd .. '/clangd'
+require'lspconfig'.clangd.setup{
+  cmd = { clangd_path },
+  on_attach = on_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+}
 
 -- JSON
 -- LspInstall json
