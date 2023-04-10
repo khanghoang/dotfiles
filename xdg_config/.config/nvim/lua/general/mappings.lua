@@ -33,7 +33,8 @@ vim.cmd [[
   command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".<q-args>, 1, <bang>0)
 ]]
 api.nvim_set_keymap('n', '<leader><space>', ':GFiles<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<leader>f', ":Telescope oldfiles previewer=false theme=ivy winblend=10<CR>", { noremap = true })
+-- api.nvim_set_keymap('n', '<leader>f', ":Telescope oldfiles previewer=false theme=ivy winblend=10<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<leader>f', ":History<CR>", { noremap = true })
 
 api.nvim_set_keymap('n', '<leader>cp', ":let @+=expand('%:p')<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<leader>gf', '<C-w>vgf', { noremap = true })

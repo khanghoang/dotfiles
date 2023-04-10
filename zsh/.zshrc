@@ -152,7 +152,7 @@ if [ -f ~/.fzf.zsh ]; then
   source ~/.fzf.zsh
   export FZF_DEFAULT_COMMAND='rg --files --ignore-vcs --hidden'
   export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
-  export FZF_DEFAULT_OPTS="--bind ctrl-n:down,ctrl-p:up"
+  export FZF_DEFAULT_OPTS="--bind ctrl-n:down,ctrl-p:up --history=$HOME/.fzf_history"
 fi
 
 # lazy load nvm since it will take 1-2 seconds for nvm to fully loaded

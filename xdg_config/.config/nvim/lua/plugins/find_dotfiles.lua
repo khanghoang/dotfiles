@@ -5,6 +5,15 @@ M.find_dotfiles = function()
         -- cwd = "~/.config/nvim",
         cwd = vim.env.DOTFILES,
         hidden = true,
+        -- theme = "ivy",
+        winblend = 10,
+        width = 0.5,
+        results_height = 15,
+        previewer = false,
+        -- layout_strategies = "vertical",
+        -- layout_config = {
+        --     height = 11,
+        -- },
     })
 end
 
