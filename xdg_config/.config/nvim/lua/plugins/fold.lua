@@ -60,8 +60,8 @@ require('ufo').setup({
         mappings = {
             scrollU = '<C-u>',
             scrollD = '<C-d>',
-            jumpTop = '[',
-            jumpBot = ']'
+            jumpTop = '<C-p>',
+            jumpBot = '<C-n>'
         }
     },
     provider_selector = function(bufnr, filetype, buftype)
