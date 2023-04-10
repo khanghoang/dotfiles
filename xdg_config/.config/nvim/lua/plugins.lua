@@ -884,14 +884,23 @@ require('packer').startup(function()
     end
   }
 
-  -- Display the winbar/breadcrumb
-  use({
-    "SmiteshP/nvim-gps",
-    requires = "nvim-treesitter/nvim-treesitter",
-    config = function ()
-      require("nvim-gps").setup()
-    end
-  })
+  -- -- Display the winbar/breadcrumb
+  -- use({
+  --   "SmiteshP/nvim-gps",
+  --   requires = "nvim-treesitter/nvim-treesitter",
+  --   config = function ()
+  --     require("nvim-gps").setup()
+  --     -- Lua
+  --     -- Winbar
+  --     --- {{{
+  --     vim.api.nvim_create_autocmd({ "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost" }, {
+  --       callback = function()
+  --         require("plugins.winbar").get_winbar()
+  --       end,
+  --     })
+  -- -- }}}
+  --   end
+  -- })
 
   -- Display color for hex string
   use {
@@ -1057,15 +1066,6 @@ require('packer').startup(function()
   -- }
   -- }}}
 
-  -- Lua
-  -- Winbar
-  --- {{{
-  vim.api.nvim_create_autocmd({ "CursorMoved", "BufWinEnter", "BufFilePost", "InsertEnter", "BufWritePost" }, {
-    callback = function()
-      require("plugins.winbar").get_winbar()
-    end,
-  })
-  -- }}}
   -- Developing Lua plugins
   --- {{{
   use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
