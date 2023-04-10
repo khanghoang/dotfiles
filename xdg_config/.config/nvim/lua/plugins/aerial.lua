@@ -64,9 +64,9 @@ require('aerial').setup({
 local map = vim.api.nvim_set_keymap
 local opt = {noremap = false}
 
-map('n', 'so', ':AerialToggle<CR>',opt)
+-- map('n', 'so', ':AerialToggle<CR>',opt)
 -- map('n', 'do', ':call aerial#fzf()<cr>',opt)
-map('n', 'do', ':Telescope aerial<CR>', opt)
+map('n', 'do', ':Telescope aerial theme=ivy previewer=false winblend=10<CR>', opt)
 
 require('telescope').load_extension('aerial')
 
@@ -78,7 +78,11 @@ require('telescope').setup({
         ['_'] = false, -- This key will be the default
         json = true,   -- You can set the option for specific filetypes
         yaml = true,
-      }
+      },
+      layout_config = {
+        vertical = { width = 0.5 }
+        -- other layout configuration here
+      },
     }
   }
 })

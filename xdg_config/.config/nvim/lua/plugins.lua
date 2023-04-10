@@ -607,7 +607,12 @@ require('packer').startup(function()
   use {'andymass/vim-matchup', event = 'VimEnter'}
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
-  use 'nvim-telescope/telescope.nvim'
+  use {
+    'nvim-telescope/telescope.nvim',
+    config = function ()
+      require 'plugins.telescope'
+    end
+  }
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable "make" == 1 }
@@ -1291,7 +1296,6 @@ require('packer').startup(function()
       local bookmark_actions = require('telescope').extensions.vim_bookmarks.actions
       require('telescope').extensions.vim_bookmarks.all {
         attach_mappings = function(_, map)
-
           -- this doesn't work :(
           map('n', 'dd', bookmark_actions.delete_selected_or_at_cursor)
           return true

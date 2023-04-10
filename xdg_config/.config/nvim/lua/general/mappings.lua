@@ -8,8 +8,32 @@ api.nvim_set_keymap('n', 'qq', ':q<cr>', { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<leader>ev', ':lua require("plugins/find_dotfiles").find_dotfiles()<CR>',
   { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<leader>rv', ':source $MYVIMRC<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<leader><space>', ':FZF<CR>', { noremap = true, silent = true })
-api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
+
+-- https://github.com/junegunn/fzf/blob/master/README-VIM.md
+vim.cmd [[
+  function! s:build_quickfix_list(lines)
+    call setqflist(map(copy(a:lines), '{ "filename": v:val, "lnum": 1 }'))
+    copen
+    cc
+  endfunction
+
+  " Override default ctrl action for h-split
+  let g:fzf_action = {
+    \ 'ctrl-q': function('s:build_quickfix_list'),
+    \ 'ctrl-t': 'tab split',
+    \ 'ctrl-s': 'split',
+    \ 'ctrl-v': 'vsplit' }
+
+  " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
+  let g:fzf_layout = { 'down': "30%" }
+  let $FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git/**'"
+  " https://github.com/junegunn/fzf.vim#preview-window
+  let g:fzf_preview_window = ['hidden,right,50%', 'ctrl-/']
+
+  command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".<q-args>, 1, <bang>0)
+]]
+api.nvim_set_keymap('n', '<leader><space>', ':GFiles<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<leader>f', ":Telescope oldfiles previewer=false theme=ivy winblend=10<CR>", { noremap = true })
 
 api.nvim_set_keymap('n', '<leader>cp', ":let @+=expand('%:p')<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<leader>gf', '<C-w>vgf', { noremap = true })
@@ -46,6 +70,9 @@ vim.api.nvim_set_keymap('n', 'ss', ":w<CR>", { noremap = true })
 -- fix "gg" doens't work because statusbar=3 in neovim 0.8
 vim.api.nvim_set_keymap('n', 'gg', ":0<CR>", { noremap = true })
 
+-- reload module
+vim.api.nvim_set_keymap('n', ',rm', ":Telescope reloader theme=ivy previewer=false winblend=10<CR>", { noremap = true, desc = "[R]eload [M]odule" })
+
 -- F5 to insert current datetime
 vim.api.nvim_set_keymap('n', '<F5>', "put=strftime('%c')<CR>P", { noremap = true })
 vim.api.nvim_set_keymap('i', '<F5>', "<C-R>=strftime('%c')<CR>", { noremap = true })
@@ -77,7 +104,7 @@ vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { de
 vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc = '[S]earch [B]uffers' })
 
 -- For marks management
-vim.keymap.set('n', '<leader>a', ':Telescope vim_bookmarks all<CR>', { noremap = true })
+vim.keymap.set('n', 'ma', ':Telescope vim_bookmarks all theme=ivy winblend=10<CR>', { noremap = true })
 vim.keymap.set('n', 'ql', ':cclose<CR>', { noremap = true })
 
 -- Prettier current file
