@@ -106,13 +106,16 @@ vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc =
 
 -- For marks management
 vim.keymap.set('n', 'ma', ':Telescope vim_bookmarks all theme=ivy winblend=10<CR>', { noremap = true })
-vim.keymap.set('n', 'ql', ':cclose<CR>', { noremap = true })
+vim.keymap.set('n', 'ql', require('plugins.quickfix_list').toggle_qf, { noremap = true })
 
 -- Prettier current file
 api.nvim_set_keymap('n', '<leader><leader>f', ":lua vim.lsp.buf.formatting { async = true }<CR>", { noremap = true })
 
 -- Copy text
 api.nvim_set_keymap('x', '<leader>c', "\"+y", { noremap = true })
+
+-- set open key binding again due to click with tmux navigation
+vim.api.nvim_set_keymap('n', '<C-\\>', ":ToggleTerm<cr>", {noremap = false, desc = "Toggle Term"})
 
 -- using 'dts' as abbreviations
 -- :help :map-expression
