@@ -3,7 +3,14 @@ import re
 import subprocess
 import sys
 
-file_path = sys.argv[1] # first arg is the script itself
+file_path = ''
+if not sys.stdin.isatty():
+    # read piped input as the first argument
+    file_path = sys.stdin.read().strip()
+else:
+    file_path = sys.argv[1] # first arg is the script itself
+
+assert file_path
 
 pattern = re.compile(".*?(\/code\/server\/.*?)(?::(\d+)(?:\.html)?)?$")
 match = pattern.match(file_path)
