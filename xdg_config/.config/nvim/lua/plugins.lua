@@ -177,33 +177,6 @@ require('packer').startup(function()
   use {
     'jose-elias-alvarez/null-ls.nvim',
     config = function ()
-      local null_ls_status_ok, null_ls = pcall(require, "null-ls")
-      if not null_ls_status_ok then
-        return
-      end
-
-      -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-      local formatting = null_ls.builtins.formatting
-      -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-      local diagnostics = null_ls.builtins.diagnostics
-
-      -- https://github.com/prettier-solidity/prettier-plugin-solidity
-      -- npm install --save-dev prettier prettier-plugin-solidity
-      null_ls.setup {
-        debug = false,
-        sources = {
-          null_ls.builtins.code_actions.refactoring,
-          -- brew install black
-          null_ls.builtins.formatting.black,
-          -- null_ls.builtins.code_actions.gitsigns,
-          formatting.stylua,
-          formatting.google_java_format,
-          -- brew install fsouza/prettierd/prettierd
-          null_ls.builtins.formatting.prettierd,
-          -- yarn global add eslint_d
-          null_ls.builtins.diagnostics.eslint_d,
-        },
-      }
     end
   }
 
@@ -1069,10 +1042,6 @@ require('packer').startup(function()
   -- Developing Lua plugins
   --- {{{
   use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
-
-  if is_bootstrap then
-    require('packer').sync()
-  end
   --- }}}
   --- }}}
 
@@ -1375,6 +1344,7 @@ require('packer').startup(function()
           hgcommit = false,
           svn = false,
           cvs = false,
+          fugitive = false,
           ["."] = false,
         },
         copilot_node_command = 'node', -- Node.js version must be > 16.x
@@ -1395,6 +1365,10 @@ require('packer').startup(function()
   }
 
   -- }}}
+
+  if is_bootstrap then
+    require('packer').sync()
+  end
 
   end)
 

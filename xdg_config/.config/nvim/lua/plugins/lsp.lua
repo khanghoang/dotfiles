@@ -362,3 +362,40 @@ require("zk").setup({
   },
   capabilities = capabilities,
 })
+
+
+local null_ls_status_ok, null_ls = pcall(require, "null-ls")
+if not null_ls_status_ok then
+  return
+end
+
+-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
+local formatting = null_ls.builtins.formatting
+-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
+local diagnostics = null_ls.builtins.diagnostics
+
+-- https://github.com/prettier-solidity/prettier-plugin-solidity
+-- npm install --save-dev prettier prettier-plugin-solidity
+null_ls.setup {
+  debug = false,
+  on_attach = on_attach,
+  sources = {
+    null_ls.builtins.code_actions.refactoring,
+    -- brew install black
+    null_ls.builtins.formatting.black,
+    -- null_ls.builtins.code_actions.gitsigns,
+    formatting.stylua,
+    formatting.google_java_format,
+    -- brew install fsouza/prettierd/prettierd
+    null_ls.builtins.formatting.prettierd,
+    -- yarn global add eslint_d
+    null_ls.builtins.diagnostics.eslint_d,
+    null_ls.builtins.diagnostics.mypy.with {
+      method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+      command = "mypy-daemon",
+      args = function(params)
+        return {}
+      end
+    },
+  },
+}
