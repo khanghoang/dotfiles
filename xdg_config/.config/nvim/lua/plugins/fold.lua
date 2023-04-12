@@ -4,6 +4,8 @@ vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 vim.o.fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]]
 
+vim.cmd [[highlight! link MoreMsg Comment]]
+
 -- Option 2: nvim lsp as LSP client
 -- Tell the server the capability of foldingRange,
 -- Neovim hasn't added foldingRange to default capabilities, users must add it manually
