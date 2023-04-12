@@ -1323,8 +1323,15 @@ require('packer').startup(function()
     end
   }
   -- }}}
+  --
+
+  -- Starlark
+  -- {{{
+  use {'cappyzawa/starlark.vim'}
+  -- }}}
 
   -- Copilot
+  -- {{{
   use {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
@@ -1386,6 +1393,8 @@ require('packer').startup(function()
       })
     end
   }
+
+  -- }}}
 
   end)
 

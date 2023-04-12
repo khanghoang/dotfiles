@@ -1,7 +1,3 @@
-vim.cmd [[
-  set filetype=lua
-]]
-
 local function i(value)
     print(vim.inspect(value))
 end
