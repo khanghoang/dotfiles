@@ -12,7 +12,7 @@ end
 -- Have packer use a popup window
 -- Packer init
 -- {{{
-require'packer'.init {
+require 'packer'.init {
   git = {
     cmd = 'git', -- The base command for git operations
     subcommands = { -- Format strings for git subcommands
@@ -59,7 +59,7 @@ require('packer').startup(function()
   use 'vifm/vifm.vim'
   use 'rbgrouleff/bclose.vim'
   use 'easymotion/vim-easymotion'
-  use {'junegunn/fzf', run = function() vim.fn['fzf#install']() end}
+  use { 'junegunn/fzf', run = function() vim.fn['fzf#install']() end }
   use 'junegunn/fzf.vim'
   use {
     "folke/which-key.nvim",
@@ -75,16 +75,22 @@ require('packer').startup(function()
   use {
     'alexghergh/nvim-tmux-navigation',
     config = function()
-      require'nvim-tmux-navigation'.setup {
+      require 'nvim-tmux-navigation'.setup {
         disable_when_zoomed = true -- defaults to false
       }
 
-      vim.api.nvim_set_keymap('n', "<C-h>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<cr>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', "<C-j>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<cr>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', "<C-k>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<cr>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', "<C-l>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<cr>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', "<C-\\>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLastActive()<cr>", { noremap = true, silent = true })
-      vim.api.nvim_set_keymap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>", { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-h>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLeft()<cr>",
+        { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-j>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateDown()<cr>",
+        { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-k>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateUp()<cr>",
+        { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-l>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateRight()<cr>",
+        { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-\\>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateLastActive()<cr>",
+        { noremap = true, silent = true })
+      vim.api.nvim_set_keymap('n', "<C-Space>", ":lua require'nvim-tmux-navigation'.NvimTmuxNavigateNext()<cr>",
+        { noremap = true, silent = true })
     end
   }
   -- }}}
@@ -135,10 +141,10 @@ require('packer').startup(function()
 
   use {
     'neovim/nvim-lspconfig',
-    config = function ()
+    config = function()
       require('plugins.lsp')
     end,
-    requires = {'williamboman/nvim-lsp-installer'},
+    requires = { 'williamboman/nvim-lsp-installer' },
   }
 
   use {
@@ -151,9 +157,9 @@ require('packer').startup(function()
       require("lspsaga").setup({})
     end,
     requires = {
-      {"nvim-tree/nvim-web-devicons"},
+      { "nvim-tree/nvim-web-devicons" },
       --Please make sure you install markdown and markdown_inline parser
-      {"nvim-treesitter/nvim-treesitter"}
+      { "nvim-treesitter/nvim-treesitter" }
     }
   }
 
@@ -166,17 +172,17 @@ require('packer').startup(function()
 
   use {
     'folke/trouble.nvim',
-    config = function ()
+    config = function()
       local map = vim.api.nvim_set_keymap
-      local opt = {noremap = false}
+      local opt = { noremap = false }
 
-      map('n', 'tt', ':TroubleToggle<CR>',opt)
+      map('n', 'tt', ':TroubleToggle<CR>', opt)
     end
   }
 
   use {
     'jose-elias-alvarez/null-ls.nvim',
-    config = function ()
+    config = function()
     end
   }
 
@@ -187,14 +193,14 @@ require('packer').startup(function()
   use {
     'hrsh7th/nvim-cmp',
     config = function()
-      local cmp = require'cmp'
+      local cmp = require 'cmp'
 
       cmp.setup({
         snippet = {
           expand = function(args)
             -- For `vsnip` user.
             -- vim.fn["vsnip#anonymous"](args.body)
-            require'luasnip'.lsp_expand(args.body)
+            require 'luasnip'.lsp_expand(args.body)
           end,
         },
         mapping = cmp.mapping.preset.insert({
@@ -259,7 +265,7 @@ require('packer').startup(function()
         },
       })
     end,
-    requires = {'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp', 'neovim/nvim-lspconfig'}
+    requires = { 'hrsh7th/cmp-buffer', 'hrsh7th/cmp-nvim-lsp', 'neovim/nvim-lspconfig' }
 
   }
 
@@ -270,8 +276,8 @@ require('packer').startup(function()
   use 'saadparwaiz1/cmp_luasnip'
   use {
     'L3MON4D3/LuaSnip',
-    config = function ()
-      require("luasnip.loaders.from_vscode").lazy_load({ paths = { "/home/khanghoang/.config/nvim/lua/snippets/vscode-jest-snippets" }})
+    config = function()
+      require("luasnip.loaders.from_vscode").lazy_load({ paths = { "/home/khanghoang/.config/nvim/lua/snippets/vscode-jest-snippets" } })
       local ls = require('luasnip');
 
       -- <c-k> is my expansion key
@@ -355,7 +361,7 @@ require('packer').startup(function()
   -- {{{
   use {
     "hrsh7th/cmp-nvim-lsp-signature-help",
-    config = function ()
+    config = function()
     end
   }
   -- }}}
@@ -364,27 +370,27 @@ require('packer').startup(function()
   -- {{{
   use {
     'tree-sitter/tree-sitter-typescript',
-    ft = {'typescriptreact', 'typescript', 'javascript', 'javascriptreact'},
+    ft = { 'typescriptreact', 'typescript', 'javascript', 'javascriptreact' },
   }
 
-  use {'nvim-treesitter/nvim-treesitter', run = ':TSUpdate'}
+  use { 'nvim-treesitter/nvim-treesitter', run = ':TSUpdate' }
   use {
     'nvim-treesitter/nvim-treesitter-refactor',
   }
   use {
     'nvim-treesitter/playground',
-    cmd = {'TSPlaygroundToggle'}
+    cmd = { 'TSPlaygroundToggle' }
   }
 
   use {
     'nvim-treesitter/nvim-treesitter-textobjects',
-    ft = {'typescriptreact', 'typescript', 'javascript', 'javascriptreact', 'lua', 'bash', 'go', 'json', 'python'},
-    config = function() 
-      require'nvim-treesitter.configs'.setup {
+    ft = { 'typescriptreact', 'typescript', 'javascript', 'javascriptreact', 'lua', 'bash', 'go', 'json', 'python' },
+    config = function()
+      require 'nvim-treesitter.configs'.setup {
         matchup = {
           enable = true,
         },
-        ensure_installed = {'javascript', 'lua', 'bash', 'go', 'json', 'typescript', 'python'},
+        ensure_installed = { 'javascript', 'lua', 'bash', 'go', 'json', 'typescript', 'python' },
         highlight = {
           enable = true
         },
@@ -522,12 +528,12 @@ require('packer').startup(function()
   -- Mostly for Table of Content, zk is for another purpose
   use {
     'preservim/vim-markdown',
-    ft = {'markdown'},
+    ft = { 'markdown' },
   }
   use {
     "ellisonleao/glow.nvim",
     branch = 'main',
-    ft = {'markdown'},
+    ft = { 'markdown' },
   }
   -- }}}
 
@@ -537,7 +543,7 @@ require('packer').startup(function()
   -- This plug-in provides automatic closing of quotes, parenthesis, brackets
   use {
     'windwp/nvim-autopairs',
-    config = function ()
+    config = function()
       require('nvim-autopairs').setup({
       })
     end
@@ -571,19 +577,19 @@ require('packer').startup(function()
   use 'christoomey/vim-tmux-navigator'
   use {
     'numToStr/Comment.nvim',
-    config = function ()
+    config = function()
       require('Comment').setup()
     end
   }
 
   -- find the matching characters for {}, [], etc
   -- https://github.com/andymass/vim-matchup#a2-jump-to-open-and-close-words
-  use {'andymass/vim-matchup', event = 'VimEnter'}
+  use { 'andymass/vim-matchup', event = 'VimEnter' }
   use 'nvim-lua/popup.nvim'
   use 'nvim-lua/plenary.nvim'
   use {
     'nvim-telescope/telescope.nvim',
-    config = function ()
+    config = function()
       require 'plugins.telescope'
     end
   }
@@ -594,7 +600,7 @@ require('packer').startup(function()
   -- support prisma schema
   use {
     'pantharshit00/vim-prisma',
-    ft = {"prisma"}
+    ft = { "prisma" }
   }
 
   -- This plugin provides f/t/F/T mappings that can be customized by your setting.
@@ -617,7 +623,7 @@ require('packer').startup(function()
   use {
     'iberianpig/tig-explorer.vim',
     opt = true,
-    cmd = {'Tig'}
+    cmd = { 'Tig' }
   }
   -- }}}
 
@@ -649,7 +655,7 @@ require('packer').startup(function()
   -- {{{
   use {
     'williamboman/mason.nvim',
-    config =function ()
+    config = function()
       require("mason").setup({
         ui = {
           icons = {
@@ -699,7 +705,7 @@ require('packer').startup(function()
       --     -- set a delay (in ms) before the installation starts. This is only
       --     -- effective if run_on_start is set to true.
       --     -- e.g.: 5000 = 5 second delay, 10000 = 10 second delay, etc...
---     -- Default: 0
+      --     -- Default: 0
       --     start_delay = 3000  -- 3 second delay
       --   }
     end,
@@ -709,8 +715,8 @@ require('packer').startup(function()
   use 'mfussenegger/nvim-dap'
   use {
     "rcarriga/nvim-dap-ui",
-    requires = {"mfussenegger/nvim-dap"},
-    config =function ()
+    requires = { "mfussenegger/nvim-dap" },
+    config = function()
       require("plugins.dap")
     end
   }
@@ -721,7 +727,7 @@ require('packer').startup(function()
   use {
     'tpope/vim-dispatch',
     opt = true,
-    cmd = {'Dispatch', 'Make', 'Focus', 'Start'}
+    cmd = { 'Dispatch', 'Make', 'Focus', 'Start' }
   }
   -- }}}
 
@@ -734,7 +740,7 @@ require('packer').startup(function()
     config = function()
       require('plugins.lightline')
     end,
-    requires = {'kyazdani42/nvim-web-devicons', opt = true}
+    requires = { 'kyazdani42/nvim-web-devicons', opt = true }
   }
 
   use {
@@ -771,7 +777,7 @@ require('packer').startup(function()
         "sql",
         "" -- for all buffers without a file type
       }
-      vim.g.indent_blankline_buftype_exclude = {"terminal", "nofile"}
+      vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
       vim.g.indent_blankline_show_trailing_blankline_indent = false
       vim.g.indent_blankline_show_current_context = true
       vim.g.indent_blankline_context_patterns = {
@@ -829,7 +835,7 @@ require('packer').startup(function()
     end,
   }
 
-  use { "mxsdev/nvim-dap-vscode-js", requires = {"mfussenegger/nvim-dap"} }
+  use { "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" } }
   use {
     "microsoft/vscode-js-debug",
     opt = true,
@@ -853,7 +859,7 @@ require('packer').startup(function()
 
   use {
     "RRethy/vim-illuminate",
-    config = function ()
+    config = function()
       require('plugins.illuminate')
     end
   }
@@ -879,7 +885,7 @@ require('packer').startup(function()
   -- Display color for hex string
   use {
     'norcalli/nvim-colorizer.lua',
-    ft = { 'html','css','sass','vim','typescript','typescriptreact'},
+    ft = { 'html', 'css', 'sass', 'vim', 'typescript', 'typescriptreact' },
     config = function()
       require 'colorizer'.setup {
         css = { rgb_fn = true; };
@@ -945,7 +951,7 @@ require('packer').startup(function()
   -- {{{
   use {
     'mickael-menu/zk-nvim',
-    config = function ()
+    config = function()
       require("zk").setup({
         -- can be "telescope", "fzf" or "select" (`vim.ui.select`)
         -- it's recommended to use "telescope" or "fzf"
@@ -969,7 +975,7 @@ require('packer').startup(function()
       })
 
       -- https://github.com/mickael-menu/zk-nvim#example-mappings
-      local opts = { noremap=true, silent=false }
+      local opts = { noremap = true, silent = false }
 
       -- Create a new note after asking for its title.
       -- Conflicted with the ft one
@@ -984,10 +990,12 @@ require('packer').startup(function()
       vim.api.nvim_set_keymap("n", "<leader>zt", ":Telescope zk tags<CR>", opts)
 
       -- Search for the notes matching a given query.
-      vim.api.nvim_set_keymap("n", "<leader>zf", "<Cmd>ZkNotes { sort = { 'modified' }, match = vim.fn.input('Search: ') }<CR>", opts)
+      vim.api.nvim_set_keymap("n", "<leader>zf",
+        "<Cmd>ZkNotes { sort = { 'modified' }, match = vim.fn.input('Search: ') }<CR>", opts)
       -- Search for the notes matching the current visual selection.
       vim.api.nvim_set_keymap("v", "<leader>zf", ":'<,'>ZkMatch<CR>", opts)
-      vim.api.nvim_set_keymap("n", "<leader>zn", "<Cmd>ZkNew { dir = vim.fn.expand('%:p:h'), title = vim.fn.input('Title: '), datetime = 'today' }<CR>", opts)
+      vim.api.nvim_set_keymap("n", "<leader>zn",
+        "<Cmd>ZkNew { dir = vim.fn.expand('%:p:h'), title = vim.fn.input('Title: '), datetime = 'today' }<CR>", opts)
     end
   }
   -- }}}
@@ -997,7 +1005,7 @@ require('packer').startup(function()
   use "tpope/vim-dadbod"
   use {
     "kristijanhusak/vim-dadbod-completion",
-    config = function ()
+    config = function()
       vim.cmd [[
         autocmd FileType sql,mysql,plsql lua require('cmp').setup.buffer({ sources = {{ name = 'vim-dadbod-completion' }} })
         " Source is automatically added, you just need to include it in the chain complete list
@@ -1043,6 +1051,12 @@ require('packer').startup(function()
   -- Developing Lua plugins
   --- {{{
   use { 'rafcamlet/nvim-luapad', requires = "antoinemadec/FixCursorHold.nvim" }
+  use { 'folke/neodev.nvim', config = function()
+    require "neodev".setup {
+      library = { plugins = { "neotest" }, type = true }
+    }
+
+  end }
   --- }}}
   --- }}}
 
@@ -1184,8 +1198,8 @@ require('packer').startup(function()
   use {
     'goolord/alpha-nvim',
     requires = { 'kyazdani42/nvim-web-devicons' },
-    config = function ()
-      require'alpha'.setup(require'alpha.themes.startify'.config)
+    config = function()
+      require 'alpha'.setup(require 'alpha.themes.startify'.config)
     end
   }
 
@@ -1249,7 +1263,7 @@ require('packer').startup(function()
   --        -- log.info('build_test_args -> args', vim.inspect(args));
   --        -- log.info('build_test_args -> tests', vim.inspect(tests));
   --      end
-  -- 
+  --
   --      require('nvim-test').setup({
   --        runners = {               -- setup tests runners
   --          cs = "nvim-test.runners.dotnet",
@@ -1262,13 +1276,13 @@ require('packer').startup(function()
   --          ruby = "nvim-test.runners.rspec",
   --          rust = "nvim-test.runners.cargo-test",
   --          typescript = jest,
---          typescriptreact = jest,
+  --          typescriptreact = jest,
   --          -- typescript = "nvim-test.runners.jest",
   --          -- typescriptreact = "nvim-test.runners.jest",
   --        }
   --      })
   --    end
---  }
+  --  }
 
   -- }}}
 
@@ -1277,7 +1291,7 @@ require('packer').startup(function()
   use 'MattesGroeger/vim-bookmarks'
   use {
     'khanghoang/telescope-vim-bookmarks.nvim',
-    config = function ()
+    config = function()
       require('telescope').load_extension('vim_bookmarks')
 
       local bookmark_actions = require('telescope').extensions.vim_bookmarks.actions
@@ -1297,15 +1311,15 @@ require('packer').startup(function()
   -- {{{
   use {
     'luukvbaal/statuscol.nvim',
-    config = function ()
-      require"plugins.statuscol"
+    config = function()
+      require "plugins.statuscol"
     end
   }
 
   use {
     'kevinhwang91/nvim-ufo',
-    requires = {'kevinhwang91/promise-async'},
-    config = function ()
+    requires = { 'kevinhwang91/promise-async' },
+    config = function()
       require("plugins.fold")
     end
   }
@@ -1314,7 +1328,7 @@ require('packer').startup(function()
 
   -- Starlark
   -- {{{
-  use {'cappyzawa/starlark.vim'}
+  use { 'cappyzawa/starlark.vim' }
   -- }}}
 
   -- Copilot
@@ -1374,7 +1388,7 @@ require('packer').startup(function()
   use {
     "zbirenbaum/copilot-cmp",
     after = { "copilot.lua" },
-    config = function ()
+    config = function()
       require("copilot_cmp").setup({
         suggestion = { enabled = false },
         panel = { enabled = false },
@@ -1388,7 +1402,7 @@ require('packer').startup(function()
     require('packer').sync()
   end
 
-  end)
+end)
 
 -- When we are bootstrapping a configuration, it doesn't
 -- make sense to execute the rest of the init.lua.
