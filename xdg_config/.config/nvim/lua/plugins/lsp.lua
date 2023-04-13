@@ -83,10 +83,11 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "gp", "<cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>", opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap("n", "gr", "<cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
-  buf_set_keymap('n', 'gD', ":vsp<cr><cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
+  buf_set_keymap('n', 'gD', "<cmd>lua vim.lsp.buf.definition({})<CR>", opts)
   buf_set_keymap('n', 'cd', "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
   buf_set_keymap('n', 'cd', "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
-  buf_set_keymap('n', 'gs', ":lua vim.lsp.buf.signature_help()<CR>", opts)
+  buf_set_keymap('n', 'gs', "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
+  buf_set_keymap('n', 'ff', "<cmd>lua vim.lsp.buf.format({ async = True})<CR>", opts)
   -- edit = '<C-c>o',
   -- vsplit = '<C-c>v',
   -- split = '<C-c>i',
@@ -135,7 +136,7 @@ local on_attach = function(client, bufnr)
     })
   end
 
-  -- setup()
+  setup()
 
   -- -- setup vim aerial
   -- local require_aerial_ok, aerial = pcall(require, 'aerial')
@@ -380,7 +381,8 @@ null_ls.setup {
   debug = false,
   on_attach = on_attach,
   sources = {
-    null_ls.builtins.code_actions.refactoring,
+    -- this causes problem at vim start
+    -- null_ls.builtins.code_actions.refactoring,
     -- brew install black
     null_ls.builtins.formatting.black,
     -- null_ls.builtins.code_actions.gitsigns,
