@@ -462,55 +462,56 @@ require('packer').startup(function()
   }
 
   -- run and display test results
-  use {
-    "rcarriga/neotest",
-    -- "~/code/neotest",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "nvim-treesitter/nvim-treesitter",
-      -- disable due to a weird error about duplicated function declaration
-      "antoinemadec/FixCursorHold.nvim",
-      "vim-test/vim-test",
-      "rcarriga/neotest-vim-test",
-      -- local dev
-      -- '~/code/neotest-vim-test',
-      "rcarriga/neotest-plenary",
-    },
-    config = function ()
-      local g = vim.g
-      -- in millisecond, used for both CursorHold and CursorHoldI,
-      -- use updatetime instead if not defined
-      g.cursorhold_updatetime = 100
-
-      require("neotest").setup({
-        adapters = {
-          require("neotest-vim-test")({ ignore_filetypes = { "python", "lua" } }),
-          -- why do we need this???
-          -- require("neotest-plenary")
-        }
-      })
-
-      -- disable for testing
-      -- g["test#javascript#runner"] = 'jest'
-      -- g["test#typescript#runner"] = 'jest'
-      -- g["test#strategy"] = 'dispatch_background'
-
-      -- usage:
-      -- 1. Run test (for example :TestNearest)
-      -- 2. <C-o> to scroll through the test results
-      -- 3. <C-o> on the failed test LOC to open it in vim
-      vim.cmd[[tmap <C-o> <C-\><C-n>]]
-
-      vim.api.nvim_set_keymap('n', '<leader>tn', ":TestNearest<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>tf', ":TestNearest<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>ts', ":TestNearest<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>tr', ":lua require('neotest').run.run()<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>tt', ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>", {noremap = true})
-      vim.api.nvim_set_keymap('n', '<leader>to', ":lua require('neotest').summary.open()<CR>", {noremap = true})
-    end
-  }
+  -- use {
+  --   "rcarriga/neotest",
+  --   -- "~/code/neotest",
+  --   requires = {
+  --     "nvim-lua/plenary.nvim",
+  --     "nvim-treesitter/nvim-treesitter",
+  --     -- disable due to a weird error about duplicated function declaration
+  --     "antoinemadec/FixCursorHold.nvim",
+  --     "vim-test/vim-test",
+  --     "rcarriga/neotest-vim-test",
+  --     -- local dev
+  --     -- '~/code/neotest-vim-test',
+  --     "rcarriga/neotest-plenary",
+  --   },
+  --   config = function()
+  --     local g = vim.g
+  --     -- in millisecond, used for both CursorHold and CursorHoldI,
+  --     -- use updatetime instead if not defined
+  --     g.cursorhold_updatetime = 100
+  --
+  --     require("neotest").setup({
+  --       adapters = {
+  --         require("neotest-vim-test")({ ignore_filetypes = { "python", "lua" } }),
+  --         -- why do we need this???
+  --         -- require("neotest-plenary")
+  --       }
+  --     })
+  --
+  --     -- disable for testing
+  --     -- g["test#javascript#runner"] = 'jest'
+  --     -- g["test#typescript#runner"] = 'jest'
+  --     -- g["test#strategy"] = 'dispatch_background'
+  --
+  --     -- usage:
+  --     -- 1. Run test (for example :TestNearest)
+  --     -- 2. <C-o> to scroll through the test results
+  --     -- 3. <C-o> on the failed test LOC to open it in vim
+  --     vim.cmd [[tmap <C-o> <C-\><C-n>]]
+  --
+  --     vim.api.nvim_set_keymap('n', '<leader>tn', ":TestNearest<CR>", { noremap = true })
+  --     vim.api.nvim_set_keymap('n', '<leader>tf', ":TestNearest<CR>", { noremap = true })
+  --     vim.api.nvim_set_keymap('n', '<leader>ts', ":TestNearest<CR>", { noremap = true })
+  --     vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", { noremap = true })
+  --     vim.api.nvim_set_keymap('n', '<leader>tl', ":TestLast<CR>", { noremap = true })
+  --     vim.api.nvim_set_keymap('n', '<leader>tr', ":lua require('neotest').run.run()<CR>", { noremap = true })
+  --     vim.api.nvim_set_keymap('n', '<leader>tt', ":lua require('neotest').run.run(vim.fn.expand('%'))<CR>",
+  --       { noremap = true })
+  --     vim.api.nvim_set_keymap('n', '<leader>to', ":lua require('neotest').summary.open()<CR>", { noremap = true })
+  --   end
+  -- }
 
 
   -- }}}
@@ -1189,6 +1190,22 @@ require('packer').startup(function()
   }
 
   use 'kyazdani42/nvim-web-devicons'
+  -- }}}
+
+  -- Test runner
+  -- {{{
+  use {
+    "nvim-neotest/neotest",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/neotest-python",
+    },
+    config = function()
+      require "plugins.neotest"
+    end
+  }
   -- }}}
 
   -- Test runners
