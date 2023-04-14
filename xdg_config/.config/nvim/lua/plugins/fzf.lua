@@ -3,7 +3,9 @@ local api = vim.api
 
 g.fzf_history_dir = "~/.local/share/fzf-history"
 
-vim.cmd([[command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]])
+vim.cmd(
+	[[command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]]
+)
 
 -- api.nvim_set_keymap('n', '<leader><space>', ':FZFMru<CR>', { noremap = true })
 -- api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
