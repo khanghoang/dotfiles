@@ -337,7 +337,7 @@ require('packer').startup(function()
           keymaps = {
             init_selection = '<CR>',
             scope_incremental = '<CR>',
-            node_incremental = '<space>',
+            node_incremental = '<TAB>',
             node_decremental = '<S-TAB>',
           },
         },
@@ -1222,17 +1222,7 @@ require('packer').startup(function()
   use {
     'khanghoang/telescope-vim-bookmarks.nvim',
     config = function()
-      require('telescope').load_extension('vim_bookmarks')
-
-      local bookmark_actions = require('telescope').extensions.vim_bookmarks.actions
-      require('telescope').extensions.vim_bookmarks.all {
-        attach_mappings = function(_, map)
-          -- this doesn't work :(
-          map('n', 'dd', bookmark_actions.delete_selected_or_at_cursor)
-          return true
-        end
-      }
-
+      require"plugins.vim_bookmark"
     end
   }
   -- }}}

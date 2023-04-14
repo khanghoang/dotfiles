@@ -33,11 +33,10 @@ vim.cmd [[
 
   command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".<q-args>, 1, <bang>0)
 ]]
-api.nvim_set_keymap('n', '<leader><space>', ':GFiles<CR>', { noremap = true, silent = true })
+api.nvim_set_keymap('n', '<leader><space>', ':GFiles<CR>', { noremap = true, silent = true, desc = "Git files" })
 -- api.nvim_set_keymap('n', '<leader>f', ":Telescope oldfiles previewer=false theme=ivy winblend=10<CR>", { noremap = true })
-api.nvim_set_keymap('n', '<leader>f', ":History<CR>", { noremap = true })
+api.nvim_set_keymap('n', '<leader>f', ":History<CR>", { noremap = true, silent = true, desc = "File history" })
 
-api.nvim_set_keymap('n', '<leader>cp', ":let @+=expand('%:p')<CR>", { noremap = true })
 api.nvim_set_keymap('n', '<leader>gf', '<C-w>vgf', { noremap = true })
 api.nvim_set_keymap('n', '<leader><leader>', '<C-^>', { noremap = true })
 
@@ -52,8 +51,6 @@ api.nvim_set_keymap('n', 'N', "nzzzv", { noremap = true })
 
 -- Reload bazel
 api.nvim_set_keymap('n', '<leader>R', ":Dispatch! mbzl itest-reload-current<CR>", { noremap = true })
--- api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'mbzl', 'itest-reload-current' })<CR>", { noremap = true })
--- api.nvim_set_keymap('n', '<leader>R', ":lua require('plugins.utils').notify_output({ 'echo', 'foo' })<CR>", { noremap = true })
 
 -- Tabs
 -- Go to tab number x -> xgt
@@ -73,7 +70,8 @@ vim.api.nvim_set_keymap('n', 'ss', ":w<CR>", { noremap = true })
 vim.api.nvim_set_keymap('n', 'gg', ":0<CR>", { noremap = true })
 
 -- reload module
-vim.api.nvim_set_keymap('n', ',rm', ":Telescope reloader theme=ivy previewer=false winblend=10<CR>", { noremap = true, desc = "[R]eload [M]odule" })
+vim.api.nvim_set_keymap('n', ',rm', ":Telescope reloader theme=ivy previewer=false winblend=10<CR>",
+  { noremap = true, desc = "[R]eload [M]odule" })
 
 -- F5 to insert current datetime
 vim.api.nvim_set_keymap('n', '<F5>', "put=strftime('%c')<CR>P", { noremap = true })
@@ -88,15 +86,13 @@ vim.api.nvim_set_keymap('n', '<leader>nt', ":Vifm<CR>", { noremap = true })
 vim.api.nvim_set_keymap('v', '<leader>nt', ":Vifm<CR>", { noremap = true })
 
 -- See `:help telescope.builtin`
-vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
--- vim.keymap.set('n', '<leader><space>', require('telescope.builtin').git_files, { desc = '[ ] Find find in current git dir' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
     winblend = 10,
     previewer = false,
   })
-end, { desc = '[/] Fuzzily search in current buffer]'})
+end, { desc = '[/] Fuzzily search in current buffer]' })
 -- Telescope live grep
 vim.keymap.set('n', '<leader>sf', require('telescope.builtin').find_files, { desc = '[S]earch [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
@@ -109,14 +105,11 @@ vim.keymap.set('n', '<leader>sb', require('telescope.builtin').buffers, { desc =
 vim.keymap.set('n', 'ma', ':Telescope vim_bookmarks all theme=ivy winblend=10<CR>', { noremap = true })
 vim.keymap.set('n', 'ql', require('plugins.quickfix_list').toggle_qf, { noremap = true })
 
--- Prettier current file
-api.nvim_set_keymap('n', '<leader><leader>f', ":lua vim.lsp.buf.formatting { async = true }<CR>", { noremap = true })
-
 -- Copy text
 api.nvim_set_keymap('x', '<leader>c', "\"+y", { noremap = true })
 
 -- set open key binding again due to click with tmux navigation
-vim.api.nvim_set_keymap('n', '<C-\\>', ":ToggleTerm<cr>", {noremap = false, desc = "Toggle Term"})
+vim.api.nvim_set_keymap('n', '<C-\\>', ":ToggleTerm<cr>", { noremap = false, desc = "Toggle Term" })
 
 -- using 'dts' as abbreviations
 -- :help :map-expression
@@ -129,4 +122,4 @@ vim.cmd [[set iskeyword+=/]]
 vim.cmd [[iab <expr> /today strftime("%c")]]
 
 -- copy current absolute path of current active buffer
-vim.keymap.set('n', '<leader>ca', ':let @*=expand("%:p")<CR>', { desc = "[C]opy [A]bsolute path of current file"})
+vim.keymap.set('n', '<leader>ca', ':let @*=expand("%:p")<CR>', { desc = "[C]opy [A]bsolute path of current file" })
