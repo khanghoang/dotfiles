@@ -5,7 +5,8 @@ api.nvim_set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })
 api.nvim_set_keymap('n', 'qq', ':q<cr>', { noremap = true, silent = true })
 
 -- open vim config
-api.nvim_set_keymap('n', '<leader>ev', ':lua require("plugins/find_dotfiles").find_dotfiles()<CR>',
+-- api.nvim_set_keymap('n', '<leader>ev', ':lua require("plugins/find_dotfiles").find_dotfiles()<CR>',
+api.nvim_set_keymap('n', '<leader>ev', '<cmd>FZF $DOTFILES<CR>',
   { noremap = true, silent = true })
 api.nvim_set_keymap('n', '<leader>rv', ':source $MYVIMRC<CR>', { noremap = true, silent = true })
 
