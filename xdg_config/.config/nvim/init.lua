@@ -17,6 +17,8 @@ require("plugins/dap")
 require("colorschemes/lua/oceannext")
 require("general/mappings")
 
+require("plugins/aerial_extend")
+
 -- Make the pane border thinner
 vim.cmd([[highlight WinSeparator guibg=None]])
 
@@ -46,7 +48,9 @@ vim.cmd([[set cursorline]])
 -- set the whole current line
 vim.cmd([[highlight CursorLine cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE]])
 -- set color for number in the gutter
-vim.cmd([[highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff]])
+vim.cmd(
+  [[highlight CursorLineNr cterm=NONE ctermbg=15 ctermfg=8 gui=NONE guibg=NONE guifg=#ffffff]]
+)
 
 vim.cmd([[set cmdheight=0]])
 vim.cmd([[set laststatus=3]])

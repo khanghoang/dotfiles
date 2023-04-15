@@ -22,7 +22,7 @@ vim.cmd([[
     \ 'ctrl-q': function('s:build_quickfix_list'),
     \ 'ctrl-t': 'tab split',
     \ 'ctrl-s': 'split',
-    \ 'ctrl-v': 'vsplit' }
+    \ 'ctrl-v': 'vsplit',}
 
   " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
   let g:fzf_layout = { 'down': "30%" }
@@ -32,9 +32,19 @@ vim.cmd([[
 
   command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".<q-args>, 1, <bang>0)
 ]])
-api.nvim_set_keymap("n", "<leader><space>", ":GFiles<CR>", { noremap = true, silent = true, desc = "Git files" })
+api.nvim_set_keymap(
+  "n",
+  "<leader><space>",
+  ":GFiles<CR>",
+  { noremap = true, silent = true, desc = "Git files" }
+)
 -- api.nvim_set_keymap('n', '<leader>f', ":Telescope oldfiles previewer=false theme=ivy winblend=10<CR>", { noremap = true })
-api.nvim_set_keymap("n", "<leader>f", ":History<CR>", { noremap = true, silent = true, desc = "File history" })
+api.nvim_set_keymap(
+  "n",
+  "<leader>f",
+  ":History<CR>",
+  { noremap = true, silent = true, desc = "File history" }
+)
 
 api.nvim_set_keymap("n", "<leader>gf", "<C-w>vgf", { noremap = true })
 api.nvim_set_keymap("n", "<leader><leader>", "<C-^>", { noremap = true })
@@ -49,7 +59,12 @@ api.nvim_set_keymap("n", "n", "nzzzv", { noremap = true })
 api.nvim_set_keymap("n", "N", "nzzzv", { noremap = true })
 
 -- Reload bazel
-api.nvim_set_keymap("n", "<leader>R", ":Dispatch! mbzl itest-reload-current<CR>", { noremap = true })
+api.nvim_set_keymap(
+  "n",
+  "<leader>R",
+  ":Dispatch! mbzl itest-reload-current<CR>",
+  { noremap = true }
+)
 
 -- Tabs
 -- Go to tab number x -> xgt
@@ -70,10 +85,10 @@ vim.api.nvim_set_keymap("n", "gg", ":0<CR>", { noremap = true })
 
 -- reload module
 vim.api.nvim_set_keymap(
-	"n",
-	",rm",
-	":Telescope reloader theme=ivy previewer=false winblend=10<CR>",
-	{ noremap = true, desc = "[R]eload [M]odule" }
+  "n",
+  ",rm",
+  ":Telescope reloader theme=ivy previewer=false winblend=10<CR>",
+  { noremap = true, desc = "[R]eload [M]odule" }
 )
 
 -- F5 to insert current datetime
@@ -90,22 +105,57 @@ vim.api.nvim_set_keymap("v", "<leader>nt", ":Vifm<CR>", { noremap = true })
 
 -- See `:help telescope.builtin`
 vim.keymap.set("n", "<leader>/", function()
-	-- You can pass additional configuration to telescope to change theme, layout, etc.
-	require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-		winblend = 10,
-		previewer = false,
-	}))
+  -- You can pass additional configuration to telescope to change theme, layout, etc.
+  require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
+    winblend = 10,
+    previewer = false,
+  }))
 end, { desc = "[/] Fuzzily search in current buffer]" })
 -- Telescope live grep
-vim.keymap.set("n", "<leader>sf", require("telescope.builtin").find_files, { desc = "[S]earch [F]iles" })
-vim.keymap.set("n", "<leader>sh", require("telescope.builtin").help_tags, { desc = "[S]earch [H]elp" })
-vim.keymap.set("n", "<leader>sw", require("telescope.builtin").grep_string, { desc = "[S]earch current [W]ord" })
-vim.keymap.set("n", "<leader>lg", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
-vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
-vim.keymap.set("n", "<leader>sb", require("telescope.builtin").buffers, { desc = "[S]earch [B]uffers" })
+vim.keymap.set(
+  "n",
+  "<leader>sf",
+  require("telescope.builtin").find_files,
+  { desc = "[S]earch [F]iles" }
+)
+vim.keymap.set(
+  "n",
+  "<leader>sh",
+  require("telescope.builtin").help_tags,
+  { desc = "[S]earch [H]elp" }
+)
+vim.keymap.set(
+  "n",
+  "<leader>sw",
+  require("telescope.builtin").grep_string,
+  { desc = "[S]earch current [W]ord" }
+)
+vim.keymap.set(
+  "n",
+  "<leader>lg",
+  require("telescope.builtin").live_grep,
+  { desc = "[S]earch by [G]rep" }
+)
+vim.keymap.set(
+  "n",
+  "<leader>sd",
+  require("telescope.builtin").diagnostics,
+  { desc = "[S]earch [D]iagnostics" }
+)
+vim.keymap.set(
+  "n",
+  "<leader>sb",
+  require("telescope.builtin").buffers,
+  { desc = "[S]earch [B]uffers" }
+)
 
 -- For marks management
-vim.keymap.set("n", "ma", ":Telescope vim_bookmarks all theme=ivy winblend=10<CR>", { noremap = true })
+vim.keymap.set(
+  "n",
+  "ma",
+  ":Telescope vim_bookmarks all theme=ivy winblend=10<CR>",
+  { noremap = true }
+)
 vim.keymap.set("n", "ql", require("plugins.quickfix_list").toggle_qf, { noremap = true })
 
 -- Copy text
@@ -125,4 +175,9 @@ vim.cmd([[set iskeyword+=/]])
 vim.cmd([[iab <expr> /today strftime("%c")]])
 
 -- copy current absolute path of current active buffer
-vim.keymap.set("n", "<leader>ca", ':let @*=expand("%:p")<CR>', { desc = "[C]opy [A]bsolute path of current file" })
+vim.keymap.set(
+  "n",
+  "<leader>ca",
+  ':let @*=expand("%:p")<CR>',
+  { desc = "[C]opy [A]bsolute path of current file" }
+)
