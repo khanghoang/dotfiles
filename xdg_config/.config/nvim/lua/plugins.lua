@@ -1303,6 +1303,9 @@ require("packer").startup(function()
       "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim",
       "nvim-neotest/neotest-python",
+      "nvim-neotest/neotest-vim-test",
+      "nvim-neotest/neotest-plenary",
+      "vim-test/vim-test", -- for lua's busted
     },
     config = function()
       require("plugins.neotest")
