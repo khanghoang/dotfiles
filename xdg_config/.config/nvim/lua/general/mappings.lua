@@ -75,7 +75,12 @@ api.nvim_set_keymap("n", "tp", ":tabnext<CR>", { noremap = true })
 api.nvim_set_keymap("n", "tN", ":tabnew<CR>", { noremap = true })
 
 -- testing
-vim.api.nvim_set_keymap("n", "<leader><leader>x", ":w<CR>:source %<CR>", { noremap = true })
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>rl",
+  ":w<CR>:source %<CR>:echo 'reload'<CR>",
+  { noremap = true }
+)
 
 -- easy save
 vim.api.nvim_set_keymap("n", "ss", ":w<CR>", { noremap = true })
