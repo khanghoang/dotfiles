@@ -2,22 +2,21 @@ local fs_utils = require("plugins/fs_utils")
 local parsers = require("nvim-treesitter.parsers")
 local M = {}
 
-M.get_functions_and_classes = function()
-  local function load_ts_tree_from_path(file_path)
-    local bufnr = vim.api.nvim_create_buf(false, true)
-    vim.api.nvim_buf_set_lines(
-      bufnr,
-      0,
-      -1,
-      false,
-      vim.split(fs_utils.get_file_content(file_path), "\n")
-    )
-    local parser = vim.treesitter.get_parser(bufnr, "python")
-    return parser:parse()[1], bufnr
-  end
+local function load_ts_tree_from_path(file_path)
+  local bufnr = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(
+    bufnr,
+    0,
+    -1,
+    false,
+    vim.split(fs_utils.get_file_content(file_path), "\n")
+  )
+  local parser = vim.treesitter.get_parser(bufnr, "python")
+  return parser:parse()[1], bufnr
+end
 
-  local tree, bufnr =
-    load_ts_tree_from_path("/Users/khanghoang/code/pytest-example/tests/test_app.py")
+M.get_functions_and_classes = function(file_path)
+  local tree, bufnr = load_ts_tree_from_path(file_path)
 
   local query_string = [[
   (function_definition
