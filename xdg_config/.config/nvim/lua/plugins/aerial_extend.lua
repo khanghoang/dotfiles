@@ -70,7 +70,7 @@ local function parse_location(file_path, matches, bufnr)
     local node_start_row, node_start_col = node:range()
     lines[#lines + 1] = {
       path = file_path,
-      lineNumber = node_start_row,
+      lineNumber = node_start_row + 1,
       col = node_start_col,
       preview = node_name_text,
     }
@@ -159,11 +159,22 @@ end
 M.get_functions_and_classes = get_functions_and_classes
 M.search = search
 
+local function foo(lines)
+  search(lines[1])
+end
+
 vim.api.nvim_set_keymap(
   "n",
   "<leader>ee",
   ":lua require('plugins.aerial_extend').search('/Users/khanghoang/dotfiles/xdg_config/.config/nvim/lua/plugins/specs/dummy.py')",
   {}
 )
+
+vim.g.fzf_action = {
+  ["ctrl-t"] = "tab split",
+  ["ctrl-s"] = "split",
+  ["ctrl-v"] = "vsplit",
+  ["ctrl-f"] = foo,
+}
 
 return M
