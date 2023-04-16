@@ -6,6 +6,18 @@ local finders = require("telescope.finders")
 local pickers = require("telescope.pickers")
 local telescope = require("telescope")
 
+-- read file content
+local function read_file(file)
+  local f = io.open(file, "rb")
+  if not f then
+    return ""
+  end
+
+  local content = f:read("*all")
+  f:close()
+  return content
+end
+
 local ext_config = {
   show_nesting = {
     ["_"] = false,
@@ -23,13 +35,15 @@ local function aerial_picker(opts)
   local highlight = require("aerial.highlight")
   local util = require("aerial.util")
 
-  local file_path = "/Users/khanghoang/code/neovim/README.md"
+  local file_path = "/Users/khanghoang/code/pytest-example/myapp/app.py"
   local bufnr = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_name(bufnr, file_path)
+  print(bufnr)
+  local content = read_file(file_path)
 
-  vim.api.nvim_buf_call(bufnr, function()
-    vim.cmd("silent! e " .. file_path)
-  end)
+  -- break up the file into lines
+  local lines = vim.split(content, "\n")
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
+  -- vim.api.nvim_buf_set_name(bufnr, file_path)
 
   local filename = vim.api.nvim_buf_get_name(bufnr)
   local filetype = vim.api.nvim_buf_get_option(bufnr, "filetype")
@@ -42,8 +56,9 @@ local function aerial_picker(opts)
   if not backend then
     backends.log_support_err()
     return
-  elseif not data.has_symbols(0) then
+  elseif not data.has_symbols(bufnr) then
     backend.fetch_symbols_sync(bufnr, opts)
+    print(vim.inspect(data.has_symbols(bufnr)))
   end
 
   local displayer = opts.displayer
@@ -97,8 +112,8 @@ local function aerial_picker(opts)
 
   local results = {}
   local default_selection_index = 1
-  if data.has_symbols(0) then
-    local bufdata = data.get_or_create(0)
+  if data.has_symbols(bufnr) then
+    local bufdata = data.get_or_create(bufnr)
     local position = bufdata.positions[bufdata.last_win]
     for _, item in bufdata:iter({ skip_hidden = false }) do
       table.insert(results, item)
@@ -111,23 +126,27 @@ local function aerial_picker(opts)
   -- Reverse the symbols so they have the same top-to-bottom order as in the file
   util.tbl_reverse(results)
   default_selection_index = #results - (default_selection_index - 1)
-  pickers
-    .new(opts, {
-      prompt_title = "Document Symbols",
-      finder = finders.new_table({
-        results = results,
-        entry_maker = make_entry,
-      }),
-      default_selection_index = default_selection_index,
-      sorter = conf.generic_sorter(opts),
-      previewer = conf.qflist_previewer(opts),
-    })
-    :find()
+  -- pickers
+  --   .new(opts, {
+  --     prompt_title = "Document Symbols",
+  --     finder = finders.new_table({
+  --       results = results,
+  --       entry_maker = make_entry,
+  --     }),
+  --     default_selection_index = default_selection_index,
+  --     sorter = conf.generic_sorter(opts),
+  --     previewer = conf.qflist_previewer(opts),
+  --   })
+  --   :find()
+
+  vim.api.nvim_buf_delete(bufnr, { force = true })
 end
 
 M.aerial = aerial_picker
 
 vim.g.aerial_picker = aerial_picker
+
+aerial_picker()
 
 -- ["ctrl-q"] = function('s:build_quickfix_list'),
 vim.g.fzf_action = {
