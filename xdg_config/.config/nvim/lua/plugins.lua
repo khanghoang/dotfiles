@@ -1141,7 +1141,10 @@ require("packer").startup(function()
     "folke/neodev.nvim",
     config = function()
       require("neodev").setup({
-        library = { plugins = { "neotest" }, type = true },
+        library = {
+          plugins = { "neotest", "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+          type = true,
+        },
       })
     end,
   })
