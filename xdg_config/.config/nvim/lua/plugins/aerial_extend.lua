@@ -7,7 +7,7 @@ vim.api.nvim_buf_set_lines(
   0,
   -1,
   false,
-  vim.split(fs_utils.get_file_content("/Users/khanghoang/code/pytest-example/myapp/app.py"), "\n")
+  vim.split(fs_utils.get_file_content("/Users/khanghoang/code/pytest-example/tests/test_app.py"), "\n")
 )
 local parser = vim.treesitter.get_parser(bufnr, "python")
 local tree = parser:parse()[1]
