@@ -22,10 +22,9 @@ local parser = vim.treesitter.get_parser(bufnr, "python")
 local tree = parser:parse()[1]
 
 local query_string = [[
-(function_definition
-  name: (identifier) @name
-  (#set! "kind" "Function")
-  ) @type
+  (function_definition
+    name: (identifier) @name
+    )
 ]]
 
 local query = vim.treesitter.query.parse("python", query_string)
@@ -40,7 +39,6 @@ for id, node, metadata in matches do
   local name = query.captures[id] -- name of the capture in the query
   local q = require("vim.treesitter")
   print(vim.treesitter.get_node_text(node, bufnr))
-  print(vim.treesitter.get_node_text(node:named_child(1), bufnr))
 end
 
 print(vim.inspect(function_names))
