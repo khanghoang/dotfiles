@@ -1,5 +1,24 @@
 local nvim_lsp = require("lspconfig")
 
+-- https://github.com/folke/neodev.nvim#%EF%B8%8F-configuration
+require("neodev").setup({
+  library = {
+    enabled = true, -- when not enabled, neodev will not change any settings to the LSP server
+    -- these settings will be used for your Neovim config directory
+    runtime = true, -- runtime path
+    types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
+    plugins = true, -- installed opt or start plugins in packpath
+    -- you can also specify the list of plugins to make available as a workspace library
+    -- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+    -- plugins = { "neotest", "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+  },
+  setup_jsonls = true, -- configures jsonls to provide completion for project specific .luarc.json files
+  -- With lspconfig, Neodev will automatically setup your lua-language-server
+  -- If you disable this, then you have to set {before_init=require("neodev.lsp").before_init}
+  -- in your lsp start options
+  lspconfig = false,
+})
+
 -- TODO: CONSIDER TO REFACOTR THIS BY USING
 -- https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L306
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -221,13 +240,16 @@ nvim_lsp.lua_ls.setup({
       },
       workspace = {
         -- Make the server aware of Neovim runtime files
-        library = {
-          [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-          [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-        },
+        library = vim.api.nvim_get_runtime_file("", true),
+      },
+      -- Do not send telemetry data containing a randomized but unique identifier
+      telemetry = {
+        enable = false,
       },
     },
   },
+  -- https://github.com/folke/neodev.nvim#%EF%B8%8F-configuration
+  before_init = require("neodev.lsp").before_init,
   on_attach = on_attach,
   capabilities = capabilities,
 })
