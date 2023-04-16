@@ -7,8 +7,28 @@ local utils = require("telescope.utils")
 
 local M = {}
 
+-- @TODO: handle relative path like ~/some/path
 local function load_ts_tree_from_path(file_path)
-  local bufnr = vim.api.nvim_create_buf(false, true)
+  local bufs = vim.api.nvim_list_bufs()
+
+  print(vim.inspect(bufs))
+
+  local bufnr = nil
+  for _, id in ipairs(bufs) do
+    if vim.api.nvim_buf_is_loaded(id) then
+      local name = vim.api.nvim_buf_get_name(id)
+      if name == file_path then
+        bufnr = id
+        break
+      end
+    end
+  end
+
+  if bufnr == nil then
+    bufnr = vim.api.nvim_create_buf(false, true)
+    vim.api.nvim_buf_set_name(bufnr, file_path)
+  end
+
   vim.api.nvim_buf_set_lines(
     bufnr,
     0,
@@ -16,8 +36,6 @@ local function load_ts_tree_from_path(file_path)
     false,
     vim.split(fs_utils.get_file_content(file_path), "\n")
   )
-
-  vim.api.nvim_buf_set_name(bufnr, file_path)
 
   -- get the filetype based on the file extension
   local ext = vim.fn.fnamemodify(file_path, ":e")
@@ -48,15 +66,6 @@ local function get_functions_and_classes(file_path)
   local matches = query:iter_captures(tree:root(), bufnr, 0, -1)
 
   return matches, bufnr
-
-  -- local results = {}
-  --
-  -- for id, node, metadata in matches do
-  --   local node_name_text = vim.treesitter.get_node_text(node, bufnr)
-  --   table.insert(results, node_name_text)
-  -- end
-  --
-  -- return results
 end
 
 ---@param file_path string
@@ -132,6 +141,7 @@ local function search(file_path)
   local matches, bufnr = get_functions_and_classes(file_path)
   local locations = parse_location(file_path, matches, bufnr)
 
+  -- @TODO: may keep this buffer for performance??
   vim.api.nvim_buf_delete(bufnr, { force = true })
 
   local make_finder = function()
@@ -150,7 +160,7 @@ local function search(file_path)
 
   pickers
     .new({}, {
-      prompt_title = "Search source graph",
+      prompt_title = "Class or function",
       finder = initial_finder,
     })
     :find()
