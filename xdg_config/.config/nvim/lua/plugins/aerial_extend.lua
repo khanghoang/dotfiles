@@ -7,35 +7,33 @@ local utils = require("telescope.utils")
 
 local M = {}
 
--- @TODO: handle relative path like ~/some/path
+-- @TODO: handle relative path like ~/some/path or some/path
+-- @TODO: handle opened buffer won't get deleted
 local function load_ts_tree_from_path(file_path)
   local bufs = vim.api.nvim_list_bufs()
 
-  print(vim.inspect(bufs))
-
   local bufnr = nil
   for _, id in ipairs(bufs) do
-    if vim.api.nvim_buf_is_loaded(id) then
-      local name = vim.api.nvim_buf_get_name(id)
-      if name == file_path then
-        bufnr = id
-        break
-      end
+    local name = vim.api.nvim_buf_get_name(id)
+    print(name)
+    if name == file_path then
+      bufnr = id
+      break
     end
+    -- end
   end
 
   if bufnr == nil then
     bufnr = vim.api.nvim_create_buf(false, true)
     vim.api.nvim_buf_set_name(bufnr, file_path)
+    vim.api.nvim_buf_set_lines(
+      bufnr,
+      0,
+      -1,
+      false,
+      vim.split(fs_utils.get_file_content(file_path), "\n")
+    )
   end
-
-  vim.api.nvim_buf_set_lines(
-    bufnr,
-    0,
-    -1,
-    false,
-    vim.split(fs_utils.get_file_content(file_path), "\n")
-  )
 
   -- get the filetype based on the file extension
   local ext = vim.fn.fnamemodify(file_path, ":e")
