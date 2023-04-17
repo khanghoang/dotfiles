@@ -1,5 +1,15 @@
 local dap = require("dap")
 local dapui = require("dapui")
+--
+function check_port(host, port)
+  -- run the Bash script and read its output
+  local handle = io.popen("./check_port.sh " .. host .. " " .. port)
+  local result = handle:read("*a")
+  handle:close()
+
+  -- check if the output contains the string "open"
+  return result:match("open") ~= nil
+end
 
 local api = vim.api
 local installation_path = vim.fn.stdpath("data") .. "/mason/bin"
@@ -45,10 +55,14 @@ dap.configurations.python = {
       }
 
       local config = configs[config_index]
+      if not check_port("127.0.0.1", config.port) then
+        print("Local port " .. port .. "is still open. Need to forward port from devbox")
+        local should_forward_port = vim.fn.input("We're cool? [Y]/n") or "Y"
+        if should_forward_port == "Y" or should_forward_port == "y" then
+          -- @TODO: run script to forward port
+        end
+      end
 
-      -- local host = vim.fn.input('Host [khang-dbx]: ')
-      -- host = host ~= '' and host or 'khang-dbx'
-      -- local port = tonumber(vim.fn.input('Port [56237 (default) and 56234]: ')) or 56237
       return config
     end,
     cwd = vim.fn.getcwd(),
