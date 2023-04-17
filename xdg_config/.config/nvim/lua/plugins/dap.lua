@@ -64,7 +64,7 @@ dap.configurations.python = {
         print("Local port " .. config.port .. " is still open. Need to forward port from devbox")
         local should_forward_port = vim.fn.input("We're cool? [Y]/n ") or "Y"
         if should_forward_port == "Y" or should_forward_port == "y" then
-          -- @TODO: run script to forward port
+          -- @TODO: handle ssh failure
           os.execute('ssh -L '..tostring(config.port)..':$USER-dbx:'..tostring(config.port)..' -N -f $USER-dbx')
         else
           assert(false, 'Need forward port')
