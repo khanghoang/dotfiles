@@ -1,17 +1,15 @@
 local dap = require("dap")
 local dapui = require("dapui")
 --
-local function check_port(host, port)
+local function is_port_available(port)
   -- run the Bash script and read its output
-  local handle = io.popen("./check_port.sh " .. host .. " " .. port)
+  local handle = io.popen("lsof -i :" .. port)
   if not handle then
     return
   end
   local result = handle:read("*a")
   handle:close()
-
-  -- check if the output contains the string "open"
-  return result:match("open") ~= nil
+  return result == ""
 end
 
 local api = vim.api
@@ -55,19 +53,25 @@ dap.configurations.python = {
       local configs = {
         -- { host = 'khang-dbx', port = 56237 },
         -- { host = 'khang-dbx', port = 56234 }
-        { host = 'localhost', port = 56237 },
-        { host = 'localhost', port = 56234 }
+        { host = "localhost", port = 56237 },
+        { host = "localhost", port = 56234 },
       }
 
       local config = configs[config_index]
-      if not check_port("127.0.0.1", config.port) then
+      if not is_port_available(config.port) then
         print("Local port " .. config.port .. " is still open. Need to forward port from devbox")
         local should_forward_port = vim.fn.input("We're cool? [Y]/n ") or "Y"
         if should_forward_port == "Y" or should_forward_port == "y" then
           -- @TODO: handle ssh failure
-          os.execute('ssh -L '..tostring(config.port)..':$USER-dbx:'..tostring(config.port)..' -N -f $USER-dbx')
+          os.execute(
+            "ssh -L "
+              .. tostring(config.port)
+              .. ":$USER-dbx:"
+              .. tostring(config.port)
+              .. " -N -f $USER-dbx"
+          )
         else
-          assert(false, 'Need forward port')
+          assert(false, "Need forward port")
         end
       end
 
