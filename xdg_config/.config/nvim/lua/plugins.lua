@@ -38,6 +38,7 @@ require("packer").init({
       return require("packer.util").float({ border = "rounded" })
     end,
   },
+  max_jobs = 10,
 })
 -- }}}
 
