@@ -1,4 +1,4 @@
-local nvim_lsp = require("lspconfig")
+local lsp_status = require("lsp-status")
 
 -- https://github.com/folke/neodev.nvim#%EF%B8%8F-configuration
 require("neodev").setup({
@@ -19,9 +19,13 @@ require("neodev").setup({
   lspconfig = false,
 })
 
+local nvim_lsp = require("lspconfig")
+
 -- TODO: CONSIDER TO REFACOTR THIS BY USING
 -- https://github.com/nvim-lua/kickstart.nvim/blob/master/init.lua#L306
 local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+capabilities = vim.tbl_extend("keep", capabilities, lsp_status.capabilities)
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = {
@@ -83,6 +87,7 @@ local function setup()
 end
 
 local on_attach = function(client, bufnr)
+  lsp_status.on_attach(client)
   local function buf_set_keymap(...)
     vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
@@ -227,24 +232,21 @@ nvim_lsp.lua_ls.setup({
   cmd = { sumneko_binary },
   settings = {
     Lua = {
-      -- Insert your settings here
       runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT in the case of Neovim)
         version = "LuaJIT",
-        -- Setup your lua path
         path = vim.split(package.path, ";"),
       },
       diagnostics = {
-        -- Get the language server to recognize the `vim` global
         globals = { "vim", "use", "describe", "it" },
       },
       workspace = {
-        -- Make the server aware of Neovim runtime files
         library = vim.api.nvim_get_runtime_file("", true),
       },
-      -- Do not send telemetry data containing a randomized but unique identifier
       telemetry = {
         enable = false,
+      },
+      completion = {
+        callSnippet = "Replace",
       },
     },
   },
