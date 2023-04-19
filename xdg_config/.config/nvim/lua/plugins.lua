@@ -202,16 +202,6 @@ require("packer").startup(function()
   })
 
   use({
-    "folke/trouble.nvim",
-    config = function()
-      local map = vim.api.nvim_set_keymap
-      local opt = { noremap = false }
-
-      map("n", "tt", ":TroubleToggle<CR>", opt)
-    end,
-  })
-
-  use({
     "jose-elias-alvarez/null-ls.nvim",
     config = function() end,
   })
@@ -283,7 +273,7 @@ require("packer").startup(function()
     "ruifm/gitlinker.nvim",
     requires = "nvim-lua/plenary.nvim",
   })
-  use({ "sindrets/diffview.nvim" })
+  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
   -- use {
   --   'lewis6991/gitsigns.nvim',
   --   requires = {
@@ -1473,6 +1463,7 @@ require("packer").startup(function()
     end,
   })
 
+  use({ "github/copilot.vim" })
   use({
     "zbirenbaum/copilot-cmp",
     after = { "copilot.lua" },
