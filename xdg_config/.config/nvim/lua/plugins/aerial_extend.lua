@@ -1,6 +1,6 @@
 local entry_display = require("telescope.pickers.entry_display")
 local finders = require("telescope.finders")
-local fs_utils = require("plugins/fs_utils")
+local fs_utils = require("plugins.fs_utils")
 local parsers = require("nvim-treesitter.parsers")
 local pickers = require("telescope.pickers")
 local utils = require("telescope.utils")
