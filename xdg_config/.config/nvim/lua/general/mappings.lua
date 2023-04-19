@@ -25,7 +25,7 @@ vim.cmd([[
     \ 'ctrl-v': 'vsplit',}
 
   " let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
-  let g:fzf_layout = { 'down': "30%" }
+  let g:fzf_layout = { 'down': "40%" }
   let $FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git/**'"
   " https://github.com/junegunn/fzf.vim#preview-window
   let g:fzf_preview_window = ['hidden,right,50%', 'ctrl-/']
