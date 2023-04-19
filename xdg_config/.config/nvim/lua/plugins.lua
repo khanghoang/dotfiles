@@ -276,6 +276,7 @@ require("packer").startup(function()
     "ruifm/gitlinker.nvim",
     requires = "nvim-lua/plenary.nvim",
   })
+  use({ "sindrets/diffview.nvim" })
   -- use {
   --   'lewis6991/gitsigns.nvim',
   --   requires = {
