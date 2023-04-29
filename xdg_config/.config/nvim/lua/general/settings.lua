@@ -40,9 +40,9 @@ vim.cmd([[
 -- Automatically source and re-compile packer whenever you save this init.lua
 local packer_group = vim.api.nvim_create_augroup("Packer", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
-	command = "source % | PackerCompile",
-	group = packer_group,
-	pattern = "plugins.lua",
+  command = "source % | PackerCompile",
+  group = packer_group,
+  pattern = "plugins.lua",
 })
 
 -- save and restore folds
@@ -51,3 +51,12 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 
 -- slow git-fugitive
 vim.cmd([[set shell=bash]])
+
+local group = vim.api.nvim_create_augroup("reload_module_on_write", { clear = true })
+vim.api.nvim_create_autocmd("BufWrite", {
+  pattern = "aerial_extend.lua",
+  callback = function()
+    require("plenary.reload").reload_module("plugins.aerial_extend")
+  end,
+  group = group,
+})

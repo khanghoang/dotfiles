@@ -145,6 +145,8 @@
         "/Users/khanghoang/.config/nvim/after",
         "/Users/khanghoang/dotfiles/xdg_config/.config/nvim/lua",
         "${3rd}/luv/library",
+        "${3rd}/luassert/library",
+        "${3rd}/luv/library",
         "${3rd}/luassert/library"
     ]
 }

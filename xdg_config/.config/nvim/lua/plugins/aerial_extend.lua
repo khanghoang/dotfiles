@@ -3,6 +3,7 @@ local finders = require("telescope.finders")
 local fs_utils = require("plugins.fs_utils")
 local parsers = require("nvim-treesitter.parsers")
 local pickers = require("telescope.pickers")
+local reload = require("plenary.reload")
 local utils = require("telescope.utils")
 
 local M = {}
@@ -184,5 +185,27 @@ vim.g.fzf_action = {
   ["ctrl-v"] = "vsplit",
   ["ctrl-f"] = foo,
 }
+
+local function get_current_test_function()
+  local ts_utils = require("nvim-treesitter.ts_utils")
+  local parser = vim.treesitter.get_parser()
+
+  -- Get the syntax node at the current cursor position
+  local node = ts_utils.get_node_at_cursor()
+
+  assert(node, "node is missing")
+
+  -- Get the start and end positions of the syntax node
+  local start_row, start_col, end_row, end_col = node:range()
+
+  -- Print the current cursor location
+  print(string.format("Cursor location: %d:%d", start_row + 1, start_col))
+end
+
+vim.api.nvim_create_user_command("GetTestCommand", function()
+  require("plugins.aerial_extend").get_current_test_function()
+end, { nargs = "*" })
+
+M.get_current_test_function = get_current_test_function
 
 return M
