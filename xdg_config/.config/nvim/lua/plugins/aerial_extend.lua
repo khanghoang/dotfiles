@@ -1,3 +1,4 @@
+local Path = require("plenary.path")
 local entry_display = require("telescope.pickers.entry_display")
 local finders = require("telescope.finders")
 local fs_utils = require("plugins.fs_utils")
@@ -5,6 +6,7 @@ local parsers = require("nvim-treesitter.parsers")
 local pickers = require("telescope.pickers")
 local reload = require("plenary.reload")
 local utils = require("telescope.utils")
+local path = Path.path
 
 local M = {}
 
@@ -215,8 +217,28 @@ local function get_current_test_function()
 
   assert(test_func, "Node not found")
 
+  -- output: "test_foo"
   local test_func_name = vim.treesitter.get_node_text(test_func, 0)
   print(test_func_name)
+
+  -- get root path
+  -- output "/some/absolute/path"
+  local current_path = vim.fn.expand("%:p")
+  local root_path = require("neotest.lib").files.match_root_pattern(".git")(current_path)
+
+  -- make relative path to root
+  local relative = Path:new(current_path):make_relative(root_path)
+
+  -- final command
+  -- mbzl tool //tools:run_test relative/path/to/file --test_filter=optional_test_name
+  local cmd =
+    string.format("mbzl tool //tools:run_test %s --test_filter=%s", relative, test_func_name)
+
+  -- send the cmd to tmux panel 0
+  -- NEED TO NAME THE PANEL "RUNNING"
+  local message = "tmux send-keys -t RUNNING " .. '"' .. cmd .. '"' .. " Enter"
+  print(message)
+  vim.fn.system(message)
 end
 
 vim.api.nvim_create_user_command("GetTestCommand", function()
