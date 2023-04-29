@@ -11,6 +11,6 @@ class ClassFoo:
         res = multiply_by_two(1)
         assert res == 2
 
-    def inside_function_two(self):
+    def test_inside_function_two(self):
         res = divide_by_two(2)
         assert res == 1

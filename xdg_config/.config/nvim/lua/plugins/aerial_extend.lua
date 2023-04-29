@@ -193,13 +193,30 @@ local function get_current_test_function()
   -- Get the syntax node at the current cursor position
   local node = ts_utils.get_node_at_cursor()
 
-  assert(node, "node is missing")
+  assert(node, "Cursor is not on a valid node")
 
-  -- Get the start and end positions of the syntax node
-  local start_row, start_col, end_row, end_col = node:range()
+  local parent = node:parent() or nil
+  while parent ~= nil do
+    local parent_type = parent:type()
+    if parent_type == "function_definition" then
+      node = parent
+      break
+    end
+    parent = parent:parent()
+  end
 
-  -- Print the current cursor location
-  print(string.format("Cursor location: %d:%d", start_row + 1, start_col))
+  local test_func = nil
+  for c in node:iter_children() do
+    if c:type() == "identifier" and vim.treesitter.get_node_text(c, 0):sub(1, 5) == "test_" then
+      test_func = c
+      break
+    end
+  end
+
+  assert(test_func, "Node not found")
+
+  local test_func_name = vim.treesitter.get_node_text(test_func, 0)
+  print(test_func_name)
 end
 
 vim.api.nvim_create_user_command("GetTestCommand", function()
