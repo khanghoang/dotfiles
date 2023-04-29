@@ -916,6 +916,7 @@ require("packer").startup(function()
     opt = true,
     run = "npm install --legacy-peer-deps && npm run compile",
   })
+  use({ "jbyuki/one-small-step-for-vimkind" })
 
   -- replaced by vim illuminate
   -- use {
