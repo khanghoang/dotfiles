@@ -32,10 +32,10 @@ else:
 assert file_path_with_line_number
 
 # open in the new tab
-subprocess.run(['/usr/local/bin/nvr', '--remote-tab', file_path_with_line_number, '-c', str(line_number)])
+subprocess.run(['nvim', '--remote-server=/tmp/nvim.pipe', '<cmd>tabnew<cr><cmd>e +{} {}<cr>'.format(line_number, file_path_with_line_number)])
 
-# switch to window 2
-subprocess.run(["/usr/local/bin/tmux", "select-window", "-t", "2"])
+# switch to CODE pane
+subprocess.run(["/usr/local/bin/tmux", "select-window", "-t", "CODE"])
 
 # bring kitty to front
 app_name = "kitty"
