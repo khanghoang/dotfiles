@@ -186,3 +186,6 @@ vim.keymap.set(
   ':let @*=expand("%:p")<CR>',
   { desc = "[C]opy [A]bsolute path of current file" }
 )
+
+-- open anything
+vim.keymap.set("n", "<leader>gx", "<cmd>OpenAnything<CR>", { desc = "Open anything" })

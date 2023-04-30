@@ -245,6 +245,22 @@ vim.api.nvim_create_user_command("GetTestCommand", function()
   require("plugins.aerial_extend").get_current_test_function()
 end, { nargs = "*" })
 
+local function open_anything()
+  local word_under_cursor = vim.fn.expand("<cword>")
+  local diff_id_or_url = string.match(word_under_cursor, "%d+")
+  if diff_id_or_url then
+    local url = "https://foo.com/D" .. diff_id_or_url
+    vim.fn.jobstart({ "open", url }, { detach = true })
+  else
+    vim.fn.jobstart({ "open", diff_id_or_url }, { detach = true })
+  end
+end
+
+vim.api.nvim_create_user_command("OpenAnything", function()
+  require("plugins.aerial_extend").open_anything()
+end, { nargs = "*" })
+
 M.get_current_test_function = get_current_test_function
+M.open_anything = open_anything
 
 return M
