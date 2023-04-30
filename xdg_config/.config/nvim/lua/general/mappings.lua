@@ -161,7 +161,7 @@ vim.keymap.set(
   ":Telescope vim_bookmarks all theme=ivy winblend=10<CR>",
   { noremap = true }
 )
-vim.keymap.set("n", "ql", require("plugins.quickfix_list").toggle_qf, { noremap = true })
+vim.keymap.set("n", "<leader>ql", require("plugins.quickfix_list").toggle_qf, { noremap = true })
 
 -- Copy text
 api.nvim_set_keymap("x", "<leader>c", '"+y', { noremap = true })
