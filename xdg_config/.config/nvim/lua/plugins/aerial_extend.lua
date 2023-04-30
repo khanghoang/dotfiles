@@ -160,11 +160,11 @@ local function search(file_path)
   local initial_finder = make_finder()
 
   pickers
-    .new({}, {
-      prompt_title = "Class or function",
-      finder = initial_finder,
-    })
-    :find()
+      .new({}, {
+        prompt_title = "Class or function",
+        finder = initial_finder,
+      })
+      :find()
 end
 
 M.get_functions_and_classes = get_functions_and_classes
@@ -188,7 +188,8 @@ vim.g.fzf_action = {
   ["ctrl-f"] = foo,
 }
 
-local function get_current_test_function()
+local function get_current_test_function(bufnr)
+  local bufnr = bufnr or 0
   local ts_utils = require("nvim-treesitter.ts_utils")
   local parser = vim.treesitter.get_parser()
 
@@ -209,7 +210,7 @@ local function get_current_test_function()
 
   local test_func = nil
   for c in node:iter_children() do
-    if c:type() == "identifier" and vim.treesitter.get_node_text(c, 0):sub(1, 5) == "test_" then
+    if c:type() == "identifier" and vim.treesitter.get_node_text(c, bufnr):sub(1, 5) == "test_" then
       test_func = c
       break
     end
@@ -218,7 +219,7 @@ local function get_current_test_function()
   assert(test_func, "Node not found")
 
   -- output: "test_foo"
-  local test_func_name = vim.treesitter.get_node_text(test_func, 0)
+  local test_func_name = vim.treesitter.get_node_text(test_func, bufnr)
   print(test_func_name)
 
   -- get root path
@@ -232,7 +233,7 @@ local function get_current_test_function()
   -- final command
   -- mbzl tool //tools:run_test relative/path/to/file --test_filter=optional_test_name
   local cmd =
-    string.format("mbzl tool //tools:run_test %s --test_filter=%s", relative, test_func_name)
+      string.format("mbzl tool //tools:run_test %s --test_filter=%s", relative, test_func_name)
 
   -- send the cmd to tmux panel 0
   -- NEED TO NAME THE PANEL "RUNNING"

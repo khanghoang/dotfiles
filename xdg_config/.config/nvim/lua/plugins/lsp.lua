@@ -115,7 +115,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "cd", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
   buf_set_keymap("n", "cd", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
   buf_set_keymap("n", "gs", "<cmd>lua vim.lsp.buf.signature_help()<CR>", opts)
-  buf_set_keymap("n", "ff", "<cmd>lua vim.lsp.buf.format({ async = True})<CR>", opts)
+  buf_set_keymap("n", "gff", "<cmd>lua vim.lsp.buf.format({ async = True})<CR>", opts)
   -- edit = '<C-c>o',
   -- vsplit = '<C-c>v',
   -- split = '<C-c>i',
@@ -349,13 +349,14 @@ nvim_lsp.ltex.setup({
   flags = { debounce_text_changes = 150 },
 })
 
--- require("sg").setup {
---   -- Pass your own custom attach function
---   --    If you do not pass your own attach function, then the following maps are provide:
---   --        - gd -> goto definition
---   --        - gr -> goto references
---   on_attach = on_attach
--- }
+require("sg").setup({
+  -- Pass your own custom attach function
+  --    If you do not pass your own attach function, then the following maps are provide:
+  --        - gd -> goto definition
+  --        - gr -> goto references
+  on_attach = on_attach,
+  capabilities = capabilities,
+})
 --
 
 -- Markdown

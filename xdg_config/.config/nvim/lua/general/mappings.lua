@@ -188,4 +188,4 @@ vim.keymap.set(
 )
 
 -- open anything
-vim.keymap.set("n", "<leader>gx", "<cmd>OpenAnything<CR>", { desc = "Open anything" })
+vim.keymap.set("n", "gx", "<cmd>OpenAnything<CR>", { desc = "Open anything" })

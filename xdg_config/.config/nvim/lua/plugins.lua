@@ -15,7 +15,8 @@ end
 require("packer").init({
   git = {
     cmd = "git", -- The base command for git operations
-    subcommands = { -- Format strings for git subcommands
+    subcommands = {
+      -- Format strings for git subcommands
       update = "pull --ff-only --progress --rebase=false",
       install = "clone --depth %i --no-single-branch --progress",
       fetch = "fetch --depth 999999 --progress",
@@ -213,6 +214,12 @@ require("packer").startup(function()
   use({
     "jose-elias-alvarez/null-ls.nvim",
     config = function() end,
+  })
+
+  use({
+    "sourcegraph/sg.nvim",
+    run = "cargo build --workspace",
+    requires = { "nvim-lua/plenary.nvim" },
   })
 
   --}}}
@@ -1032,7 +1039,6 @@ require("packer").startup(function()
         -- can be "telescope", "fzf" or "select" (`vim.ui.select`)
         -- it's recommended to use "telescope" or "fzf"
         picker = "select",
-
         lsp = {
           -- `config` is passed to `vim.lsp.start_client(config)`
           config = {
@@ -1422,7 +1428,7 @@ require("packer").startup(function()
     config = function()
       require("copilot").setup({
         panel = {
-          enabled = true,
+          enabled = false,
           auto_refresh = false,
           keymap = {
             jump_prev = "[[",

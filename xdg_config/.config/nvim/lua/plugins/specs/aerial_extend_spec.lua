@@ -4,6 +4,7 @@ local spy = require("luassert.spy")
 
 -- luassert https://github.com/lunarmodules/luassert
 -- busted https://lunarmodules.github.io/busted/#asserts
+-- test examples https://github.com/stevearc/aerial.nvim/blob/master/tests/navigation_spec.lua
 
 local function foo(bufnr)
   vim.api.nvim_buf_set_keymap(bufnr, "n", "<leader>dh", ":lua echo 'foo'", {})
@@ -23,7 +24,7 @@ describe("aerial_extend", function()
       table.insert(results, vim.treesitter.get_node_text(node, buf))
     end
     assert.are.same(
-      { "outside_function", "ClassFoo", "inside_function_one", "inside_function_two" },
+      { "outside_function", "ClassFoo", "inside_function_one", "test_inside_function_two" },
       results
     )
   end)
