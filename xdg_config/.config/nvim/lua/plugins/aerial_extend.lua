@@ -160,11 +160,11 @@ local function search(file_path)
   local initial_finder = make_finder()
 
   pickers
-      .new({}, {
-        prompt_title = "Class or function",
-        finder = initial_finder,
-      })
-      :find()
+    .new({}, {
+      prompt_title = "Class or function",
+      finder = initial_finder,
+    })
+    :find()
 end
 
 M.get_functions_and_classes = get_functions_and_classes
@@ -189,6 +189,7 @@ vim.g.fzf_action = {
 }
 
 local function get_current_test_function(bufnr)
+  ---@diagnostic disable-next-line: redefined-local
   local bufnr = bufnr or 0
   local ts_utils = require("nvim-treesitter.ts_utils")
   local parser = vim.treesitter.get_parser()
@@ -233,7 +234,7 @@ local function get_current_test_function(bufnr)
   -- final command
   -- mbzl tool //tools:run_test relative/path/to/file --test_filter=optional_test_name
   local cmd =
-      string.format("mbzl tool //tools:run_test %s --test_filter=%s", relative, test_func_name)
+    string.format("mbzl tool //tools:run_test %s --test_filter=%s", relative, test_func_name)
 
   -- send the cmd to tmux panel 0
   -- NEED TO NAME THE PANEL "RUNNING"
