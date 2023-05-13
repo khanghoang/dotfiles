@@ -289,7 +289,7 @@ vim.keymap.set(
 vim.keymap.set(
   "n",
   "<leader>dj",
-  ":lua require('dap').step_in()<CR>",
+  ":lua require('dap').step_into()<CR>",
   { noremap = true, desc = "Step in" }
 )
 vim.keymap.set(

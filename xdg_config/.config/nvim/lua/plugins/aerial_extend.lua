@@ -255,6 +255,11 @@ local function get_current_test_function(bufnr)
   local cmd =
     string.format("mbzl tool //tools:run_test %s --test_filter=%s -I", relative, test_func_name)
 
+  local should_run_debugger = vim.fn.input("Run with debugger? y/[n] ") or "Y"
+  if should_run_debugger == "Y" or should_run_debugger == "y" then
+    cmd = cmd .. ' --test_arg="--vscode-wait"'
+  end
+
   -- send the cmd to tmux panel 0
   -- NEED TO NAME THE PANEL "RUNNING"
   local message = "tmux send-keys -t RUNNING " .. '"' .. cmd .. '"' .. " Enter"
