@@ -232,9 +232,28 @@ local function get_current_test_function(bufnr)
   local relative = Path:new(current_path):make_relative(root_path)
 
   -- final command
-  -- mbzl tool //tools:run_test relative/path/to/file --test_filter=optional_test_name
+  -- mbzl tool //tools:run_test relative/path/to/file --test_filter=optional_test_name -I
+  --
+  -- read more about itest commands
+  -- https://app.dropboxer.net/binder/bazel/bzl_itest_tour#bzl_itest_containers
+  --
+  -- source code of itest
+  -- https://github.com/dropbox/dbx_build_tools/blob/master/build_tools/bzl_lib/itest/itest.py#L746
+  --
+  -- source code of itool run test
+  -- https://sourcegraph.pp.dropbox.com/server/-/blob/devtools/tools/run_test.py
+  --
+  -- PTVSD
+  -- https://sourcegraph.pp.dropbox.com/server/-/blob/dropbox/testutils/plugins/ptvsd_plugin.py?L11:1
+  --
+  -- Notes: bzl itest-* and test are not the same. At its core, bzl test uses bazel sandbox vs bzl itest-*
+  -- runs things in contains. Therefore, we can forward debugging port from container -> devbox to run
+  -- debugger with itest-*. And I don't think it's possible with bzl test
+  --
+  -- "-I" here will add itest-reload-or-start [here](https://sourcegraph.pp.dropbox.com/server@b3b1fee23462dc6441af6b50d9e836dc582676c2/-/blob/devtools/tools/run_test.py?L72)
+  -- otherwise it will invoke "bzl test" which debugger cannot work as explained above 
   local cmd =
-    string.format("mbzl tool //tools:run_test %s --test_filter=%s", relative, test_func_name)
+    string.format("mbzl tool //tools:run_test %s --test_filter=%s -I", relative, test_func_name)
 
   -- send the cmd to tmux panel 0
   -- NEED TO NAME THE PANEL "RUNNING"
