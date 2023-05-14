@@ -33,6 +33,15 @@ require("packer").init({
     -- tree-sitter/tree-sitter-typescript timeout at 60s
     clone_timeout = 5 * 60, -- Timeout, in seconds, for git clones
     default_url_format = "https://github.com/%s", -- Lua format string used for "aaa/bbb" style plugins
+    log = { level = 'debug' }
+  },
+  -- due to https://github.com/nvim-lua/plenary.nvim/issues/4#issuecomment-860269256
+  -- hererocks may need to be installed manually (optional)
+  -- run:
+  -- export MACOSX_DEPLOYMENT_TARGET=10.15
+  -- python3 /Users/khang/.cache/nvim/packer_hererocks/hererocks.py --verbose -j 2.1.0-beta3 /Users/khang/.cache/nvim/packer_hererocks/2.1.0-beta3
+  luarocks = {
+    python_cmd = '/usr/local/bin/python3' -- or "python", to set the python command to use for running hererocks
   },
   display = {
     open_fn = function()
@@ -43,7 +52,7 @@ require("packer").init({
 })
 -- }}}
 
-require("packer").startup(function()
+require("packer").startup(function(use, use_rocks)
   -- Packer can manage itself
   -- Package manager
   -- {{{
@@ -1476,6 +1485,11 @@ require("packer").startup(function()
   })
 
   -- }}}
+
+  -- Need to start nvim with flag
+  -- MACOSX_DEPLOYMENT_TARGET=10.15 nvim
+  -- then run "PackerUpdate"
+  use_rocks('luasocket')
 
   if is_bootstrap then
     require("packer").sync()
