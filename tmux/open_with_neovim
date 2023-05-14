@@ -1,0 +1,63 @@
+#!/usr/local/bin/python3
+import re
+import subprocess
+import sys
+
+file_path = ''
+if not sys.stdin.isatty():
+    # read piped input as the first argument
+    file_path = sys.stdin.read().strip()
+else:
+    file_path = sys.argv[1] # first arg is the script itself
+
+assert file_path
+
+# for open with source graph
+pattern = re.compile(".*?(\/code\/server\/.*?)(?::(\d+)(?:\.html)?)?$")
+match = pattern.match(file_path)
+
+file_path_with_line_number = ''
+line_number = 0
+
+if match:
+    file_path_with_line_number = match.group(1)
+    file_path_with_line_number = '{}{}'.format("/Users/khang", file_path_with_line_number)
+    line_number = match.group(2)
+    if line_number:
+        print(f"File path with line number: {file_path_with_line_number}:{line_number}")
+    else:
+        print(f"File path without line number: {file_path_with_line_number}")
+else:
+    # for open in tmux
+    # string = 'File "/mnt/cache/bazel/output/339cddb5af73fe0d62ee16fe5bc4d6ca/execroot/__main__/bazel-out/k8-fastbuild/bin/atlas/atlas_examples/http/tests/atlas_about_tests.runfiles/__main__/dropbox/atlas/wsgi_adapter/wsgi_adapter.py", line 187, in write'
+    file_path_with_line_number = re.search(r'\/__main__([\w\/]+\.py)', file_path).group(1)
+    file_path_with_line_number = '{}{}'.format("/Users/khang/code/server", file_path_with_line_number)
+    line_number = re.search(r'line (\d+)', file_path).group(1)
+
+    # print(file_path_with_line_number)
+    # match = pattern.match(file_path)
+    # if (match):
+    #     file_path_with_line_number = match.group(1)
+    #
+    #     # file_path_with_line_number = re.search(r'\/([\w\/]+\.py)"', string).group(1)
+    #     file_path_with_line_number = '{}{}'.format("/Users/khang/code/server", file_path_with_line_number)
+
+        # line_number = re.search(r'line (\d+)', string).group(1)
+
+assert file_path_with_line_number
+
+
+# open in the new tab
+# start nvim with command "nvim --listen /tmp/nvimsocket"
+subprocess.run(['/usr/local/bin/nvr', '--remote-tab', file_path_with_line_number, '-c', str(line_number)])
+
+# start nvim with command "nvim --listen /tmp/nvim.pipe"
+# subprocess.run(['nvim', '--remote-server=/tmp/nvim.pipe', '<cmd>tabnew<cr><cmd>e +{} {}<cr>'.format(line_number, file_path_with_line_number)])
+
+# switch to CODE pane
+subprocess.run(["/usr/local/bin/tmux", "select-window", "-t", "CODE"])
+
+# bring kitty to front
+app_name = "kitty"
+script = f'tell application "System Events" to set frontmost of process "{app_name}" to true'
+subprocess.run(['osascript', '-e', script])
