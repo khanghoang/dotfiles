@@ -7,6 +7,7 @@ local pickers = require("telescope.pickers")
 local reload = require("plenary.reload")
 local utils = require("telescope.utils")
 local path = Path.path
+local is_port_available = require("plugins.check_port").is_port_available
 
 local M = {}
 
@@ -257,6 +258,17 @@ local function get_current_test_function(bufnr)
 
   local should_run_debugger = vim.fn.input("Run with debugger? y/[n] ") or "Y"
   if should_run_debugger == "Y" or should_run_debugger == "y" then
+    atlas_debug_port = 56234
+    if is_port_available(atlas_debug_port) then
+      -- @TODO: handle ssh failure
+      os.execute(
+        "ssh -L "
+        .. tostring(atlas_debug_port)
+        .. ":$USER-dbx:"
+        .. tostring(atlas_debug_port)
+        .. " -N -f $USER-dbx"
+      )
+    end
     cmd = cmd .. ' --test_arg="--vscode-wait"'
   end
 

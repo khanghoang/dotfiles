@@ -1,26 +1,10 @@
 local dap = require("dap")
 local dapui = require("dapui")
+local is_port_available = require("plugins.check_port").is_port_available
 --
-local function is_port_available(port)
-  local socket_available = pcall(require, "socket")
-  -- assert(socket_available, 'luasocket is not installed')
-  if socket_available then
-    local socket = require"socket"
-    local server = socket.tcp()
-    server:settimeout(5)
-    local result = server:bind("127.0.0.1", port)
-    server:close()
-    if result then
-      return true
-    else
-      return false
-    end
-  end
-
-end
-
 local api = vim.api
 local installation_path = vim.fn.stdpath("data") .. "/mason/bin"
+
 
 -- May need to symlink manually, for example
 -- ln -sf ~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3 ~/.local/share/nvim/mason/bin/
@@ -65,10 +49,10 @@ dap.configurations.python = {
       }
 
       local config = configs[config_index]
-      if not is_port_available(config.port) then
+      if is_port_available(config.port) then
         print("Local port " .. config.port .. " is still open. Need to forward port from devbox")
         local should_forward_port = vim.fn.input("We're cool? [Y]/n ") or "Y"
-        if should_forward_port == "Y" or should_forward_port == "y" then
+        if should_forward_port == "Y" or should_forward_port == "y" or should_forward_port == "" then
           -- @TODO: handle ssh failure
           os.execute(
             "ssh -L "
