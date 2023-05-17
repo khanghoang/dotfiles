@@ -11,6 +11,16 @@ local is_port_available = require("plugins.check_port").is_port_available
 
 local M = {}
 
+local function enable_devbox_debug_bazel_flag()
+  os.execute('ssh khang@khang-dbx -t "echo \'build --define vscode_python_debugging=1\' > ~/.bazelrc.user"')
+end
+
+local function disable_devbox_debug_bazel_flag()
+  os.execute('ssh khang@khang-dbx -t "echo > ~/.bazelrc.user"')
+end
+
+local is_enabled = false
+
 -- @TODO: handle relative path like ~/some/path or some/path
 -- @TODO: handle opened buffer won't get deleted
 local function load_ts_tree_from_path(file_path)
@@ -258,7 +268,7 @@ local function get_current_test_function(bufnr)
 
   local should_run_debugger = vim.fn.input("Run with debugger? y/[n] ") or "Y"
   if should_run_debugger == "Y" or should_run_debugger == "y" then
-    atlas_debug_port = 56234
+    local atlas_debug_port = 56234
     if is_port_available(atlas_debug_port) then
       -- @TODO: handle ssh failure
       os.execute(
@@ -269,7 +279,21 @@ local function get_current_test_function(bufnr)
         .. " -N -f $USER-dbx"
       )
     end
+
+    -- set the flag when running with debugger
+    if not is_enabled then
+      enable_devbox_debug_bazel_flag()
+      is_enabled = true
+    end
+
     cmd = cmd .. ' --test_arg="--vscode-wait"'
+
+  else
+    -- reset the flag when running without debugger
+    if is_enabled then
+      disable_devbox_debug_bazel_flag()
+      is_enabled = false
+    end
   end
 
   -- send the cmd to tmux panel 0
@@ -296,6 +320,14 @@ end
 
 vim.api.nvim_create_user_command("OpenAnything", function()
   require("plugins.aerial_extend").open_anything()
+end, { nargs = "*" })
+
+vim.api.nvim_create_user_command("EnableDevboxDebug", function()
+  enable_devbox_debug_bazel_flag()
+end, { nargs = "*" })
+
+vim.api.nvim_create_user_command("DisableDevboxDebug", function()
+  disable_devbox_debug_bazel_flag()
 end, { nargs = "*" })
 
 M.get_current_test_function = get_current_test_function
