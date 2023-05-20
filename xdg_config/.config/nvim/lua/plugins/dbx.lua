@@ -3,6 +3,7 @@ local lib = require("neotest.lib")
 local base = require("neotest-python.base")
 local Path = require("plenary.path")
 local logger = require("neotest.logging")
+local nio = require("nio")
 
 local is_test_file = base.is_test_file
 
@@ -80,15 +81,11 @@ function DbxPythonNeotestAdapter.build_spec(args)
   local results_path = async.fn.tempname()
   local stream_path = async.fn.tempname()
   lib.files.write(stream_path, "")
-  lib.files.write(results_path, "")
+  -- lib.files.write(results_path, "")
 
   local root = DbxPythonNeotestAdapter.root(position.path)
-  local stream_data, stop_stream = lib.files.stream_lines(stream_path)
-
   -- local relative_path = "metaserver/atf_lambdas/devbox_lambdas/tests/devbox_lambdas_test.py"
   -- mbzl tool //tools:run_test metaserver/lib/growth/rightsizing/tests/rightsizing_tests.py --test_filter=test_rightsizing_linked_team_user -I
-  logger.debug("results_path", results_path)
-  logger.debug("kyle")
 
   local relative = Path:new(position.path):make_relative(root)
   -- The path for the position is not a directory, ensure the directory variable refers to one
@@ -107,34 +104,33 @@ function DbxPythonNeotestAdapter.build_spec(args)
     table.insert(script_args, position.name)
   end
 
-  -- local command = vim.tbl_flatten({
-  --   "mbzl",
-  --   "tool",
-  --   "//tools:run_test",
-  --   script_args,
-  -- })
-
-  local command = { "echo ''" }
+  local command = vim.tbl_flatten({
+    "mbzl",
+    "tool",
+    "//tools:run_test",
+    script_args,
+  })
 
   ---@type neotest.RunSpec
   return {
     command = command,
     context = {
       results_path = results_path,
-      stop_stream = stop_stream,
+      -- stop_stream = stop_stream,
       stream_path = stream_path,
     },
-    stream = function()
-      return function()
-        local lines = stream_data()
-        local results = {}
-        for _, line in ipairs(lines) do
-          local result = vim.json.decode(line, { luanil = { object = true } })
-          results[result.id] = result.result
-        end
-        return results
-      end
-    end,
+    -- stream = function()
+    --   return function()
+    --     local lines = stream_data()
+    --     logger.debug("steamed_lines", lines)
+    --     local results = {}
+    --     for _, line in ipairs(lines) do
+    --       local result = vim.json.decode(line, { luanil = { object = true } })
+    --       results[result.id] = result.result
+    --     end
+    --     return results
+    --   end
+    -- end,
   }
 end
 
@@ -144,9 +140,11 @@ end
 ---@param tree neotest.Tree
 ---@return table<string, neotest.Result>
 function DbxPythonNeotestAdapter.results(spec, result, tree)
-  spec.context.stop_stream()
-  local success, lines = pcall(lib.files.read, spec.context.output)
-  -- logger.debug('results data', result.output)
+  -- spec.context.stop_stream()
+  local success, lines = pcall(lib.files.read_lines, result.output)
+  for _, line in ipairs(lines) do
+    logger.debug('result_line', line)
+  end
   -- logger.debug('results data 2', data)
   local results = {}
   logger.debug('foobaz')
