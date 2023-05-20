@@ -2,8 +2,7 @@ local async = require("neotest.async")
 local lib = require("neotest.lib")
 local base = require("neotest-python.base")
 local Path = require("plenary.path")
-
-local log = require("plugins.log")
+local logger = require("neotest.logging")
 
 local is_test_file = base.is_test_file
 
@@ -81,12 +80,15 @@ function DbxPythonNeotestAdapter.build_spec(args)
   local results_path = async.fn.tempname()
   local stream_path = async.fn.tempname()
   lib.files.write(stream_path, "")
+  lib.files.write(results_path, "")
 
   local root = DbxPythonNeotestAdapter.root(position.path)
   local stream_data, stop_stream = lib.files.stream_lines(stream_path)
 
   -- local relative_path = "metaserver/atf_lambdas/devbox_lambdas/tests/devbox_lambdas_test.py"
   -- mbzl tool //tools:run_test metaserver/lib/growth/rightsizing/tests/rightsizing_tests.py --test_filter=test_rightsizing_linked_team_user -I
+  logger.debug("results_path", results_path)
+  logger.debug("kyle")
 
   local relative = Path:new(position.path):make_relative(root)
   -- The path for the position is not a directory, ensure the directory variable refers to one
@@ -99,15 +101,20 @@ function DbxPythonNeotestAdapter.build_spec(args)
   })
   if position then
     table.insert(script_args, "--test_filter")
+    -- position.id = /Users/khang/src/server/atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_allowed_roles_paired_user_both_logged_in
+    -- position.name = est_allowed_roles_paired_user_both_logged_in
+
     table.insert(script_args, position.name)
   end
 
-  local command = vim.tbl_flatten({
-    "mbzl",
-    "tool",
-    "//tools:run_test",
-    script_args,
-  })
+  -- local command = vim.tbl_flatten({
+  --   "mbzl",
+  --   "tool",
+  --   "//tools:run_test",
+  --   script_args,
+  -- })
+
+  local command = { "echo ''" }
 
   ---@type neotest.RunSpec
   return {
@@ -138,18 +145,28 @@ end
 ---@return table<string, neotest.Result>
 function DbxPythonNeotestAdapter.results(spec, result, tree)
   spec.context.stop_stream()
-  local success, data = pcall(lib.files.read, spec.context.results_path)
-  print(data)
-  if not success then
-    data = "{}"
+  local success, lines = pcall(lib.files.read, spec.context.output)
+  -- logger.debug('results data', result.output)
+  -- logger.debug('results data 2', data)
+  local results = {}
+  logger.debug('foobaz')
+  local position = tree:data()
+  for _, node in tree:iter_nodes() do
+    local value = node:data()
+    results[value.id] = {
+      status = "failed",
+      output = result.output,
+    }
   end
-
-  -- TODO: Find out if this JSON option is supported in future
-  local results = vim.json.decode(data, { luanil = { object = true } })
-  for _, pos_result in pairs(results) do
-    result.output_path = pos_result.output_path
-  end
+  logger.debug("final_results", results)
   return results
+  -- @TODO: parse the file
+  -- -- TODO: Find out if this JSON option is supported in future
+  -- local results = vim.json.decode(data, { luanil = { object = true } })
+  -- for _, pos_result in pairs(results) do
+  --   result.output_path = pos_result.output_path
+  -- end
+  -- return results
 end
 
 return DbxPythonNeotestAdapter

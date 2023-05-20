@@ -60,3 +60,33 @@ vim.api.nvim_create_autocmd("BufWrite", {
   end,
   group = group,
 })
+
+local save_dbx_pytest_plugin = vim.api.nvim_create_augroup("reload_dbx_pytest_module_on_write", { clear = false })
+vim.api.nvim_create_autocmd("BufWrite", {
+  pattern = "dbx.lua",
+  callback = function()
+    vim.fn.execute("source %", true)
+    require("plenary.reload").reload_module("plugins.dbx")
+    -- require("plenary.reload").reload_module("plugins.neotest")
+    -- require('plugins.neotest')
+    require("neotest").setup({
+      adapters = {
+        require('plugins.dbx'),
+      },
+      log_level = vim.log.levels.DEBUG,
+      discovery = {
+        enabled = false,
+      },
+      ["/Users/khang/src/server"] = {
+        adapters = {
+          require('plugins.dbx'),
+        },
+        discovery = {
+          enabled = false,
+        },
+      },
+    })
+    print('Reloaded')
+  end,
+  group = save_dbx_pytest_plugin,
+})
