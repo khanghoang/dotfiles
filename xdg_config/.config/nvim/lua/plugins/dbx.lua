@@ -1,14 +1,17 @@
-local async = require("neotest.async")
-local lib = require("neotest.lib")
-local base = require("neotest-python.base")
-local Path = require("plenary.path")
-local logger = require("neotest.logging")
-local nio = require("nio")
-
-local is_test_file = base.is_test_file
-
 -- view log at 
 -- lnav ~/.local/state/nvim/neotest.log
+
+-- @TODO: handle dap debugger mode
+-- @TODO: maintain status of devbox's debugging flag
+-- @TODO: handle bazel reload failures, i.e. bazel-stop-all and start again
+-- @TODO: properly handle skipped tests
+-- @TODO: allow streaming result for better experience
+-- @TODO: parse error
+--
+local async = require("neotest.async")
+local lib = require("neotest.lib")
+local Path = require("plenary.path")
+local logger = require("neotest.logging")
 
 ---@type neotest.Adapter
 local DbxPythonNeotestAdapter = { name = "dbx-python" }
@@ -33,7 +36,6 @@ end
 function DbxPythonNeotestAdapter.is_test_file(file_path)
   -- consider all files are test file
   return true
-  -- return is_test_file(file_path)
 end
 
 ---Given a file path, parse all the tests within it.
@@ -81,26 +83,14 @@ function DbxPythonNeotestAdapter.build_spec(args)
   local results_path = async.fn.tempname()
   local stream_path = async.fn.tempname()
   lib.files.write(stream_path, "")
-  -- lib.files.write(results_path, "")
-
   local root = DbxPythonNeotestAdapter.root(position.path)
-  -- local relative_path = "metaserver/atf_lambdas/devbox_lambdas/tests/devbox_lambdas_test.py"
-  -- mbzl tool //tools:run_test metaserver/lib/growth/rightsizing/tests/rightsizing_tests.py --test_filter=test_rightsizing_linked_team_user -I
-
   local relative = Path:new(position.path):make_relative(root)
-  -- The path for the position is not a directory, ensure the directory variable refers to one
-  -- if vim.fn.isdirectory(position.path) ~= 1 then
-  --   dir = vim.fn.fnamemodify(position.path, ":h")
-  -- end
   local script_args = vim.tbl_flatten({
     relative,
     "-I"
   })
   if position then
     table.insert(script_args, "--test_filter")
-    -- position.id = /Users/khang/src/server/atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_allowed_roles_paired_user_both_logged_in
-    -- position.name = est_allowed_roles_paired_user_both_logged_in
-
     table.insert(script_args, position.name)
   end
 
@@ -110,7 +100,6 @@ function DbxPythonNeotestAdapter.build_spec(args)
     "//tools:run_test",
     script_args,
   })
-  -- local command = {"ls"}
 
   ---@type neotest.RunSpec
   return {
@@ -120,6 +109,7 @@ function DbxPythonNeotestAdapter.build_spec(args)
       -- stop_stream = stop_stream,
       stream_path = stream_path,
     },
+    -- @TODO: enable stream for better experience
     -- stream = function()
     --   return function()
     --     local lines = stream_data()
@@ -138,11 +128,10 @@ end
 ---@param line string
 ---@return table<string, neotest.Result>
 local function parse_line(line)
-  -- line = "atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_uid_aware_migration_role_session_optional_paired <- metaserver/tests/community_owned_expensive_and_slow_utils/mock_session.py PASSED      [ 86%]"
   -- Remove ANSI escape code color
-  local line = line:gsub("\27%[%d+m", "")
+  line = line:gsub("\27%[%d+m", "")
   -- remove tabs and multiple spaces
-  local line = line:gsub("%s+", " ")
+  line = line:gsub("%s+", " ")
 
   logger.debug('input line', line)
   -- Extract the test case name
@@ -175,17 +164,7 @@ local function parse_line(line)
   end
 
   logger.debug("parsed line", vim.inspect(result))
-
   return result
-
-  -- Extract the test result
-  -- atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_uid_aware_migration_role <- metaserver/tests/community_owned_expensive_and_slow_utils/mock_session.py PASSED
-  --
-  -- atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_uid_aware_migration_role PASSED
-  --
-  -- atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_allowed_roles_paired_user_both_logged_in <- metaserver/tests/community_owned_expensive_and_slow_utils/mock_session.py FAILED
-  --
-  -- atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_allowed_roles_paired_user_both_logged_inend FAILED
 end
 
 ---@async
@@ -223,19 +202,9 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
       end
     end
 
-    -- results[value.id] = {
-    --   status = "failed",
-    --   output = result.output,
-    -- }
   end
   logger.debug("final_results", ret)
   return ret
-  -- @TODO: parse the file
-  -- -- TODO: Find out if this JSON option is supported in future
-  -- local results = vim.json.decode(data, { luanil = { object = true } })
-  -- for _, pos_result in pairs(results) do
-  --   result.output_path = pos_result.output_path
-  -- end
   -- return results
 end
 
