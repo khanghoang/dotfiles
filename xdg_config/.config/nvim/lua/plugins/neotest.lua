@@ -33,7 +33,7 @@ vim.api.nvim_set_keymap(
 vim.api.nvim_set_keymap(
   "n",
   "<leader>to",
-  [[<Cmd>lua require("neotest").output.open()<CR>]],
+  [[<Cmd>lua require("neotest").output_panel.open()<CR>]],
   { noremap = true, desc = "[T]est [O]pen" }
 )
 vim.api.nvim_set_keymap(

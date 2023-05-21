@@ -110,6 +110,7 @@ function DbxPythonNeotestAdapter.build_spec(args)
     "//tools:run_test",
     script_args,
   })
+  -- local command = {"ls"}
 
   ---@type neotest.RunSpec
   return {
@@ -134,6 +135,59 @@ function DbxPythonNeotestAdapter.build_spec(args)
   }
 end
 
+---@param line string
+---@return table<string, neotest.Result>
+local function parse_line(line)
+  -- line = "atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_uid_aware_migration_role_session_optional_paired <- metaserver/tests/community_owned_expensive_and_slow_utils/mock_session.py PASSED      [ 86%]"
+  -- Remove ANSI escape code color
+  local line = line:gsub("\27%[%d+m", "")
+  -- remove tabs and multiple spaces
+  local line = line:gsub("%s+", " ")
+
+  logger.debug('input line', line)
+  -- Extract the test case name
+  local passTestName = line:match("([^%s]+%.[^%s]+::.+)%s*PASSED")
+
+  local result = {}
+  if passTestName then
+    -- trim
+    passTestName = passTestName:gsub("^%s*(.-)%s*$", "%1")
+    -- get before "<-"
+    passTestName = passTestName:match("^(%S+)%s?")
+    result = {
+      [passTestName] = {
+        status = "passed"
+      }
+    }
+  end
+
+  local failedTestName = line:match("([^%s]+%.[^%s]+::.+)%s*FAILED")
+  if failedTestName then
+    -- trim
+    failedTestName = failedTestName:gsub("^%s*(.-)%s*$", "%1")
+    -- get before "<-"
+    failedTestName = failedTestName:match("^(%S+)%s?")
+    result = {
+      [failedTestName] = {
+        status = "failed"
+      }
+    }
+  end
+
+  logger.debug("parsed line", vim.inspect(result))
+
+  return result
+
+  -- Extract the test result
+  -- atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_uid_aware_migration_role <- metaserver/tests/community_owned_expensive_and_slow_utils/mock_session.py PASSED
+  --
+  -- atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_uid_aware_migration_role PASSED
+  --
+  -- atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_allowed_roles_paired_user_both_logged_in <- metaserver/tests/community_owned_expensive_and_slow_utils/mock_session.py FAILED
+  --
+  -- atlas/decorator_tests/tests/uid_aware_tests.py::UidAwareTests::test_allowed_roles_paired_user_both_logged_inend FAILED
+end
+
 ---@async
 ---@param spec neotest.RunSpec
 ---@param result neotest.StrategyResult
@@ -142,22 +196,40 @@ end
 function DbxPythonNeotestAdapter.results(spec, result, tree)
   -- spec.context.stop_stream()
   local success, lines = pcall(lib.files.read_lines, result.output)
+  local results = {}
   for _, line in ipairs(lines) do
     logger.debug('result_line', line)
+    for testLongName, res in pairs(parse_line(line)) do
+      results[testLongName] = res
+    end
   end
-  -- logger.debug('results data 2', data)
-  local results = {}
-  logger.debug('foobaz')
-  local position = tree:data()
+
+  local ret = {}
+
   for _, node in tree:iter_nodes() do
     local value = node:data()
-    results[value.id] = {
-      status = "failed",
-      output = result.output,
+    local id = value.id
+
+    logger.debug('node id', id)
+
+    -- @TODO optimize this
+    ret[id] = {
+      status = "skipped"
     }
+    for testLongName, res in pairs(results) do
+      logger.debug('test long name', testLongName)
+      if string.sub(id, -string.len(testLongName)) == testLongName then
+        ret[id] = res
+      end
+    end
+
+    -- results[value.id] = {
+    --   status = "failed",
+    --   output = result.output,
+    -- }
   end
-  logger.debug("final_results", results)
-  return results
+  logger.debug("final_results", ret)
+  return ret
   -- @TODO: parse the file
   -- -- TODO: Find out if this JSON option is supported in future
   -- local results = vim.json.decode(data, { luanil = { object = true } })

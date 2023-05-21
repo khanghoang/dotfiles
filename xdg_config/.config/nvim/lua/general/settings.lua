@@ -61,7 +61,7 @@ vim.api.nvim_create_autocmd("BufWrite", {
   group = group,
 })
 
-local save_dbx_pytest_plugin = vim.api.nvim_create_augroup("reload_dbx_pytest_module_on_write", { clear = false })
+local save_dbx_pytest_plugin = vim.api.nvim_create_augroup("reload_dbx_pytest_module_on_write", { clear = true })
 vim.api.nvim_create_autocmd("BufWrite", {
   pattern = "dbx.lua",
   callback = function()
