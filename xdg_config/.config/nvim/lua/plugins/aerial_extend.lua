@@ -19,6 +19,7 @@ local function disable_devbox_debug_bazel_flag()
   os.execute('ssh khang@khang-dbx -t "echo > ~/.bazelrc.user"')
 end
 
+-- @TODO: store this on disk
 local is_enabled = false
 
 -- @TODO: handle relative path like ~/some/path or some/path
@@ -263,8 +264,31 @@ local function get_current_test_function(bufnr)
   --
   -- "-I" here will add itest-reload-or-start [here](https://sourcegraph.pp.dropbox.com/server@b3b1fee23462dc6441af6b50d9e836dc582676c2/-/blob/devtools/tools/run_test.py?L72)
   -- otherwise it will invoke "bzl test" which debugger cannot work as explained above 
+  --
+  -- redirect the output https://askubuntu.com/questions/420981/how-do-i-save-terminal-output-to-a-file
+  --
+  --           || visible in terminal ||   visible in file   || existing
+  --   Syntax  ||  StdOut  |  StdErr  ||  StdOut  |  StdErr  ||   file   
+  -- ==========++==========+==========++==========+==========++===========
+  --     >     ||    no    |   yes    ||   yes    |    no    || overwrite
+  --     >>    ||    no    |   yes    ||   yes    |    no    ||  append
+  --           ||          |          ||          |          ||
+  --    2>     ||   yes    |    no    ||    no    |   yes    || overwrite
+  --    2>>    ||   yes    |    no    ||    no    |   yes    ||  append
+  --           ||          |          ||          |          ||
+  --    &>     ||    no    |    no    ||   yes    |   yes    || overwrite
+  --    &>>    ||    no    |    no    ||   yes    |   yes    ||  append
+  --           ||          |          ||          |          ||
+  --  | tee    ||   yes    |   yes    ||   yes    |    no    || overwrite
+  --  | tee -a ||   yes    |   yes    ||   yes    |    no    ||  append
+  --           ||          |          ||          |          ||
+  --  n.e. (*) ||   yes    |   yes    ||    no    |   yes    || overwrite
+  --  n.e. (*) ||   yes    |   yes    ||    no    |   yes    ||  append
+  --           ||          |          ||          |          ||
+  -- |& tee    ||   yes    |   yes    ||   yes    |   yes    || overwrite
+  -- |& tee -a ||   yes    |   yes    ||   yes    |   yes    ||  append
   local cmd =
-    string.format("mbzl tool //tools:run_test %s --test_filter=%s -I", relative, test_func_name)
+    string.format("mbzl tool //tools:run_test %s --test_filter=%s -I |& tee /Users/khang/temp/info.log", relative, test_func_name)
 
   local should_run_debugger = vim.fn.input("Run with debugger? y/[n] ") or "Y"
   if should_run_debugger == "Y" or should_run_debugger == "y" then

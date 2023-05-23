@@ -41,7 +41,7 @@ require("packer").init({
   -- export MACOSX_DEPLOYMENT_TARGET=10.15
   -- python3 /Users/khang/.cache/nvim/packer_hererocks/hererocks.py --verbose -j 2.1.0-beta3 /Users/khang/.cache/nvim/packer_hererocks/2.1.0-beta3
   luarocks = {
-    python_cmd = '/usr/local/bin/python3' -- or "python", to set the python command to use for running hererocks
+    python_cmd = '/opt/homebrew/bin/python3' -- or "python", to set the python command to use for running hererocks
   },
   display = {
     open_fn = function()
@@ -1472,17 +1472,17 @@ require("packer").startup(function(use, use_rocks)
     end,
   })
 
-  use({ "github/copilot.vim" })
-  use({
-    "zbirenbaum/copilot-cmp",
-    after = { "copilot.lua" },
-    config = function()
-      require("copilot_cmp").setup({
-        suggestion = { enabled = false },
-        panel = { enabled = false },
-      })
-    end,
-  })
+  -- use({ "github/copilot.vim" })
+  -- use({
+  --   "zbirenbaum/copilot-cmp",
+  --   after = { "copilot.lua" },
+  --   config = function()
+  --     require("copilot_cmp").setup({
+  --       suggestion = { enabled = false },
+  --       panel = { enabled = false },
+  --     })
+  --   end,
+  -- })
 
   -- }}}
 

@@ -173,6 +173,7 @@ export PATH="$PATH:$HOME/local/bin/nvim"
 export PATH="$PATH:$HOME/.rvm/bin"
 # export PATH="$PATH:$HOME/Library/Python/2.7/bin"
 export PATH="$PATH:$HOME/.local/bin"
+export PATH="/opt/homebrew/opt/node@18/bin:$PATH"
 
 # Use Git's default (reverse chronological) order, never automatically
 # use topo-order for the commit graph
@@ -236,6 +237,7 @@ alias vi=nvim
 alias cat=bat
 alias gs="git status"
 alias gco="git checkout"
+alias log="lnav ~/temp/info.log"
 
 if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khanghoang/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
@@ -253,3 +255,11 @@ if [ -f ~/dbx-secret-config ]; then
 else
     print "404: ~/dbx-secret-config not found."
 fi
+
+# slow zsh? try "set -x"
+#
+#
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+DISABLE_UNTRACKED_FILES_DIRTY="true"

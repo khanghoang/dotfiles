@@ -70,8 +70,8 @@ api.nvim_set_keymap(
 -- Go to tab number x -> xgt
 -- Go to last accessed tab x -> g<Tab>
 api.nvim_set_keymap("n", "tc", ":tabclose<CR>", { noremap = true })
-api.nvim_set_keymap("n", "tn", ":tabprevious<CR>", { noremap = true })
-api.nvim_set_keymap("n", "tp", ":tabnext<CR>", { noremap = true })
+api.nvim_set_keymap("n", "tp", ":tabprevious<CR>", { noremap = true })
+api.nvim_set_keymap("n", "tn", ":tabnext<CR>", { noremap = true })
 api.nvim_set_keymap("n", "tN", ":tabnew<CR>", { noremap = true })
 
 -- testing

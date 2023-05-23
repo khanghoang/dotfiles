@@ -1,9 +1,9 @@
 require("neotest").setup({
   adapters = {
     require('plugins.dbx'),
-    require("neotest-plenary"),
+    -- require("neotest-plenary"),
   },
-  log_level = vim.log.levels.DEBUG,
+  -- log_level = vim.log.levels.DEBUG,
   discovery = {
     concurrent = 1,
     enabled = false,
