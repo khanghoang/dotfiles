@@ -11,6 +11,24 @@ local async = require("neotest.async")
 local lib = require("neotest.lib")
 local Path = require("plenary.path")
 local logger = require("neotest.logging")
+local neotest = require("neotest")
+
+local function execute_and_wait(cmd, cwd)
+  -- NOTE: THIS WILL NOT WORK W/O PASSING "w"
+  -- AND WE STILL DON'T KNOW WHY
+  local file = io.popen(string.format('cd "%s" && %s', cwd, cmd), "w")
+  local output = file:read("*a")
+  file:close()
+end
+
+local function handle_parse_line_error(errorMsg)
+  -- if errorMsg == "NEED_BZL_STOP_AND_RESTART" then
+  -- @TODO: need to pass cwd?
+  logger.debug("bzl stop all")
+  execute_and_wait('mbzl itest-stop-all --force', "~/code/server")
+  logger.debug("neotest run last")
+  neotest.run.run_last()
+end
 
 ---@param line string
 ---@return table<string, neotest.Result>
@@ -19,6 +37,12 @@ local function parse_line(line)
   line = line:gsub("\27%[%d+m", "")
   -- remove tabs and multiple spaces
   line = line:gsub("%s+", " ")
+
+  local should_restart_bazel = string.match(line, "Try running the following to remove all containers and start a new container for")
+  if should_restart_bazel then
+    logger.debug("restart bazel request sent")
+    error("NEED_BZL_STOP_AND_RESTART")
+  end
 
   logger.debug('input line', line)
   -- Extract the test case name
@@ -161,8 +185,18 @@ function DbxPythonNeotestAdapter.build_spec(args)
         local lines = output_stream()
         local results = {}
         for _, line in ipairs(lines) do
-          for testLongName, res in pairs(parse_line(line)) do
-            results[testLongName] = res
+          local success, errorMsg = pcall(parse_line, line);
+          if not success then
+            logger.debug('error message', errorMsg)
+            handle_parse_line_error(errorMsg)
+            return {}
+          end
+
+          if success then
+            local data = parse_line(line)
+            for testLongName, res in pairs(data) do
+              results[testLongName] = res
+            end
           end
         end
 
@@ -203,9 +237,21 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
   local results = {}
   for _, line in ipairs(lines) do
     logger.debug('result_line', line)
-    for testLongName, res in pairs(parse_line(line)) do
-      results[testLongName] = res
+    local success, errorMsg = pcall(parse_line, line);
+
+    if not success then
+      logger.debug('error message', errorMsg)
+      handle_parse_line_error(errorMsg)
+      return {}
     end
+
+    if success then
+      local data = parse_line(line)
+      for testLongName, res in pairs(data) do
+        results[testLongName] = res
+      end
+    end
+
   end
 
   local ret = {}

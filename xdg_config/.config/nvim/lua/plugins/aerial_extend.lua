@@ -288,7 +288,7 @@ local function get_current_test_function(bufnr)
   -- |& tee    ||   yes    |   yes    ||   yes    |   yes    || overwrite
   -- |& tee -a ||   yes    |   yes    ||   yes    |   yes    ||  append
   local cmd =
-    string.format("mbzl tool //tools:run_test %s --test_filter=%s -I |& tee /Users/khang/temp/info.log", relative, test_func_name)
+    string.format("mbzl tool //tools:run_test %s --test_filter=%s -I", relative, test_func_name)
 
   local should_run_debugger = vim.fn.input("Run with debugger? y/[n] ") or "Y"
   if should_run_debugger == "Y" or should_run_debugger == "y" then
@@ -319,6 +319,8 @@ local function get_current_test_function(bufnr)
       is_enabled = false
     end
   end
+
+  cmd = cmd .. ' |& tee /Users/khang/temp/info.log'
 
   -- send the cmd to tmux panel 0
   -- NEED TO NAME THE PANEL "RUNNING"
