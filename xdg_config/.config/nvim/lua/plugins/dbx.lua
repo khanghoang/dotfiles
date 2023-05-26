@@ -59,7 +59,7 @@ end
 local DbxPythonNeotestAdapter = { name = "dbx-python" }
 
 DbxPythonNeotestAdapter.root =
-  lib.files.match_root_pattern("pyproject.toml", "setup.cfg", "mypy.ini", "pytest.ini", "setup.py")
+  lib.files.match_root_pattern("pyproject.toml", "setup.cfg", "mypy.ini", "pytest.ini", "setup.py", ".git")
 
 ---Filter directories when searching for test files
 ---@async
@@ -67,10 +67,10 @@ DbxPythonNeotestAdapter.root =
 ---@param rel_path string Path to directory, relative to root
 ---@param root string Root directory of project
 ---@return boolean
-function DbxPythonNeotestAdapter.filter_dir(name, rel_path, root)
-  -- https://github.com/nvim-neotest/neotest-python/blob/master/lua/neotest-python/init.lua#LL79C3-L79C24
-  return true
-end
+-- function DbxPythonNeotestAdapter.filter_dir(name, rel_path, root)
+--   -- https://github.com/nvim-neotest/neotest-python/blob/master/lua/neotest-python/init.lua#LL79C3-L79C24
+--   return true
+-- end
 
 ---@async
 ---@param file_path string
