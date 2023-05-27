@@ -356,6 +356,19 @@ vim.api.nvim_create_user_command("DisableDevboxDebug", function()
   disable_devbox_debug_bazel_flag()
 end, { nargs = "*" })
 
+local function execute_and_wait(cmd, cwd)
+  -- NOTE: THIS WILL NOT WORK W/O PASSING "w"
+  -- AND WE STILL DON'T KNOW WHY
+  local file = io.popen("cd ~/code/server && mbzl itest-stop-all --force 2> error.txt", "w")
+  local output = file:read("*a")
+  print(output)
+  file:close()
+end
+
+vim.api.nvim_create_user_command("BazelStop", function()
+  execute_and_wait()
+end, { nargs = "*" })
+
 M.get_current_test_function = get_current_test_function
 M.open_anything = open_anything
 
