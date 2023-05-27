@@ -12,8 +12,55 @@ local Path = require("plenary.path")
 local logger = require("neotest.logging")
 local neotest = require("neotest")
 local process = require'plugins.process'
+local is_port_available = require("plugins.check_port").is_port_available
 
+local dap_args
 local debug = logger.debug
+
+local function get_strategy_config(strategy, python, program, args)
+  local config = {
+    ["neotest-dbx-dap"] = function()
+      return vim.tbl_extend("keep", {
+        type = "python",
+        request = "attach",
+        name = "Attach remote",
+        cwd = async.fn.getcwd(),
+        connect = function()
+          local config_index = 2
+          local configs = {
+            { host = "localhost", port = 56237 },
+            { host = "localhost", port = 56234 },
+          }
+
+          local config = configs[config_index]
+          -- if is_port_available(config.port) then
+          --   debug("Local port " .. config.port .. " is still open. Need to forward port from devbox")
+          --   -- @TODO: handle ssh failure
+          --   os.execute(
+          --     "ssh -L "
+          --     .. tostring(config.port)
+          --     .. ":$USER-dbx:"
+          --     .. tostring(config.port)
+          --     .. " -N -f $USER-dbx"
+          --   )
+          -- end
+
+          return config
+        end,
+        pathMappings = {
+          {
+            localRoot = vim.fn.getcwd(),
+            -- Same as WORKDIR on your devbox
+            remoteRoot = "/home/khang/src/server-mirror",
+          },
+        },
+      }, dap_args or {})
+    end,
+  }
+  if config[strategy] then
+    return config[strategy]()
+  end
+end
 
 local function stop_current_bazel_target()
   -- this function runs synchronously
@@ -145,24 +192,6 @@ end
 function DbxPythonNeotestAdapter.build_spec(args)
   local position = args.tree:data()
 
-  if args.strategy == "debugger" then
-    debug('strategy debugger')
-
-    -- add debugging flag on devbox
-    debug('adding debugging flag on devbox')
-    os.execute('ssh khang@khang-dbx -t "echo \'build --define vscode_python_debugging=1\' > ~/.bazelrc.user"')
-
-    -- forward debugging port from devbox
-    debug('forward debugging port to local')
-    os.execute(
-      "ssh -L "
-      .. tostring(56234)
-      .. ":$USER-dbx:"
-      .. tostring(56234)
-      .. " -N -f $USER-dbx"
-    )
-  end
-
   local results_path = async.fn.tempname()
   lib.files.write(results_path, "")
   -- local stream_path = async.fn.tempname()
@@ -172,14 +201,37 @@ function DbxPythonNeotestAdapter.build_spec(args)
   local relative = Path:new(position.path):make_relative(root)
   local script_args = vim.tbl_flatten({
     relative,
-    "-I"
   })
   if position then
     table.insert(script_args, "--test_filter")
     table.insert(script_args, position.name)
   end
 
-  -- table.insert(script_args, "> " .. stream_path)
+  -- this flag needs to be placed before --vscode-wait
+  table.insert(script_args, "-I")
+
+  local config
+  if args.strategy == "neotest-dbx-dap" then
+    table.insert(script_args, "--test_arg=--vscode-wait")
+
+    local config_index = 2
+    local configs = {
+      { host = "localhost", port = 56237 },
+      { host = "localhost", port = 56234 },
+    }
+
+    config = configs[config_index]
+    if is_port_available(config.port) then
+      debug("Local port " .. config.port .. " is still open. Need to forward port from devbox")
+      -- @TODO: handle ssh failure
+      process.run({ "ssh", "-L", tostring(config.port), ":$USER-dbx:", tostring(config.port), '-N', "-f", "$USER-dbx" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+    end
+    debug("enable debug flag on devbox")
+    process.run({ "ssh", "khang@khang-dbx", "-t", "echo \'build --define vscode_python_debugging=1\' > ~/.bazelrc.user" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+  else
+    debug("disable debug flag on devbox")
+    process.run({ "ssh", "khang@khang-dbx", "-t", "echo > ~/.bazelrc.user" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+  end
 
   local command = vim.tbl_flatten({
     "mbzl",
@@ -188,13 +240,18 @@ function DbxPythonNeotestAdapter.build_spec(args)
     script_args,
   })
 
+  debug('final command', command)
+
+  -- pass output_stream here
+  local strategy_config = get_strategy_config(args.strategy)
+
   ---@type neotest.RunSpec
   return {
     command = command,
     context = {
       results_path = results_path,
-      stop_stream = stop_stream,
-      stream_path = stream_path,
+      position_id = position.id,
+      debug_config = config,
     },
     stream = function(output_stream)
       return function()
@@ -241,6 +298,7 @@ function DbxPythonNeotestAdapter.build_spec(args)
         return ret
       end
     end,
+    strategy = strategy_config
   }
 end
 
@@ -300,8 +358,8 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
         ret[id] = res
       end
     end
-
   end
+
   logger.debug("final_results", ret)
   return ret
   -- return results
