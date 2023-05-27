@@ -24,6 +24,14 @@ vim.api.nvim_set_keymap(
   [[<Cmd>lua require("neotest").run.run()<CR>]],
   { noremap = true, desc = "[T]est [R]un" }
 )
+
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>td",
+  [[<Cmd>lua require("neotest").run.run({ strategy = 'debugger' })<CR>]],
+  { noremap = true, desc = "[T]est [D]egbug" }
+)
+
 vim.api.nvim_set_keymap(
   "n",
   "<leader>tf",
