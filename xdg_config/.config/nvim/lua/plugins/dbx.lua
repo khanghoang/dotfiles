@@ -3,7 +3,6 @@
 
 -- @TODO: handle dap debugger mode
 -- @TODO: maintain status of devbox's debugging flag
--- @TODO: handle bazel reload failures, i.e. bazel-stop-all and start again
 -- @TODO: properly handle skipped tests
 -- @TODO: parse error
 --
@@ -12,22 +11,19 @@ local lib = require("neotest.lib")
 local Path = require("plenary.path")
 local logger = require("neotest.logging")
 local neotest = require("neotest")
+local process = require'plugins.process'
 
-local function execute_and_wait(cmd, cwd)
-  -- NOTE: THIS WILL NOT WORK W/O PASSING "w"
-  -- AND WE STILL DON'T KNOW WHY
-  local file = io.popen(string.format('cd "%s" && %s', cwd, cmd), "w")
-  local output = file:read("*a")
-  file:close()
+local function stop_current_bazel_target()
+  -- this function runs synchronously
+  process.run({ "mbzl", "itest-stop-all", "--force" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
 end
 
 local function handle_parse_line_error(errorMsg)
+  -- @TODO: need to pass cwd?
   -- if errorMsg == "NEED_BZL_STOP_AND_RESTART" then
   -- @TODO: need to pass cwd?
   logger.debug("bzl stop all")
-  execute_and_wait('mbzl itest-stop-all --force', "~/code/server")
-  logger.debug("neotest run last")
-  neotest.run.run_last()
+  stop_current_bazel_target()
 end
 
 ---@param line string
@@ -147,10 +143,10 @@ end
 function DbxPythonNeotestAdapter.build_spec(args)
   local position = args.tree:data()
 
-  -- local results_path = async.fn.tempname()
+  local results_path = async.fn.tempname()
+  lib.files.write(results_path, "")
   -- local stream_path = async.fn.tempname()
   -- lib.files.write(stream_path, "")
-  -- lib.files.write(results_path, "")
 
   local root = DbxPythonNeotestAdapter.root(position.path)
   local relative = Path:new(position.path):make_relative(root)
@@ -188,7 +184,8 @@ function DbxPythonNeotestAdapter.build_spec(args)
           local success, errorMsg = pcall(parse_line, line);
           if not success then
             logger.debug('error message', errorMsg)
-            handle_parse_line_error(errorMsg)
+            -- don't need to handle error here since it alread
+            -- properly handled in the final result fn
             return {}
           end
 
@@ -242,7 +239,21 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
     if not success then
       logger.debug('error message', errorMsg)
       handle_parse_line_error(errorMsg)
-      return {}
+      logger.debug("neotest run last")
+      neotest.run.run_last()
+
+      local ret = {}
+      -- indicate temporary failure due to bzl stop as
+      -- skipped
+      for _, node in tree:iter_nodes() do
+        local value = node:data()
+        local id = value.id
+        ret[id] = {
+          status = "running"
+        }
+      end
+      return ret
+
     end
 
     if success then
