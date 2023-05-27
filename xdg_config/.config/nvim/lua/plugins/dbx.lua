@@ -13,6 +13,8 @@ local logger = require("neotest.logging")
 local neotest = require("neotest")
 local process = require'plugins.process'
 
+local debug = logger.debug
+
 local function stop_current_bazel_target()
   -- this function runs synchronously
   process.run({ "mbzl", "itest-stop-all", "--force" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
@@ -142,6 +144,24 @@ end
 ---@return nil | neotest.RunSpec | neotest.RunSpec[]
 function DbxPythonNeotestAdapter.build_spec(args)
   local position = args.tree:data()
+
+  if args.strategy == "debugger" then
+    debug('strategy debugger')
+
+    -- add debugging flag on devbox
+    debug('adding debugging flag on devbox')
+    os.execute('ssh khang@khang-dbx -t "echo \'build --define vscode_python_debugging=1\' > ~/.bazelrc.user"')
+
+    -- forward debugging port from devbox
+    debug('forward debugging port to local')
+    os.execute(
+      "ssh -L "
+      .. tostring(56234)
+      .. ":$USER-dbx:"
+      .. tostring(56234)
+      .. " -N -f $USER-dbx"
+    )
+  end
 
   local results_path = async.fn.tempname()
   lib.files.write(results_path, "")
