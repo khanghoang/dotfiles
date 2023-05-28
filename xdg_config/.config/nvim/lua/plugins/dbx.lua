@@ -146,7 +146,7 @@ DbxPythonNeotestAdapter.root =
 ---@return boolean
 function DbxPythonNeotestAdapter.is_test_file(file_path)
   -- consider all files are test file
-  return true
+  return file_path ~= "" and not vim.endswith(file_path, lib.files.sep)
 end
 
 ---Given a file path, parse all the tests within it.
