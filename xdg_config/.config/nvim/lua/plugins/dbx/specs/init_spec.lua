@@ -1,4 +1,4 @@
-local dbx = require("plugins.dbx")
+local plugin = require("plugins.dbx")
 
 local need_restart_bazel_lines = [[
 I0528 18:49:13.658 28417 gitr_syncd.py:971] full-sync: 1.186s git-sync: 0.0s file-sync: 0.0s for 0 files
@@ -10,10 +10,10 @@ bzl itest-reload --test_arg=-k=test_buy_redirect_to_order_confirmation --test_ar
 
 [32mINFO: [0mInvocation ID: 74108a39-0890-495a-b838-06b547890d89
 
-[32mLoading:[0m 
+[32mLoading:[0m
 
 
-[1A[K[32mLoading:[0m 
+[1A[K[32mLoading:[0m
 
 
 [1A[K[32mLoading:[0m 0 packages loaded
@@ -114,27 +114,29 @@ If you suspect that there's a problem with the tool, try contacting the team tha
 ]]
 
 describe("dbx python adapter", function()
-  it("should detect bazel stop and restart", function()
-    local lines = {}
+  describe("_parse_line", function()
+    it("should detect bazel stop and restart", function()
+      local lines = {}
 
-    -- Iterate over each line in the multiline string
-    for line in need_restart_bazel_lines:gmatch("[^\r\n]+") do
-      table.insert(lines, line)
-    end
-
-    local errorMessage = ""
-    for _, line in ipairs(lines) do
-      local success, errorMsg = pcall(dbx._parse_line, line)
-      if not success then
-        ---@diagnostic disable-next-line: cast-local-type
-        errorMessage = errorMsg
+      -- Iterate over each line in the multiline string
+      for line in need_restart_bazel_lines:gmatch("[^\r\n]+") do
+        table.insert(lines, line)
       end
-    end
 
-    local expected = "NEED_BZL_STOP_AND_RESTART"
-    -- this has both line number and error massge
-    ---@diagnostic disable-next-line: param-type-mismatch
-    local actual = string.sub(errorMessage, -string.len(expected))
-    assert.equal(actual, expected)
+      local errorMessage = ""
+      for _, line in ipairs(lines) do
+        local success, errorMsg = pcall(plugin._parse_line, line)
+        if not success then
+          ---@diagnostic disable-next-line: cast-local-type
+          errorMessage = errorMsg
+        end
+      end
+
+      local expected = "NEED_BZL_STOP_AND_RESTART"
+      -- this has both line number and error massge
+      ---@diagnostic disable-next-line: param-type-mismatch
+      local actual = string.sub(errorMessage, -string.len(expected))
+      assert.equal(actual, expected)
+    end)
   end)
 end)
