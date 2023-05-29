@@ -4,7 +4,7 @@ local plugin = require("dbx")
 local process = require("process")
 local stub = require("luassert.stub")
 
-local tests_folder = vim.loop.cwd() .. "/xdg_config/.config/nvim_plugins/dbx/tests"
+local tests_folder = vim.loop.cwd() .. "/tests"
 local test_file = tests_folder .. "/foo_tests.py"
 
 local function debug(v)

@@ -11,7 +11,7 @@ require("neotest").setup({
 require("neotest").setup_project("/Users/khang/dotfiles", {
   adapters = {
     require("neotest-plenary").setup({
-      min_init = "./xdg_config/.config/nvim/lua/plugins/dbx/tests/test_init.lua",
+      min_init = "./xdg_config/.config/nvim_plugins/dbx/tests/test_init.lua",
     }),
   },
   discovery = {
