@@ -197,7 +197,7 @@ function DbxPythonNeotestAdapter.discover_positions(path)
       @namespace.definition
       ;;
       ;; @(Khang) test failed with this, so disabled for now
-      ;; (#not-has-parent? @namespace.definition decorated_definition)
+      (#not-has-parent? @namespace.definition decorated_definition)
     )
   ]]
   return lib.treesitter.parse_positions(path, query, {

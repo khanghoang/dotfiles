@@ -8,9 +8,20 @@ require("neotest").setup({
   },
 })
 
+require("neotest").setup_project("/Users/khang/dotfiles", {
+  adapters = {
+    require("neotest-plenary").setup({
+      min_init = "./xdg_config/.config/nvim/lua/plugins/dbx/tests/test_init.lua",
+    }),
+  },
+  discovery = {
+    enabled = false,
+  },
+})
+
 require("neotest").setup_project("/Users/khang/src/server", {
   adapters = {
-    require('plugins.dbx'),
+    require("plugins.dbx"),
   },
   discovery = {
     enabled = false,
@@ -19,7 +30,7 @@ require("neotest").setup_project("/Users/khang/src/server", {
 
 require("neotest").setup_project("/Users/khang/code/server", {
   adapters = {
-    require('plugins.dbx'),
+    require("plugins.dbx"),
   },
   discovery = {
     enabled = false,

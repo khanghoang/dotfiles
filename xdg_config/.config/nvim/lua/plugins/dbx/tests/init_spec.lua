@@ -1,7 +1,7 @@
 local assert = require("luassert")
 local async = require("nio.tests")
-local stub = require("luassert.stub")
 local plugin = require("plugins.dbx")
+local stub = require("luassert.stub")
 
 local function debug(v)
   io.stdout:write(tostring(v))
