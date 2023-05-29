@@ -1,5 +1,4 @@
----@diagnostic disable: cast-local-type
-local dbx = require"plugins.dbx"
+local dbx = require("plugins.dbx")
 
 local need_restart_bazel_lines = [[
 I0528 18:49:13.658 28417 gitr_syncd.py:971] full-sync: 1.186s git-sync: 0.0s file-sync: 0.0s for 0 files
@@ -114,8 +113,8 @@ ERROR: //tools:run_test did not exit successfully.
 If you suspect that there's a problem with the tool, try contacting the team that owns it: ci-automation
 ]]
 
-describe("aerial_extend", function()
-  it("parses function and class names", function()
+describe("dbx python adapter", function()
+  it("should detect bazel stop and restart", function()
     local lines = {}
 
     -- Iterate over each line in the multiline string
@@ -123,10 +122,11 @@ describe("aerial_extend", function()
       table.insert(lines, line)
     end
 
-    local errorMessage = ''
+    local errorMessage = ""
     for _, line in ipairs(lines) do
       local success, errorMsg = pcall(dbx.parse_line, line)
       if not success then
+        ---@diagnostic disable-next-line: cast-local-type
         errorMessage = errorMsg
       end
     end
@@ -138,4 +138,3 @@ describe("aerial_extend", function()
     assert.equal(actual, expected)
   end)
 end)
-
