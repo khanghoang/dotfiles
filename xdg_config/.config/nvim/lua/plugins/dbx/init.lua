@@ -71,16 +71,21 @@ local function stop_current_bazel_target()
   )
 end
 
-local function handle_parse_line_error(errorMsg)
+---@type neotest.Adapter
+local DbxPythonNeotestAdapter = { name = "dbx-python" }
+
+-- easy to stub in test since we don't have "neotest" in test
+function DbxPythonNeotestAdapter._run_last()
+  neotest.run.run_last()
+end
+
+function DbxPythonNeotestAdapter._handle_parse_line_error(errorMsg)
   -- @TODO: need to pass cwd?
   -- if errorMsg == "NEED_BZL_STOP_AND_RESTART" then
   -- @TODO: need to pass cwd?
   logger.debug("bzl stop all")
   stop_current_bazel_target()
 end
-
----@type neotest.Adapter
-local DbxPythonNeotestAdapter = { name = "dbx-python" }
 
 ---@param line string
 ---@return table<string, neotest.Result>
@@ -356,9 +361,9 @@ function DbxPythonNeotestAdapter.prepare_results(tree, lines)
 
     if not success then
       logger.debug("error message", errorMsg)
-      handle_parse_line_error(errorMsg)
+      DbxPythonNeotestAdapter._handle_parse_line_error(errorMsg)
       logger.debug("neotest run last")
-      neotest.run.run_last()
+      DbxPythonNeotestAdapter._run_last()
 
       local ret = {}
       -- indicate temporary failure due to bzl stop as
