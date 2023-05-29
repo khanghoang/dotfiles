@@ -283,14 +283,14 @@ require("packer").startup(function(use, use_rocks)
     requires = "nvim-lua/plenary.nvim",
   })
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
-  use {
-    'lewis6991/gitsigns.nvim',
+  use({
+    "lewis6991/gitsigns.nvim",
     requires = {
-      'nvim-lua/plenary.nvim'
+      "nvim-lua/plenary.nvim",
     },
     config = function()
       require("plugins.gitsigns")
-    end
+    end,
   }
 
   -- }}}
@@ -1271,6 +1271,7 @@ require("packer").startup(function(use, use_rocks)
   use("kyazdani42/nvim-web-devicons")
   -- }}}
 
+  use("~/dotfiles/xdg_config/.config/nvim_plugins/dbx")
   -- Test runner
   -- {{{
   use({
@@ -1460,7 +1461,7 @@ require("packer").startup(function(use, use_rocks)
   -- Need to start nvim with flag
   -- MACOSX_DEPLOYMENT_TARGET=10.15 nvim
   -- then run "PackerUpdate"
-  use_rocks('luasocket')
+  use_rocks("luasocket")
 
   if is_bootstrap then
     require("packer").sync()
