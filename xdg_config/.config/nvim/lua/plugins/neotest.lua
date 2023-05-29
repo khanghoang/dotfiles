@@ -21,7 +21,7 @@ require("neotest").setup_project("/Users/khang/dotfiles", {
 
 require("neotest").setup_project("/Users/khang/src/server", {
   adapters = {
-    require("plugins.dbx"),
+    require("dbx"),
   },
   discovery = {
     enabled = false,
@@ -30,7 +30,7 @@ require("neotest").setup_project("/Users/khang/src/server", {
 
 require("neotest").setup_project("/Users/khang/code/server", {
   adapters = {
-    require("plugins.dbx"),
+    require("dbx"),
   },
   discovery = {
     enabled = false,

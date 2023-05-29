@@ -1,8 +1,11 @@
 local assert = require("luassert")
 local async = require("nio.tests")
-local plugin = require("plugins.dbx")
-local process = require("plugins.process")
+local plugin = require("dbx")
+local process = require("process")
 local stub = require("luassert.stub")
+
+local tests_folder = vim.loop.cwd() .. "/xdg_config/.config/nvim_plugins/dbx/tests"
+local test_file = tests_folder .. "/foo_tests.py"
 
 local function debug(v)
   io.stdout:write(tostring(v))
@@ -242,7 +245,7 @@ collected 2 items / 1 deselected / 1 selected                                   
 
 
 
-xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test::test_foo_2 [32mPASSED[0m[32m                                                                          [100%][0m
+xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test::test_foo_2 [32mPASSED[0m[32m                                                                          [100%][0m
 
 
 
@@ -253,23 +256,21 @@ xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test::test_foo_2 [3
 
     ]]
 
-    local tests_folder = vim.loop.cwd() .. "/xdg_config/.config/nvim/lua/plugins/dbx/tests"
-    local test_file = tests_folder .. "/foo_tests.py"
     local tree = plugin.discover_positions(test_file)
     local lines = parse_lines(output)
     ---@diagnostic disable-next-line: param-type-mismatch
     local processed_results = plugin.prepare_results(tree, lines)
     local expected = {
-      ["/Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py"] = {
+      ["/Users/khang/dotfiles/xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py"] = {
         status = "skipped",
       },
-      ["/Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test"] = {
+      ["/Users/khang/dotfiles/xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test"] = {
         status = "skipped",
       },
-      ["/Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test::test_foo"] = {
+      ["/Users/khang/dotfiles/xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test::test_foo"] = {
         status = "skipped",
       },
-      ["/Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test::test_foo_2"] = {
+      ["/Users/khang/dotfiles/xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test::test_foo_2"] = {
         status = "passed",
       },
     }
@@ -342,9 +343,9 @@ collected 2 items                                                               
 
 
 
-xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test::test_foo [32mPASSED[0m[32m                                                                            [ 50%][0m
+xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test::test_foo [32mPASSED[0m[32m                                                                            [ 50%][0m
 
-xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test::test_foo_2 [32mPASSED[0m[32m                                                                          [100%][0m
+xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test::test_foo_2 [32mPASSED[0m[32m                                                                          [100%][0m
 
 
 
@@ -362,23 +363,21 @@ Logs are stored on the host at /home/khang/bzl/itest/per-container/bzl-itest_atl
 
     ]]
 
-    local tests_folder = vim.loop.cwd() .. "/xdg_config/.config/nvim/lua/plugins/dbx/tests"
-    local test_file = tests_folder .. "/foo_tests.py"
     local tree = plugin.discover_positions(test_file)
     local lines = parse_lines(output)
     ---@diagnostic disable-next-line: param-type-mismatch
     local processed_results = plugin.prepare_results(tree, lines)
     local expected = {
-      ["/Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py"] = {
+      ["/Users/khang/dotfiles/xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py"] = {
         status = "skipped",
       },
-      ["/Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test"] = {
+      ["/Users/khang/dotfiles/xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test"] = {
         status = "skipped",
       },
-      ["/Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test::test_foo"] = {
+      ["/Users/khang/dotfiles/xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test::test_foo"] = {
         status = "passed",
       },
-      ["/Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py::Test::test_foo_2"] = {
+      ["/Users/khang/dotfiles/xdg_config/.config/nvim_plugins/dbx/tests/foo_tests.py::Test::test_foo_2"] = {
         status = "passed",
       },
     }
@@ -500,8 +499,6 @@ ERROR: //tools:run_test did not exit successfully.
 If you suspect that there's a problem with the tool, try contacting the team that owns it: ci-automation
     ]]
 
-    local tests_folder = vim.loop.cwd() .. "/xdg_config/.config/nvim/lua/plugins/dbx/tests"
-    local test_file = tests_folder .. "/foo_tests.py"
     local tree = plugin.discover_positions(test_file)
     local lines = parse_lines(output)
 
@@ -517,15 +514,13 @@ If you suspect that there's a problem with the tool, try contacting the team tha
 end)
 
 describe("builds spec correctly", function()
-  before_each(function() 
+  before_each(function()
     stub(process, "run")
   end)
-  after_each(function ()
+  after_each(function()
     process.run:revert()
   end)
   async.it("builds most basis spec", function()
-    local tests_folder = vim.loop.cwd() .. "/xdg_config/.config/nvim/lua/plugins/dbx/tests"
-    local test_file = tests_folder .. "/foo_tests.py"
     local tree = plugin.discover_positions(test_file)
     local args = { tree = tree }
 
@@ -537,7 +532,7 @@ describe("builds spec correctly", function()
         "mbzl",
         "tool",
         "//tools:run_test",
-        "xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py",
+        "tests/foo_tests.py",
         "--test_filter",
         "foo_tests.py",
         "-I",

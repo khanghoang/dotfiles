@@ -11,8 +11,8 @@ local async = require("neotest.async")
 local lib = require("neotest.lib")
 local logger = require("neotest.logging")
 local neotest = require("neotest")
-local process = require("plugins.process")
-local is_port_available = require("plugins.check_port").is_port_available
+local process = require("process")
+local is_port_available = require("check_port").is_port_available
 
 local dap_args
 local debug = logger.debug
@@ -197,7 +197,7 @@ function DbxPythonNeotestAdapter.discover_positions(path)
       @namespace.definition
       ;;
       ;; @(Khang) test failed with this, so disabled for now
-      (#not-has-parent? @namespace.definition decorated_definition)
+      ;; (#not-has-parent? @namespace.definition decorated_definition)
     )
   ]]
   return lib.treesitter.parse_positions(path, query, {
