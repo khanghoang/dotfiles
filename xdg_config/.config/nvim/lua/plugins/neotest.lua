@@ -1,20 +1,28 @@
 require("neotest").setup({
+  log_level = vim.log.levels.DEBUG,
+  adapters = {
+    require("neotest-plenary"),
+  },
+  discovery = {
+    enabled = true,
+  },
+})
+
+require("neotest").setup_project("/Users/khang/src/server", {
   adapters = {
     require('plugins.dbx'),
-    -- require("neotest-plenary"),
   },
-  -- log_level = vim.log.levels.DEBUG,
   discovery = {
-    concurrent = 1,
     enabled = false,
   },
-  ["/Users/khang/src/server"] = {
-    adapters = {
-      require('plugins.dbx'),
-    },
-    discovery = {
-      enabled = false,
-    },
+})
+
+require("neotest").setup_project("/Users/khang/code/server", {
+  adapters = {
+    require('plugins.dbx'),
+  },
+  discovery = {
+    enabled = false,
   },
 })
 
@@ -28,8 +36,22 @@ vim.api.nvim_set_keymap(
 vim.api.nvim_set_keymap(
   "n",
   "<leader>td",
-  [[<Cmd>lua require("neotest").run.run({ strategy = 'debugger' })<CR>]],
-  { noremap = true, desc = "[T]est [D]egbug" }
+  [[<Cmd>lua require("neotest").run.run({ strategy = 'neotest-dbx-dap' })<CR>]],
+  { noremap = true, desc = "[T]est [D]ebug" }
+)
+
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>td",
+  [[<Cmd>lua require("neotest").run.run_last()<CR>]],
+  { noremap = true, desc = "[T]est [L]ast" }
+)
+
+vim.api.nvim_set_keymap(
+  "n",
+  "<leader>tx",
+  [[<Cmd>lua require("neotest").run.stop()<CR>]],
+  { noremap = true, desc = "[T]est [X]kill" }
 )
 
 vim.api.nvim_set_keymap(

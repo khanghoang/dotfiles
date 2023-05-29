@@ -75,9 +75,12 @@ local function handle_parse_line_error(errorMsg)
   stop_current_bazel_target()
 end
 
+---@type neotest.Adapter
+local DbxPythonNeotestAdapter = { name = "dbx-python" }
+
 ---@param line string
 ---@return table<string, neotest.Result>
-local function parse_line(line)
+function DbxPythonNeotestAdapter.parse_line(line)
   -- Remove ANSI escape code color
   line = line:gsub("\27%[%d+m", "")
   -- remove tabs and multiple spaces
@@ -124,8 +127,6 @@ local function parse_line(line)
 end
 
 
----@type neotest.Adapter
-local DbxPythonNeotestAdapter = { name = "dbx-python" }
 
 DbxPythonNeotestAdapter.root =
   lib.files.match_root_pattern("pyproject.toml", "setup.cfg", "mypy.ini", "pytest.ini", "setup.py", ".git")
@@ -258,7 +259,7 @@ function DbxPythonNeotestAdapter.build_spec(args)
         local lines = output_stream()
         local results = {}
         for _, line in ipairs(lines) do
-          local success, errorMsg = pcall(parse_line, line);
+          local success, errorMsg = pcall(DbxPythonNeotestAdapter.parse_line, line);
           if not success then
             logger.debug('error message', errorMsg)
             -- don't need to handle error here since it alread
@@ -267,7 +268,7 @@ function DbxPythonNeotestAdapter.build_spec(args)
           end
 
           if success then
-            local data = parse_line(line)
+            local data = DbxPythonNeotestAdapter.parse_line(line)
             for testLongName, res in pairs(data) do
               results[testLongName] = res
             end
@@ -287,7 +288,7 @@ function DbxPythonNeotestAdapter.build_spec(args)
               found = true
             end
           end
-        
+
           if not found then
             -- @TODO optimize this
             ret[id] = nil
@@ -312,7 +313,7 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
   local results = {}
   for _, line in ipairs(lines) do
     logger.debug('result_line', line)
-    local success, errorMsg = pcall(parse_line, line);
+    local success, errorMsg = pcall(DbxPythonNeotestAdapter.parse_line, line);
 
     if not success then
       logger.debug('error message', errorMsg)
@@ -335,7 +336,7 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
     end
 
     if success then
-      local data = parse_line(line)
+      local data = DbxPythonNeotestAdapter.parse_line(line)
       for testLongName, res in pairs(data) do
         results[testLongName] = res
       end
