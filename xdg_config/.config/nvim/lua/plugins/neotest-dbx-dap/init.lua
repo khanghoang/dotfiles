@@ -59,8 +59,10 @@ return function(spec)
       for _, printed_id in ipairs(data) do
         debug('with printed_id', printed_id)
         if printed_id then
-          -- trimmed
+          -- trim
           printed_id = printed_id:gsub("^%s*(.-)%s*$", "%1")
+          -- get before "<-"
+          printed_id = printed_id:match("^(%S+)%s?")
           if string.sub(id, -string.len(printed_id)) == printed_id then
             debug('attach dap')
 
