@@ -190,12 +190,14 @@ function DbxPythonNeotestAdapter.discover_positions(path)
      (class_definition
       name: (identifier) @namespace.name)
       @namespace.definition
-     (#not-has-parent? @namespace.definition decorated_definition)
+      ;;
+      ;; @(Khang) test failed with this, so disabled for now
+      ;; (#not-has-parent? @namespace.definition decorated_definition)
     )
   ]]
   return lib.treesitter.parse_positions(path, query, {
     -- https://github.com/nvim-neotest/neotest-python/blob/master/lua/neotest-python/init.lua#L116
-    require_namespaces = true,
+    require_namespaces = false,
   })
 end
 
@@ -236,32 +238,24 @@ function DbxPythonNeotestAdapter.build_spec(args)
     if is_port_available(config.port) then
       debug("Local port " .. config.port .. " is still open. Need to forward port from devbox")
       -- @TODO: handle ssh failure
-      process.run(
-        {
-          "ssh",
-          "-L",
-          tostring(config.port),
-          ":$USER-dbx:",
-          tostring(config.port),
-          "-N",
-          "-f",
-          "$USER-dbx",
-        },
-        { stdout = true, stderr = true },
-        "/Users/khang/src/server"
-      )
+      process.run({
+        "ssh",
+        "-L",
+        tostring(config.port),
+        ":$USER-dbx:",
+        tostring(config.port),
+        "-N",
+        "-f",
+        "$USER-dbx",
+      }, { stdout = true, stderr = true }, "/Users/khang/src/server")
     end
     debug("enable debug flag on devbox")
-    process.run(
-      {
-        "ssh",
-        "khang@khang-dbx",
-        "-t",
-        "echo 'build --define vscode_python_debugging=1' > ~/.bazelrc.user",
-      },
-      { stdout = true, stderr = true },
-      "/Users/khang/src/server"
-    )
+    process.run({
+      "ssh",
+      "khang@khang-dbx",
+      "-t",
+      "echo 'build --define vscode_python_debugging=1' > ~/.bazelrc.user",
+    }, { stdout = true, stderr = true }, "/Users/khang/src/server")
   else
     debug("disable debug flag on devbox")
     process.run(
@@ -346,6 +340,15 @@ end
 ---@return table<string, neotest.Result>
 function DbxPythonNeotestAdapter.results(spec, result, tree)
   local _, lines = pcall(lib.files.read_lines, result.output)
+  local results = DbxPythonNeotestAdapter.prepare_results(tree, lines)
+  logger.debug("final_results", results)
+  return results
+end
+
+---@param tree neotest.Tree
+---@param lines string[]
+---@return table<string, neotest.Result[]>
+function DbxPythonNeotestAdapter.prepare_results(tree, lines)
   local results = {}
   for _, line in ipairs(lines) do
     logger.debug("result_line", line)
@@ -394,10 +397,7 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
       end
     end
   end
-
-  logger.debug("final_results", ret)
   return ret
-  -- return results
 end
 
 return DbxPythonNeotestAdapter
