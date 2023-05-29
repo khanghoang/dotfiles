@@ -1,4 +1,4 @@
--- view log at 
+-- view log at
 -- lnav ~/.local/state/nvim/neotest.log
 
 -- @TODO: handle dap debugger mode
@@ -6,12 +6,12 @@
 -- @TODO: properly handle skipped tests
 -- @TODO: parse error
 --
+local Path = require("plenary.path")
 local async = require("neotest.async")
 local lib = require("neotest.lib")
-local Path = require("plenary.path")
 local logger = require("neotest.logging")
 local neotest = require("neotest")
-local process = require'plugins.process'
+local process = require("plugins.process")
 local is_port_available = require("plugins.check_port").is_port_available
 
 local dap_args
@@ -64,7 +64,11 @@ end
 
 local function stop_current_bazel_target()
   -- this function runs synchronously
-  process.run({ "mbzl", "itest-stop-all", "--force" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+  process.run(
+    { "mbzl", "itest-stop-all", "--force" },
+    { stdout = true, stderr = true },
+    "/Users/khang/src/server"
+  )
 end
 
 local function handle_parse_line_error(errorMsg)
@@ -80,19 +84,22 @@ local DbxPythonNeotestAdapter = { name = "dbx-python" }
 
 ---@param line string
 ---@return table<string, neotest.Result>
-function DbxPythonNeotestAdapter.parse_line(line)
+function DbxPythonNeotestAdapter._parse_line(line)
   -- Remove ANSI escape code color
   line = line:gsub("\27%[%d+m", "")
   -- remove tabs and multiple spaces
   line = line:gsub("%s+", " ")
 
-  local should_restart_bazel = string.match(line, "Try running the following to remove all containers and start a new container for")
+  local should_restart_bazel = string.match(
+    line,
+    "Try running the following to remove all containers and start a new container for"
+  )
   if should_restart_bazel then
     logger.debug("restart bazel request sent")
     error("NEED_BZL_STOP_AND_RESTART")
   end
 
-  logger.debug('input line', line)
+  logger.debug("input line", line)
   -- Extract the test case name
   local passTestName = line:match("([^%s]+%.[^%s]+::.+)%s*PASSED")
 
@@ -104,8 +111,8 @@ function DbxPythonNeotestAdapter.parse_line(line)
     passTestName = passTestName:match("^(%S+)%s?")
     result = {
       [passTestName] = {
-        status = "passed"
-      }
+        status = "passed",
+      },
     }
   end
 
@@ -117,8 +124,8 @@ function DbxPythonNeotestAdapter.parse_line(line)
     failedTestName = failedTestName:match("^(%S+)%s?")
     result = {
       [failedTestName] = {
-        status = "failed"
-      }
+        status = "failed",
+      },
     }
   end
 
@@ -126,10 +133,14 @@ function DbxPythonNeotestAdapter.parse_line(line)
   return result
 end
 
-
-
-DbxPythonNeotestAdapter.root =
-  lib.files.match_root_pattern("pyproject.toml", "setup.cfg", "mypy.ini", "pytest.ini", "setup.py", ".git")
+DbxPythonNeotestAdapter.root = lib.files.match_root_pattern(
+  "pyproject.toml",
+  "setup.cfg",
+  "mypy.ini",
+  "pytest.ini",
+  "setup.py",
+  ".git"
+)
 
 ---Filter directories when searching for test files
 ---@async
@@ -184,7 +195,7 @@ function DbxPythonNeotestAdapter.discover_positions(path)
   ]]
   return lib.treesitter.parse_positions(path, query, {
     -- https://github.com/nvim-neotest/neotest-python/blob/master/lua/neotest-python/init.lua#L116
-    require_namespaces = true
+    require_namespaces = true,
   })
 end
 
@@ -225,13 +236,39 @@ function DbxPythonNeotestAdapter.build_spec(args)
     if is_port_available(config.port) then
       debug("Local port " .. config.port .. " is still open. Need to forward port from devbox")
       -- @TODO: handle ssh failure
-      process.run({ "ssh", "-L", tostring(config.port), ":$USER-dbx:", tostring(config.port), '-N', "-f", "$USER-dbx" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+      process.run(
+        {
+          "ssh",
+          "-L",
+          tostring(config.port),
+          ":$USER-dbx:",
+          tostring(config.port),
+          "-N",
+          "-f",
+          "$USER-dbx",
+        },
+        { stdout = true, stderr = true },
+        "/Users/khang/src/server"
+      )
     end
     debug("enable debug flag on devbox")
-    process.run({ "ssh", "khang@khang-dbx", "-t", "echo \'build --define vscode_python_debugging=1\' > ~/.bazelrc.user" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+    process.run(
+      {
+        "ssh",
+        "khang@khang-dbx",
+        "-t",
+        "echo 'build --define vscode_python_debugging=1' > ~/.bazelrc.user",
+      },
+      { stdout = true, stderr = true },
+      "/Users/khang/src/server"
+    )
   else
     debug("disable debug flag on devbox")
-    process.run({ "ssh", "khang@khang-dbx", "-t", "echo > ~/.bazelrc.user" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+    process.run(
+      { "ssh", "khang@khang-dbx", "-t", "echo > ~/.bazelrc.user" },
+      { stdout = true, stderr = true },
+      "/Users/khang/src/server"
+    )
   end
 
   local command = vim.tbl_flatten({
@@ -241,7 +278,7 @@ function DbxPythonNeotestAdapter.build_spec(args)
     script_args,
   })
 
-  debug('final command', command)
+  debug("final command", command)
 
   -- pass output_stream here
   local strategy_config = get_strategy_config(args.strategy)
@@ -259,16 +296,16 @@ function DbxPythonNeotestAdapter.build_spec(args)
         local lines = output_stream()
         local results = {}
         for _, line in ipairs(lines) do
-          local success, errorMsg = pcall(DbxPythonNeotestAdapter.parse_line, line);
+          local success, errorMsg = pcall(DbxPythonNeotestAdapter._parse_line, line)
           if not success then
-            logger.debug('error message', errorMsg)
+            logger.debug("error message", errorMsg)
             -- don't need to handle error here since it alread
             -- properly handled in the final result fn
             return {}
           end
 
           if success then
-            local data = DbxPythonNeotestAdapter.parse_line(line)
+            local data = DbxPythonNeotestAdapter._parse_line(line)
             for testLongName, res in pairs(data) do
               results[testLongName] = res
             end
@@ -293,13 +330,12 @@ function DbxPythonNeotestAdapter.build_spec(args)
             -- @TODO optimize this
             ret[id] = nil
           end
-
         end
         logger.debug("final_results", ret)
         return ret
       end
     end,
-    strategy = strategy_config
+    strategy = strategy_config,
   }
 end
 
@@ -312,11 +348,11 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
   local _, lines = pcall(lib.files.read_lines, result.output)
   local results = {}
   for _, line in ipairs(lines) do
-    logger.debug('result_line', line)
-    local success, errorMsg = pcall(DbxPythonNeotestAdapter.parse_line, line);
+    logger.debug("result_line", line)
+    local success, errorMsg = pcall(DbxPythonNeotestAdapter._parse_line, line)
 
     if not success then
-      logger.debug('error message', errorMsg)
+      logger.debug("error message", errorMsg)
       handle_parse_line_error(errorMsg)
       logger.debug("neotest run last")
       neotest.run.run_last()
@@ -328,20 +364,18 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
         local value = node:data()
         local id = value.id
         ret[id] = {
-          status = "running"
+          status = "running",
         }
       end
       return ret
-
     end
 
     if success then
-      local data = DbxPythonNeotestAdapter.parse_line(line)
+      local data = DbxPythonNeotestAdapter._parse_line(line)
       for testLongName, res in pairs(data) do
         results[testLongName] = res
       end
     end
-
   end
 
   local ret = {}
@@ -352,7 +386,7 @@ function DbxPythonNeotestAdapter.results(spec, result, tree)
 
     -- @TODO optimize this
     ret[id] = {
-      status = "skipped"
+      status = "skipped",
     }
     for testLongName, res in pairs(results) do
       if string.sub(id, -string.len(testLongName)) == testLongName then

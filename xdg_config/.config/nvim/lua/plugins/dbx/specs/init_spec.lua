@@ -124,7 +124,7 @@ describe("dbx python adapter", function()
 
     local errorMessage = ""
     for _, line in ipairs(lines) do
-      local success, errorMsg = pcall(dbx.parse_line, line)
+      local success, errorMsg = pcall(dbx._parse_line, line)
       if not success then
         ---@diagnostic disable-next-line: cast-local-type
         errorMessage = errorMsg
