@@ -194,7 +194,7 @@ require("packer").startup(function(use, use_rocks)
     branch = "main",
     event = "LspAttach",
     config = function()
-      require("lspsaga").setup({})
+      require('plugins.lsp_saga')
     end,
     requires = {
       { "nvim-tree/nvim-web-devicons" },
