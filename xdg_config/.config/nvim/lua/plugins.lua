@@ -33,7 +33,7 @@ require("packer").init({
     -- tree-sitter/tree-sitter-typescript timeout at 60s
     clone_timeout = 5 * 60, -- Timeout, in seconds, for git clones
     default_url_format = "https://github.com/%s", -- Lua format string used for "aaa/bbb" style plugins
-    log = { level = 'debug' }
+    -- log = { level = "debug" },
   },
   -- due to https://github.com/nvim-lua/plenary.nvim/issues/4#issuecomment-860269256
   -- hererocks may need to be installed manually (optional)
@@ -41,7 +41,7 @@ require("packer").init({
   -- export MACOSX_DEPLOYMENT_TARGET=10.15
   -- python3 /Users/khang/.cache/nvim/packer_hererocks/hererocks.py --verbose -j 2.1.0-beta3 /Users/khang/.cache/nvim/packer_hererocks/2.1.0-beta3
   luarocks = {
-    python_cmd = '/opt/homebrew/bin/python3' -- or "python", to set the python command to use for running hererocks
+    python_cmd = "/opt/homebrew/bin/python3", -- or "python", to set the python command to use for running hererocks
   },
   display = {
     open_fn = function()
@@ -194,7 +194,7 @@ require("packer").startup(function(use, use_rocks)
     branch = "main",
     event = "LspAttach",
     config = function()
-      require('plugins.lsp_saga')
+      require("plugins.lsp_saga")
     end,
     requires = {
       { "nvim-tree/nvim-web-devicons" },
@@ -282,7 +282,7 @@ require("packer").startup(function(use, use_rocks)
     "ruifm/gitlinker.nvim",
     requires = "nvim-lua/plenary.nvim",
   })
-  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+  use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
   use({
     "lewis6991/gitsigns.nvim",
     requires = {
@@ -291,7 +291,7 @@ require("packer").startup(function(use, use_rocks)
     config = function()
       require("plugins.gitsigns")
     end,
-  }
+  })
 
   -- }}}
 
@@ -665,6 +665,12 @@ require("packer").startup(function(use, use_rocks)
     requires = { "mfussenegger/nvim-dap" },
     config = function()
       require("plugins.dap")
+    end,
+  })
+  use({
+    "theHamsta/nvim-dap-virtual-text",
+    config = function()
+      require("plugins.dap-virtual-text")
     end,
   })
   -- }}}
