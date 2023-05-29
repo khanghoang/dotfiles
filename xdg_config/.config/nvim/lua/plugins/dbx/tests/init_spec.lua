@@ -1,6 +1,7 @@
 local assert = require("luassert")
 local async = require("nio.tests")
 local plugin = require("plugins.dbx")
+local process = require("plugins.process")
 local stub = require("luassert.stub")
 
 local function debug(v)
@@ -512,5 +513,35 @@ If you suspect that there's a problem with the tool, try contacting the team tha
 
     ---@diagnostic disable-next-line: param-type-mismatch
     assert.spy(plugin._run_last).was.called(1)
+  end)
+end)
+
+describe("builds spec correctly", function()
+  before_each(function() 
+    stub(process, "run")
+  end)
+  after_each(function ()
+    process.run:revert()
+  end)
+  async.it("builds most basis spec", function()
+    local tests_folder = vim.loop.cwd() .. "/xdg_config/.config/nvim/lua/plugins/dbx/tests"
+    local test_file = tests_folder .. "/foo_tests.py"
+    local tree = plugin.discover_positions(test_file)
+    local args = { tree = tree }
+
+    local run_spec = plugin.build_spec(args)
+    assert.are.same(
+      ---@diagnostic disable-next-line: need-check-nil
+      run_spec.command,
+      {
+        "mbzl",
+        "tool",
+        "//tools:run_test",
+        "xdg_config/.config/nvim/lua/plugins/dbx/tests/foo_tests.py",
+        "--test_filter",
+        "foo_tests.py",
+        "-I",
+      }
+    )
   end)
 end)
