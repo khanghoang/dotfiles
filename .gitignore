@@ -4,4 +4,8 @@
 xdg_config/.config/nvim/plugin/packer_compiled.lua
 xdg_config/.config/vifm/vifminfo.json
 
+# dbx test 3rd plugins
 xdg_config/.config/nvim_plugins/dbx/misc
+
+# lnav is annoying
+.lnav/
