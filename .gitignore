@@ -9,3 +9,6 @@ xdg_config/.config/nvim_plugins/dbx/misc
 
 # lnav is annoying
 .lnav/
+
+# lnav is annoying
+.luarc.json
