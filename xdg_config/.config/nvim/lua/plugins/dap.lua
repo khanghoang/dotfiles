@@ -5,7 +5,6 @@ local is_port_available = require("plugins.check_port").is_port_available
 local api = vim.api
 local installation_path = vim.fn.stdpath("data") .. "/mason/bin"
 
-
 -- May need to symlink manually, for example
 -- ln -sf ~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3 ~/.local/share/nvim/mason/bin/
 -- Though for debugpy, it needs the full path of the even python3, and
@@ -52,7 +51,11 @@ dap.configurations.python = {
       if is_port_available(config.port) then
         print("Local port " .. config.port .. " is still open. Need to forward port from devbox")
         local should_forward_port = vim.fn.input("We're cool? [Y]/n ") or "Y"
-        if should_forward_port == "Y" or should_forward_port == "y" or should_forward_port == "" then
+        if
+          should_forward_port == "Y"
+          or should_forward_port == "y"
+          or should_forward_port == ""
+        then
           -- @TODO: handle ssh failure
           os.execute(
             "ssh -L "
@@ -257,7 +260,7 @@ dapui.setup({
     {
       elements = {
         "repl",
-        "console",
+        -- "console",
       },
       size = 10,
       position = "bottom",
@@ -308,19 +311,33 @@ vim.keymap.set(
   { noremap = true, desc = "[D]ebug [R]un to [L]ast" }
 )
 
--- dap.listeners.after.event_initialized['dapui_config'] = function()
---   dapui.open()
--- end
--- dap.listeners.before.event_exited['dapui_config'] = function()
---   dapui.close()
--- end
--- dap.listeners.before.event_stopped['dapui_config'] = function()
---   dapui.close()
--- end
--- -- dbx remote debugging needs these two config to close dap-ui
--- dap.listeners.before.disconnect["dapui_config"] = function()
---   dapui.close()
--- end
--- dap.listeners.after.event_terminated['dapui_config'] = function()
---   dapui.close()
--- end
+local function clear_virtual_dap_text(session)
+  session = session or dap.session()
+  local virtual_text = require("nvim-dap-virtual-text/virtual_text")
+  if session and session.threads and session.threads[session.stopped_thread_id] then
+    local frames = session.threads[session.stopped_thread_id].frames
+    virtual_text.clear_virtual_text()
+    for _, f in pairs(frames or {}) do
+      virtual_text.set_virtual_text(f, {}, false)
+    end
+  else
+    virtual_text.set_virtual_text(session.current_frame, {}, true)
+  end
+end
+
+-- This won't work since PTVSD doesn't fully implement DAP protocol
+dap.listeners.before["event_exited"]["dbx-dap"] = function(session, body)
+  print("Session exited!!", vim.inspect(session), vim.inspect(body))
+  clear_virtual_dap_text(session)
+end
+dap.listeners.before.disconnect["dapui_config"] = function()
+  clear_virtual_dap_text()
+end
+dap.listeners.after.event_terminated["dapui_config"] = function()
+  -- dapui.close()
+  clear_virtual_dap_text()
+end
+
+vim.api.nvim_create_user_command("RemoveVirtualText", function()
+  clear_virtual_dap_text()
+end, { nargs = "*" })

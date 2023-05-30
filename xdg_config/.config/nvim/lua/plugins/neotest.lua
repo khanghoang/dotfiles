@@ -53,7 +53,7 @@ vim.api.nvim_set_keymap(
 
 vim.api.nvim_set_keymap(
   "n",
-  "<leader>td",
+  "<leader>tl",
   [[<Cmd>lua require("neotest").run.run_last()<CR>]],
   { noremap = true, desc = "[T]est [L]ast" }
 )

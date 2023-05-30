@@ -1,12 +1,12 @@
 -- Need to symlink since neotest looks for plugins side its "strategies" dir
 -- ln -sf /Users/khang/dotfiles/xdg_config/.config/nvim/lua/plugins/neotest-dbx-dap /Users/khang/.local/share/nvim/site/pack/packer/start/neotest/lua/neotest/client/strategies
-local nio = require("nio")
 local lib = require("neotest.lib")
+local nio = require("nio")
 local FanoutAccum = require("neotest.types").FanoutAccum
 local logger = require("neotest.logging")
 local debug = logger.debug
-local process = require('plugins.process')
 local dap = require("dap")
+local process = require("plugins.process")
 local is_port_available = require("plugins.check_port").is_port_available
 
 ---@class integratedStrategyConfig
@@ -17,8 +17,15 @@ local is_port_available = require("plugins.check_port").is_port_available
 ---@param spec neotest.RunSpec
 ---@return neotest.Process
 return function(spec)
-  debug('run spec dbx-dap')
+  debug("run spec dbx-dap")
   local env, cwd = spec.env, spec.cwd
+
+  process.run({
+    "ssh",
+    "khang@khang-dbx",
+    "-t",
+    "echo 'build --define vscode_python_debugging=1' > ~/.bazelrc.user",
+  }, { stdout = true, stderr = true }, "/Users/khang/src/server")
 
   local finish_future = nio.control.future()
   local result_code = nil
@@ -53,44 +60,61 @@ return function(spec)
       end)
 
       local id = spec.context.position_id
-      debug('with data', data)
-      debug('with id', id)
-      debug('with printed_id 2', data[2])
+      debug("with data", data)
+      debug("with id", id)
       for _, printed_id in ipairs(data) do
-        debug('with printed_id', printed_id)
-        if printed_id then
+        debug("with printed_id", printed_id)
+        if printed_id and #printed_id ~= 0 then
           -- trim
           printed_id = printed_id:gsub("^%s*(.-)%s*$", "%1")
           -- get before "<-"
           printed_id = printed_id:match("^(%S+)%s?")
-          if string.sub(id, -string.len(printed_id)) == printed_id then
-            debug('attach dap')
+          debug("with processed printed_id 2", printed_id)
+          if printed_id and #printed_id ~= 0 then
+            if string.sub(id, -string.len(printed_id)) == printed_id then
+              debug("attach dap")
 
-            local config = spec.context.debug_config
-            if is_port_available(config.port) then
-              debug("Local port " .. config.port .. " is still open. Need to forward port from devbox")
-              -- @TODO: handle ssh failure
-              process.run({ "ssh", "-L", tostring(config.port), ":$USER-dbx:", tostring(config.port), '-N', "-f", "$USER-dbx" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+              local config = spec.context.debug_config
+              if is_port_available(config.port) then
+                debug(
+                  "Local port " .. config.port .. " is still open. Need to forward port from devbox"
+                )
+                -- @TODO: handle ssh failure
+                process.run({
+                  "ssh",
+                  "-L",
+                  tostring(config.port),
+                  ":$USER-dbx:",
+                  tostring(config.port),
+                  "-N",
+                  "-f",
+                  "$USER-dbx",
+                }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+              end
+              debug("enable debug flag on devbox")
+              process.run({
+                "ssh",
+                "khang@khang-dbx",
+                "-t",
+                "echo 'build --define vscode_python_debugging=1' > ~/.bazelrc.user",
+              }, { stdout = true, stderr = true }, "/Users/khang/src/server")
+
+              debug("strategy config", spec.strategy)
+              dap.run(vim.tbl_extend("keep", spec.strategy, { env = spec.env, cwd = spec.cwd }), {
+                before = function(config)
+                  return adapter_before and adapter_before() or config
+                end,
+                after = function()
+                  if adapter_after then
+                    adapter_after()
+                  end
+                end,
+              })
+
+              break
             end
-            debug("enable debug flag on devbox")
-            process.run({ "ssh", "khang@khang-dbx", "-t", "echo \'build --define vscode_python_debugging=1\' > ~/.bazelrc.user" }, { stdout = true, stderr = true }, "/Users/khang/src/server")
-
-            debug('strategy config', spec.strategy)
-            dap.run(vim.tbl_extend("keep", spec.strategy, { env = spec.env, cwd = spec.cwd }), {
-              before = function(config)
-                return adapter_before and adapter_before() or config
-              end,
-              after = function()
-                if adapter_after then
-                  adapter_after()
-                end
-              end,
-            })
-
-            break
           end
         else
-
         end
       end
     end,
