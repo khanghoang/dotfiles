@@ -8,15 +8,54 @@ local reload = require("plenary.reload")
 local utils = require("telescope.utils")
 local path = Path.path
 local is_port_available = require("plugins.check_port").is_port_available
+local nio = require("nio")
+local tasks = require("nio.tasks")
 
 local M = {}
 
+local run_async = function(cmd, options, on_exit)
+  local loop = vim.loop
+  vim.inspect(options)
+  local stdout = options.stdio.stdout
+  local stderr = options.stdio.stderr
+  handle = loop.spawn(cmd, options, function()
+    if stdout then
+      stdout:read_stop()
+      stdout:close()
+    end
+    if stderr then
+      stderr:read_stop()
+      stderr:close()
+    end
+    handle:close()
+    print("done!!")
+  end)
+  -- loop.read_start(stdout, function() end) -- TODO implement onread handler
+  -- loop.read_start(stderr, function() end)
+end
+
 local function enable_devbox_debug_bazel_flag()
-  os.execute('ssh khang@khang-dbx -t "echo \'build --define vscode_python_debugging=1\' > ~/.bazelrc.user"')
+  local loop = vim.loop
+  local stdout = loop.new_pipe(false) -- create file descriptor for stdout
+  local stderr = loop.new_pipe(false) -- create file descriptor for stdout
+  run_async("ssh", {
+    args = {
+      "khang@khang-dbx",
+      "-t",
+      "echo 'build --define vscode_python_debugging=1' > ~/.bazelrc.user",
+    },
+    stdio = { nil, stdout, stderr },
+  })
 end
 
 local function disable_devbox_debug_bazel_flag()
-  os.execute('ssh khang@khang-dbx -t "echo > ~/.bazelrc.user"')
+  local loop = vim.loop
+  local stdout = loop.new_pipe(false) -- create file descriptor for stdout
+  local stderr = loop.new_pipe(false) -- create file descriptor for stdout
+  run_async("ssh", {
+    args = { "khang@khang-dbx", "-t", "echo > ~/.bazelrc.user" },
+    stdio = { nil, stdout, stderr },
+  })
 end
 
 -- @TODO: store this on disk
@@ -263,12 +302,12 @@ local function get_current_test_function(bufnr)
   -- debugger with itest-*. And I don't think it's possible with bzl test
   --
   -- "-I" here will add itest-reload-or-start [here](https://sourcegraph.pp.dropbox.com/server@b3b1fee23462dc6441af6b50d9e836dc582676c2/-/blob/devtools/tools/run_test.py?L72)
-  -- otherwise it will invoke "bzl test" which debugger cannot work as explained above 
+  -- otherwise it will invoke "bzl test" which debugger cannot work as explained above
   --
   -- redirect the output https://askubuntu.com/questions/420981/how-do-i-save-terminal-output-to-a-file
   --
   --           || visible in terminal ||   visible in file   || existing
-  --   Syntax  ||  StdOut  |  StdErr  ||  StdOut  |  StdErr  ||   file   
+  --   Syntax  ||  StdOut  |  StdErr  ||  StdOut  |  StdErr  ||   file
   -- ==========++==========+==========++==========+==========++===========
   --     >     ||    no    |   yes    ||   yes    |    no    || overwrite
   --     >>    ||    no    |   yes    ||   yes    |    no    ||  append
@@ -297,10 +336,10 @@ local function get_current_test_function(bufnr)
       -- @TODO: handle ssh failure
       os.execute(
         "ssh -L "
-        .. tostring(atlas_debug_port)
-        .. ":$USER-dbx:"
-        .. tostring(atlas_debug_port)
-        .. " -N -f $USER-dbx"
+          .. tostring(atlas_debug_port)
+          .. ":$USER-dbx:"
+          .. tostring(atlas_debug_port)
+          .. " -N -f $USER-dbx"
       )
     end
 
@@ -311,7 +350,6 @@ local function get_current_test_function(bufnr)
     end
 
     cmd = cmd .. ' --test_arg="--vscode-wait"'
-
   else
     -- reset the flag when running without debugger
     if is_enabled then
@@ -320,7 +358,7 @@ local function get_current_test_function(bufnr)
     end
   end
 
-  cmd = cmd .. ' |& tee /Users/khang/temp/info.log'
+  cmd = cmd .. " |& tee /Users/khang/temp/info.log"
 
   -- send the cmd to tmux panel 0
   -- NEED TO NAME THE PANEL "RUNNING"
@@ -353,6 +391,9 @@ vim.api.nvim_create_user_command("EnableDevboxDebug", function()
 end, { nargs = "*" })
 
 vim.api.nvim_create_user_command("DisableDevboxDebug", function()
+  -- tasks.run(tasks.wrap(disable_devbox_debug_bazel_flag, 1), function(success_, error_)
+  --   print("Done!!")
+  -- end)
   disable_devbox_debug_bazel_flag()
 end, { nargs = "*" })
 
@@ -366,7 +407,9 @@ local function execute_and_wait(cmd, cwd)
 end
 
 vim.api.nvim_create_user_command("BazelStop", function()
-  execute_and_wait()
+  tasks.run(tasks.wrap(execute_and_wait, 1), function(success_, error_)
+    print("Bazel stop")
+  end)
 end, { nargs = "*" })
 
 M.get_current_test_function = get_current_test_function
