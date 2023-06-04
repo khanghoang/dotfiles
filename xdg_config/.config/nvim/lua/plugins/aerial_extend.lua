@@ -13,48 +13,44 @@ local tasks = require("nio.tasks")
 
 local M = {}
 
-local run_async = function(cmd, options, on_exit)
+local run_async = nio.wrap(function(cmd, options, cb)
   local loop = vim.loop
-  vim.inspect(options)
-  local stdout = options.stdio.stdout
-  local stderr = options.stdio.stderr
+  -- local stdout = options.stdio.stdout
+  -- local stderr = options.stdio.stderr
+  ---@diagnostic disable-next-line: unused-local
   handle = loop.spawn(cmd, options, function()
-    if stdout then
-      stdout:read_stop()
-      stdout:close()
-    end
-    if stderr then
-      stderr:read_stop()
-      stderr:close()
-    end
+    -- if stdout then
+    --   stdout:read_stop()
+    --   stdout:close()
+    -- end
+    -- if stderr then
+    --   stderr:read_stop()
+    --   stderr:close()
+    -- end
+    ---@diagnostic disable-next-line: undefined-global
     handle:close()
+    if cb then
+      cb()
+    end
     print("done!!")
   end)
   -- loop.read_start(stdout, function() end) -- TODO implement onread handler
   -- loop.read_start(stderr, function() end)
-end
+end, 3)
 
 local function enable_devbox_debug_bazel_flag()
-  local loop = vim.loop
-  local stdout = loop.new_pipe(false) -- create file descriptor for stdout
-  local stderr = loop.new_pipe(false) -- create file descriptor for stdout
   run_async("ssh", {
     args = {
       "khang@khang-dbx",
       "-t",
       "echo 'build --define vscode_python_debugging=1' > ~/.bazelrc.user",
     },
-    stdio = { nil, stdout, stderr },
   })
 end
 
 local function disable_devbox_debug_bazel_flag()
-  local loop = vim.loop
-  local stdout = loop.new_pipe(false) -- create file descriptor for stdout
-  local stderr = loop.new_pipe(false) -- create file descriptor for stdout
   run_async("ssh", {
     args = { "khang@khang-dbx", "-t", "echo > ~/.bazelrc.user" },
-    stdio = { nil, stdout, stderr },
   })
 end
 
