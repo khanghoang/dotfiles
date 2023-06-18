@@ -366,7 +366,16 @@ local function execute_and_wait(cmd, cwd)
 end
 
 vim.api.nvim_create_user_command("BazelStop", function()
-  execute_and_wait()
+  local job = require("plenary.job")
+  job
+    :new({
+      command = "mbzl",
+      args = { "itest-stop-all", "--force" },
+      on_exit = function()
+        print("done!!")
+      end,
+    })
+    :start()
 end, { nargs = "*" })
 
 M.get_current_test_function = get_current_test_function
