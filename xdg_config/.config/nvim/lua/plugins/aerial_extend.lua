@@ -8,6 +8,7 @@ local reload = require("plenary.reload")
 local utils = require("telescope.utils")
 local path = Path.path
 local is_port_available = require("plugins.check_port").is_port_available
+local job = require("plenary.job")
 local nio = require("nio")
 local tasks = require("nio.tasks")
 
@@ -393,6 +394,16 @@ vim.api.nvim_create_user_command("DisableDevboxDebug", function()
   disable_devbox_debug_bazel_flag()
 end, { nargs = "*" })
 
+vim.api.nvim_create_user_command("BazelGenAll", function()
+  job
+    :new({
+      command = "arc",
+      args = { "preflight", "bzl-gen-preflight" },
+      on_exit = function() end,
+    })
+    :start()
+end, { nargs = "*" })
+
 local function execute_and_wait(cmd, cwd)
   -- NOTE: THIS WILL NOT WORK W/O PASSING "w"
   -- AND WE STILL DON'T KNOW WHY
@@ -403,9 +414,13 @@ local function execute_and_wait(cmd, cwd)
 end
 
 vim.api.nvim_create_user_command("BazelStop", function()
-  tasks.run(tasks.wrap(execute_and_wait, 1), function(success_, error_)
-    print("Bazel stop")
-  end)
+  job
+    :new({
+      command = "mbzl",
+      args = { "itest-stop-all", "--force" },
+      on_exit = function() end,
+    })
+    :start()
 end, { nargs = "*" })
 
 M.get_current_test_function = get_current_test_function
