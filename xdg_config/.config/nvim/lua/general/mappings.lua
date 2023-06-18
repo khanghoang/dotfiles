@@ -189,3 +189,5 @@ vim.keymap.set(
 
 -- open anything
 vim.keymap.set("n", "gx", "<cmd>OpenAnything<CR>", { desc = "Open anything" })
+vim.keymap.set("n", "dvo", "<cmd>DiffviewOpen @..master<CR>", { desc = "[D]iff[View] [O]pen" })
+vim.keymap.set("n", "dvc", "<cmd>DiffviewClose<CR>", { desc = "[D]iff[View] [C]pen" })
