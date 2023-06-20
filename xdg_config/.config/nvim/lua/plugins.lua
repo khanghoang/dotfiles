@@ -1132,6 +1132,11 @@ require("packer").startup(function(use, use_rocks)
   --- }}}
 
   -- Notify
+  -- popup is already imported
+  -- use("nvim-lua/popup.nvim")
+  use("MunifTanjim/nui.nvim")
+
+  -- Notify
   -- {{{
   -- use {
   --   'rcarriga/nvim-notify',
