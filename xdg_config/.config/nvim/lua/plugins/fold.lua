@@ -12,68 +12,69 @@ vim.cmd([[highlight! link MoreMsg Comment]])
 -- this is done in lsp.lua file
 
 local handler = function(virtText, lnum, endLnum, width, truncate)
-	local newVirtText = {}
-	local suffix = ("  %d "):format(endLnum - lnum)
-	local sufWidth = vim.fn.strdisplaywidth(suffix)
-	local targetWidth = width - sufWidth
-	local curWidth = 0
-	for _, chunk in ipairs(virtText) do
-		local chunkText = chunk[1]
-		local chunkWidth = vim.fn.strdisplaywidth(chunkText)
-		if targetWidth > curWidth + chunkWidth then
-			table.insert(newVirtText, chunk)
-		else
-			chunkText = truncate(chunkText, targetWidth - curWidth)
-			local hlGroup = chunk[2]
-			table.insert(newVirtText, { chunkText, hlGroup })
-			chunkWidth = vim.fn.strdisplaywidth(chunkText)
-			-- str width returned from truncate() may less than 2nd argument, need padding
-			if curWidth + chunkWidth < targetWidth then
-				suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
-			end
-			break
-		end
-		curWidth = curWidth + chunkWidth
-	end
-	table.insert(newVirtText, { suffix, "MoreMsg" })
-	return newVirtText
+  local newVirtText = {}
+  local suffix = ("  %d "):format(endLnum - lnum)
+  local sufWidth = vim.fn.strdisplaywidth(suffix)
+  local targetWidth = width - sufWidth
+  local curWidth = 0
+  for _, chunk in ipairs(virtText) do
+    local chunkText = chunk[1]
+    local chunkWidth = vim.fn.strdisplaywidth(chunkText)
+    if targetWidth > curWidth + chunkWidth then
+      table.insert(newVirtText, chunk)
+    else
+      chunkText = truncate(chunkText, targetWidth - curWidth)
+      local hlGroup = chunk[2]
+      table.insert(newVirtText, { chunkText, hlGroup })
+      chunkWidth = vim.fn.strdisplaywidth(chunkText)
+      -- str width returned from truncate() may less than 2nd argument, need padding
+      if curWidth + chunkWidth < targetWidth then
+        suffix = suffix .. (" "):rep(targetWidth - curWidth - chunkWidth)
+      end
+      break
+    end
+    curWidth = curWidth + chunkWidth
+  end
+  table.insert(newVirtText, { suffix, "MoreMsg" })
+  return newVirtText
 end
 
 local ftMap = {
-	vim = "indent",
-	python = { "indent" },
-	git = "",
+  vim = "indent",
+  python = { "lsp", "indent" },
+  lua = { "lsp", "treesitter" },
+  git = "",
 }
 
 -- global handler
 -- `handler` is the 2nd parameter of `setFoldVirtTextHandler`,
 -- check out `./lua/ufo.lua` and search `setFoldVirtTextHandler` for detail.
 require("ufo").setup({
-	open_fold_hl_timeout = 150,
-	close_fold_kinds = { "imports", "comment" },
-	preview = {
-		win_config = {
-			border = { "", "─", "", "", "", "─", "", "" },
-			-- winhighlight = 'Normal:Normal',
-			-- winhighlight = 'IncSearch:Folded',
-			winhighlight = "Normal:UfoPreviewNormal,FloatBorder:UfoPreviewBorder,CursorLine:UfoPreviewCursorLine",
-			winblend = 0,
-		},
-		mappings = {
-			scrollU = "<C-u>",
-			scrollD = "<C-d>",
-			jumpTop = "<C-p>",
-			jumpBot = "<C-n>",
-		},
-	},
-	provider_selector = function(bufnr, filetype, buftype)
-		-- if you prefer treesitter provider rather than lsp,
-		-- return ftMap[filetype] or {'treesitter', 'indent'}
-		return ftMap[filetype] or { "treesitter", "indent" }
+  open_fold_hl_timeout = 150,
+  close_fold_kinds = { "imports", "comment" },
+  preview = {
+    win_config = {
+      border = { "", "─", "", "", "", "─", "", "" },
+      -- winhighlight = 'Normal:Normal',
+      -- winhighlight = 'IncSearch:Folded',
+      winhighlight = "Normal:UfoPreviewNormal,FloatBorder:UfoPreviewBorder,CursorLine:UfoPreviewCursorLine",
+      winblend = 0,
+    },
+    mappings = {
+      scrollU = "<C-u>",
+      scrollD = "<C-d>",
+      jumpTop = "<C-p>",
+      jumpBot = "<C-n>",
+    },
+  },
+  provider_selector = function(bufnr, filetype, buftype)
+    -- if you prefer treesitter provider rather than lsp,
+    -- return ftMap[filetype] or {'treesitter', 'indent'}
+    return ftMap[filetype] or { "treesitter", "indent" }
 
-		-- refer to ./doc/example.lua for detail
-	end,
-	fold_virt_text_handler = handler,
+    -- refer to ./doc/example.lua for detail
+  end,
+  fold_virt_text_handler = handler,
 })
 
 -- buffer scope handler

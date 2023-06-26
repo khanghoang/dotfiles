@@ -321,8 +321,11 @@ local function clear_virtual_dap_text(session)
       virtual_text.set_virtual_text(f, {}, false)
     end
   else
-    virtual_text.set_virtual_text(session.current_frame, {}, true)
+    if session and session.current_frame then
+      virtual_text.set_virtual_text(session.current_frame, {}, true)
+    end
   end
+  virtual_text.clear_virtual_text()
 end
 
 -- This won't work since PTVSD doesn't fully implement DAP protocol
