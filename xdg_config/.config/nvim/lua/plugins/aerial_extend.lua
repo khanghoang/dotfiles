@@ -10,6 +10,7 @@ local path = Path.path
 local is_port_available = require("plugins.check_port").is_port_available
 local job = require("plenary.job")
 local nio = require("nio")
+local notify = require("plugins.notify")
 local tasks = require("nio.tasks")
 
 local M = {}
@@ -359,9 +360,16 @@ local function get_current_test_function(bufnr)
 
   -- send the cmd to tmux panel 0
   -- NEED TO NAME THE PANEL "RUNNING"
-  local message = "tmux send-keys -t RUNNING " .. '"' .. cmd .. '"' .. " Enter"
-  print(message)
-  vim.fn.system(message)
+  local args = { "send-keys", "-t", "RUNNING", cmd, "Enter" }
+  job
+    :new({
+      command = "tmux",
+      args = args,
+      on_exit = function() end,
+    })
+    :start()
+
+  notify._show_notification("Running test", 1000)
 end
 
 vim.api.nvim_create_user_command("GetTestCommand", function()
@@ -395,11 +403,21 @@ vim.api.nvim_create_user_command("DisableDevboxDebug", function()
 end, { nargs = "*" })
 
 vim.api.nvim_create_user_command("BazelGenAll", function()
+  notify._show_notification("⟳ Bazel gen all", 2000)
   job
     :new({
+      -- cwd = "/Users/khang/code/server",
       command = "arc",
       args = { "preflight", "bzl-gen-preflight" },
-      on_exit = function() end,
+      on_exit = function(j, return_value)
+        vim.schedule(function()
+          if return_value == 0 then
+            notify._show_notification("✓ done!!", 1000)
+          else
+            notify._show_notification("✖ error!!", 1000)
+          end
+        end)
+      end,
     })
     :start()
 end, { nargs = "*" })
@@ -414,13 +432,27 @@ local function execute_and_wait(cmd, cwd)
 end
 
 vim.api.nvim_create_user_command("BazelStop", function()
+  notify._show_notification("Stopping bazel", 2000)
   job
     :new({
+      -- cwd = "/Users/khang/code/server",
       command = "mbzl",
       args = { "itest-stop-all", "--force" },
-      on_exit = function() end,
+      on_exit = function(j, return_value)
+        vim.schedule(function()
+          if return_value == 0 then
+            notify._show_notification("✓ done!!", 1000)
+          else
+            notify._show_notification("✖ error!!", 1000)
+          end
+        end)
+      end,
     })
     :start()
+end, { nargs = "*" })
+
+vim.api.nvim_create_user_command("HideNotification", function()
+  notify._show_notification("foo", 0)
 end, { nargs = "*" })
 
 M.get_current_test_function = get_current_test_function

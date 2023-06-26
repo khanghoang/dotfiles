@@ -18,7 +18,8 @@ local Popup = require("nui.popup")
 local Split = require("nui.split")
 local event = require("nui.utils.autocmd").event
 
-local Output = require("executor.output")
+-- local Output = require("executor.output")
+local Output = {}
 
 local M = {}
 
@@ -276,7 +277,7 @@ M._show_notification = function(text, timeout)
   if timeout then
     M._state.notification_timer = vim.loop.new_timer()
     M._state.notification_timer:start(
-      5000,
+      timeout,
       0,
       vim.schedule_wrap(function()
         M._notification_popup:unmount()
