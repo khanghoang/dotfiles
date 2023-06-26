@@ -330,6 +330,8 @@ local function clear_virtual_dap_text(session)
   virtual_text.clear_virtual_text()
 end
 
+-- List available events in DAP
+-- https://github.com/mfussenegger/nvim-dap/blob/a6d48d23407fbad7a4c1451803b8f34cab31c441/lua/dap.lua#L38-L96
 -- This won't work since PTVSD doesn't fully implement DAP protocol
 dap.listeners.before["event_exited"]["dbx-dap"] = function(session, body)
   print("Session exited!!", vim.inspect(session), vim.inspect(body))
