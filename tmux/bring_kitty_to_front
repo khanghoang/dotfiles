@@ -1,6 +1,9 @@
 #!/opt/homebrew/bin/python3
 import subprocess
 
+# switch to CODE pane
+subprocess.run(["/opt/homebrew/bin/tmux", "select-window", "-t", "CODE"])
+
 # bring kitty to front
 app_name = "kitty"
 script = f'tell application "System Events" to set frontmost of process "{app_name}" to true'

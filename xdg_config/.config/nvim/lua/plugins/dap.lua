@@ -4,6 +4,8 @@ local is_port_available = require("plugins.check_port").is_port_available
 --
 local api = vim.api
 local installation_path = vim.fn.stdpath("data") .. "/mason/bin"
+local notify = require("plugins.notify")
+local job = require("plenary.job")
 
 -- May need to symlink manually, for example
 -- ln -sf ~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3 ~/.local/share/nvim/mason/bin/
@@ -339,6 +341,14 @@ end
 dap.listeners.after.event_terminated["dapui_config"] = function()
   -- dapui.close()
   clear_virtual_dap_text()
+end
+dap.listeners.before.event_stopped["dapui_config"] = function()
+  job
+    :new({
+      -- cwd = "/Users/khang/code/server",
+      command = "bring_kitty_to_front",
+    })
+    :start()
 end
 
 vim.api.nvim_create_user_command("RemoveVirtualText", function()
