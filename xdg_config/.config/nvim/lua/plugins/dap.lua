@@ -310,6 +310,12 @@ vim.keymap.set(
   ":lua require('dap').run_last()<CR>",
   { noremap = true, desc = "[D]ebug [R]un to [L]ast" }
 )
+vim.keymap.set(
+  "n",
+  "<leader>dc",
+  ":lua require'dap'.set_breakpoint(nil, vim.fn.input('Condition: '), vim.fn.input('Log message: '))<CR>",
+  { noremap = true, desc = "[D]ebug [C]onsole" }
+)
 
 local function clear_virtual_dap_text(session)
   session = session or dap.session()
