@@ -8,7 +8,9 @@ xdg_config/.config/vifm/vifminfo.json
 xdg_config/.config/nvim_plugins/dbx/misc
 
 # lnav is annoying
-.lnav/
+.lnav/*
 
 # lnav is annoying
 .luarc.json
+
+!.lnav/.lnav.conf
