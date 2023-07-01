@@ -5,6 +5,11 @@ local is_port_available = require("plugins.check_port").is_port_available
 local api = vim.api
 local installation_path = vim.fn.stdpath("data") .. "/mason/bin"
 
+-- config for persistent-breakpoints
+require("persistent-breakpoints").setup({
+  load_breakpoints_event = { "BufReadPost" },
+})
+
 -- May need to symlink manually, for example
 -- ln -sf ~/.local/share/nvim/mason/packages/debugpy/venv/bin/python3 ~/.local/share/nvim/mason/bin/
 -- Though for debugpy, it needs the full path of the even python3, and
@@ -229,7 +234,7 @@ api.nvim_set_keymap("n", "<leader>dd", ":lua require('dap').continue()<CR>", { n
 api.nvim_set_keymap(
   "n",
   "<leader>dbp",
-  ":lua require('dap').toggle_breakpoint()<CR>",
+  ":lua require('persistent-breakpoints.api').toggle_breakpoint()<CR>",
   { noremap = true }
 )
 api.nvim_set_keymap("n", "<leader>de", ":lua require('dap').close()<CR>", { noremap = true })
@@ -312,9 +317,16 @@ vim.keymap.set(
 )
 vim.keymap.set(
   "n",
-  "<leader>dc",
-  ":lua require'dap'.set_breakpoint(nil, vim.fn.input('Condition: '), vim.fn.input('Log message: '))<CR>",
-  { noremap = true, desc = "[D]ebug [C]onsole" }
+  "<leader>dbc",
+  ":lua require('persistent-breakpoints.api').set_conditional_breakpoint()<CR>",
+  { noremap = true, desc = "[D]ebug [B]reakpoint [C]ondition" }
+)
+
+vim.keymap.set(
+  "n",
+  "<leader>dbx",
+  ":lua require('persistent-breakpoints.api').clear_all_breakpoints()<CR>",
+  { noremap = true, desc = "[D]ebug [B]reakpoint [X]kill" }
 )
 
 local function clear_virtual_dap_text(session)

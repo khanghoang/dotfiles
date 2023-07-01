@@ -673,6 +673,9 @@ require("packer").startup(function(use, use_rocks)
       require("plugins.dap-virtual-text")
     end,
   })
+  -- persists breakpoints
+  -- config is loaded in plugins.dap
+  use({ "Weissle/persistent-breakpoints.nvim" })
   -- }}}
 
   -- Vim async dispatch
