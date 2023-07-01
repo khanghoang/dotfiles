@@ -329,6 +329,10 @@ vim.keymap.set(
   { noremap = true, desc = "[D]ebug [B]reakpoint [X]kill" }
 )
 
+-- Check value
+vim.keymap.set("n", "L", '<Cmd>lua require("dap.ui.widgets").hover()<CR>', { silent = true })
+vim.keymap.set("v", "L", '<Cmd>lua require("dap.ui.widgets").hover()<CR>', { silent = true })
+
 local function clear_virtual_dap_text(session)
   session = session or dap.session()
   local virtual_text = require("nvim-dap-virtual-text/virtual_text")
