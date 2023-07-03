@@ -3,7 +3,6 @@ if not packer_plugins["plenary.nvim"].loaded then
 end
 local bar_icon = "▌"
 require("gitsigns").setup({
-  debug_mode = true,
   signs = {
     add = { text = bar_icon },
     change = { text = bar_icon },
