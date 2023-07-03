@@ -667,12 +667,6 @@ require("packer").startup(function(use, use_rocks)
       require("plugins.dap")
     end,
   })
-  use({
-    "theHamsta/nvim-dap-virtual-text",
-    config = function()
-      require("plugins.dap-virtual-text")
-    end,
-  })
   -- persists breakpoints
   -- config is loaded in plugins.dap
   use({ "Weissle/persistent-breakpoints.nvim" })
