@@ -357,14 +357,14 @@ end
 -- This won't work since PTVSD doesn't fully implement DAP protocol
 dap.listeners.before["event_exited"]["dbx-dap"] = function(session, body)
   print("Session exited!!", vim.inspect(session), vim.inspect(body))
-  clear_virtual_dap_text(session)
+  -- clear_virtual_dap_text(session)
 end
 dap.listeners.before.disconnect["dapui_config"] = function()
-  clear_virtual_dap_text()
+  -- clear_virtual_dap_text()
 end
 dap.listeners.after.event_terminated["dapui_config"] = function()
   -- dapui.close()
-  clear_virtual_dap_text()
+  -- clear_virtual_dap_text()
 end
 dap.listeners.before.event_stopped["dapui_config"] = function()
   job
