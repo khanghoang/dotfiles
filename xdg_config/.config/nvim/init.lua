@@ -55,10 +55,3 @@ vim.cmd(
 vim.cmd([[set cmdheight=0]])
 vim.cmd([[set laststatus=3]])
 vim.cmd([[highlight WinSeparator guibg=None]])
-
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerCompile
-  augroup end
-]])

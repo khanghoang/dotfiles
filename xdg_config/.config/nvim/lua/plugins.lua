@@ -1,83 +1,42 @@
 -- vim: set foldmethod=marker foldlevel=0 foldlevelstart=0 foldenable :
 
--- Install Packer on fresh start
-local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-local is_bootstrap = false
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-  is_bootstrap = true
-  vim.fn.execute("!git clone https://github.com/wbthomason/packer.nvim " .. install_path)
-  vim.cmd([[packadd packer.nvim]])
+-- Install lazy.vnim on fresh start
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
--- Have packer use a popup window
--- Packer init
--- {{{
-require("packer").init({
-  git = {
-    cmd = "git", -- The base command for git operations
-    subcommands = {
-      -- Format strings for git subcommands
-      update = "pull --ff-only --progress --rebase=false",
-      install = "clone --depth %i --no-single-branch --progress",
-      fetch = "fetch --depth 999999 --progress",
-      checkout = "checkout %s --",
-      update_branch = "merge --ff-only @{u}",
-      current_branch = "branch --show-current",
-      diff = "log --color=never --pretty=format:FMT --no-show-signature HEAD@{1}...HEAD",
-      diff_fmt = "%%h %%s (%%cr)",
-      get_rev = "rev-parse --short HEAD",
-      get_msg = "log --color=never --pretty=format:FMT --no-show-signature HEAD -n 1",
-      submodules = "submodule update --init --recursive --progress",
-    },
-    depth = 1, -- Git clone depth
-    -- tree-sitter/tree-sitter-typescript timeout at 60s
-    clone_timeout = 5 * 60, -- Timeout, in seconds, for git clones
-    default_url_format = "https://github.com/%s", -- Lua format string used for "aaa/bbb" style plugins
-    -- log = { level = "debug" },
-  },
-  -- due to https://github.com/nvim-lua/plenary.nvim/issues/4#issuecomment-860269256
-  -- hererocks may need to be installed manually (optional)
-  -- run:
-  -- export MACOSX_DEPLOYMENT_TARGET=10.15
-  -- python3 /Users/khang/.cache/nvim/packer_hererocks/hererocks.py --verbose -j 2.1.0-beta3 /Users/khang/.cache/nvim/packer_hererocks/2.1.0-beta3
-  luarocks = {
-    python_cmd = "/opt/homebrew/bin/python3", -- or "python", to set the python command to use for running hererocks
-  },
-  display = {
-    open_fn = function()
-      return require("packer.util").float({ border = "rounded" })
-    end,
-  },
-  max_jobs = 10,
-})
--- }}}
+vim.g.mapleader = ","
+vim.g.maplocalleader = ","
 
-require("packer").startup(function(use, use_rocks)
-  -- Packer can manage itself
-  -- Package manager
-  -- {{{
-  use("wbthomason/packer.nvim")
-  -- }}}
-
+require("lazy").setup({
   -- Color schemes
   -- {{{
-  use("mhartington/oceanic-next")
-  use("frankier/neovim-colors-solarized-truecolor-only")
+  "mhartington/oceanic-next",
+  "frankier/neovim-colors-solarized-truecolor-only",
   -- }}}
 
   -- Navigation
   -- {{{
-  use("vifm/vifm.vim")
-  use("rbgrouleff/bclose.vim")
-  use("easymotion/vim-easymotion")
-  use({
+  "vifm/vifm.vim",
+  "rbgrouleff/bclose.vim",
+  "easymotion/vim-easymotion",
+  {
     "junegunn/fzf",
-    run = function()
+    build = function()
       vim.fn["fzf#install"]()
     end,
-  })
-  use("junegunn/fzf.vim")
-  use({
+  },
+  "junegunn/fzf.vim",
+  {
     "folke/which-key.nvim",
     config = function()
       require("which-key").setup({
@@ -86,9 +45,9 @@ require("packer").startup(function(use, use_rocks)
         -- refer to the configuration section below
       })
     end,
-  })
+  },
 
-  use({
+  {
     "alexghergh/nvim-tmux-navigation",
     config = function()
       require("nvim-tmux-navigation").setup({
@@ -132,12 +91,12 @@ require("packer").startup(function(use, use_rocks)
         { noremap = true, silent = true }
       )
     end,
-  })
+  },
   -- }}}
 
   -- LSP
   --- {{{
-  use({
+  {
     "nvim-lua/lsp-status.nvim",
     config = function()
       local lsp_status = require("lsp-status")
@@ -177,68 +136,68 @@ require("packer").startup(function(use, use_rocks)
       })
       lsp_status.register_progress()
     end,
-  })
+  },
 
-  use({
+  {
     "neovim/nvim-lspconfig",
     config = function()
       require("plugins.lsp")
     end,
-    requires = { "williamboman/nvim-lsp-installer" },
-  })
+    dependencies = { "williamboman/nvim-lsp-installer" },
+  },
 
-  use({
+  {
     "glepnir/lspsaga.nvim",
     -- branch = 'nvim6.0'
-    opt = true,
+    lazy = true,
     branch = "main",
     event = "LspAttach",
     config = function()
       require("plugins.lsp_saga")
     end,
-    requires = {
-      { "nvim-tree/nvim-web-devicons" },
+    dependencies = {
+      { "kyazdani42/nvim-web-devicons" },
       --Please make sure you install markdown and markdown_inline parser
       { "nvim-treesitter/nvim-treesitter" },
     },
-  })
+  },
 
-  use({
+  {
     "stevearc/aerial.nvim",
     config = function()
       require("plugins.aerial")
     end,
-  })
+  },
 
-  use({
+  {
     "jose-elias-alvarez/null-ls.nvim",
     config = function() end,
-  })
+  },
 
-  use({
+  {
     "sourcegraph/sg.nvim",
-    run = "cargo build --workspace",
-    requires = { "nvim-lua/plenary.nvim" },
-  })
+    build = "cargo build --workspace",
+    dependencies = { "nvim-lua/plenary.nvim" },
+  },
 
   --}}}
 
   -- Completion
   -- {{{
-  use({
+  {
     "hrsh7th/nvim-cmp",
     config = function()
       require("plugins.nvim_cmp")
     end,
-    requires = { "hrsh7th/cmp-buffer", "hrsh7th/cmp-nvim-lsp", "neovim/nvim-lspconfig" },
-  })
+    dependencies = { "hrsh7th/cmp-buffer", "hrsh7th/cmp-nvim-lsp", "neovim/nvim-lspconfig" },
+  },
 
-  use("hrsh7th/cmp-nvim-lsp")
-  use("hrsh7th/cmp-vsnip")
-  use("hrsh7th/vim-vsnip")
-  use("hrsh7th/cmp-path")
-  use("saadparwaiz1/cmp_luasnip")
-  use({
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-vsnip",
+  "hrsh7th/vim-vsnip",
+  "hrsh7th/cmp-path",
+  "saadparwaiz1/cmp_luasnip",
+  {
     "L3MON4D3/LuaSnip",
     config = function()
       require("luasnip.loaders.from_vscode").lazy_load({
@@ -270,56 +229,56 @@ require("packer").startup(function(use, use_rocks)
         end
       end)
     end,
-  })
+  },
 
   -- }}}
 
   -- Git support
   -- {{{
-  use("tpope/vim-fugitive")
-  use("tpope/vim-rhubarb")
-  use({
+  "tpope/vim-fugitive",
+  "tpope/vim-rhubarb",
+  {
     "ruifm/gitlinker.nvim",
-    requires = "nvim-lua/plenary.nvim",
-  })
-  use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })
-  use({
+    dependencies = "nvim-lua/plenary.nvim",
+  },
+  { "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" },
+  {
     "lewis6991/gitsigns.nvim",
-    requires = {
+    dependencies = {
       "nvim-lua/plenary.nvim",
     },
     config = function()
       require("plugins.gitsigns")
     end,
-  })
+  },
 
   -- }}}
 
   -- Language support
   -- {{{
-  use({
+  {
     "hrsh7th/cmp-nvim-lsp-signature-help",
     config = function() end,
-  })
+  },
   -- }}}
 
   -- TreeSitter
   -- {{{
-  use({
+  {
     "tree-sitter/tree-sitter-typescript",
     ft = { "typescriptreact", "typescript", "javascript", "javascriptreact" },
-  })
+  },
 
-  use({ "nvim-treesitter/nvim-treesitter", run = ":TSUpdate" })
-  use({
+  { "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+  {
     "nvim-treesitter/nvim-treesitter-refactor",
-  })
-  use({
+  },
+  {
     "nvim-treesitter/playground",
     cmd = { "TSPlaygroundToggle" },
-  })
+  },
 
-  use({
+  {
     "nvim-treesitter/nvim-treesitter-textobjects",
     ft = {
       "typescriptreact",
@@ -364,10 +323,8 @@ require("packer").startup(function(use, use_rocks)
         textobjects = {
           select = {
             enable = true,
-
             -- Automatically jump forward to textobj, similar to targets.vim
             lookahead = true,
-
             keymaps = {
               -- You can use the capture groups defined in textobjects.scm
               ["af"] = "@function.outer",
@@ -412,7 +369,7 @@ require("packer").startup(function(use, use_rocks)
       -- disable auto fold when opening file
       vim.cmd([[set nofoldenable]])
     end,
-  })
+  },
 
   -- run and display test results
   -- use {
@@ -472,27 +429,27 @@ require("packer").startup(function(use, use_rocks)
   -- {{{
   -- Generate table of content from a markdown file
   -- Mostly for Table of Content, zk is for another purpose
-  use({
+  {
     "preservim/vim-markdown",
     ft = { "markdown" },
-  })
-  use({
+  },
+  {
     "ellisonleao/glow.nvim",
     branch = "main",
     ft = { "markdown" },
-  })
+  },
   -- }}}
 
   -- Misc
   --- {{{
   -- Written in Lua
   -- This plug-in provides automatic closing of quotes, parenthesis, brackets
-  use({
+  {
     "windwp/nvim-autopairs",
     config = function()
       require("nvim-autopairs").setup({})
     end,
-  })
+  },
   -- Same as the above
   -- use {
   --   'Raimondi/delimitMate',
@@ -514,64 +471,64 @@ require("packer").startup(function(use, use_rocks)
   -- ^      ^          ^
   -- delete surround` `"`
   --- Finally, let's try out visual mode. Press a capital V (for linewise visual mode) followed by `S"`
-  use("tpope/vim-surround")
+  "tpope/vim-surround",
 
   -- Detect tabstop and shiftwidth automatically
-  use("tpope/vim-sleuth")
+  "tpope/vim-sleuth",
 
-  use("christoomey/vim-tmux-navigator")
-  use({
+  "christoomey/vim-tmux-navigator",
+  {
     "numToStr/Comment.nvim",
     config = function()
       require("Comment").setup()
     end,
-  })
+  },
 
   -- find the matching characters for {}, [], etc
   -- https://github.com/andymass/vim-matchup#a2-jump-to-open-and-close-words
-  use({ "andymass/vim-matchup", event = "VimEnter" })
-  use("nvim-lua/popup.nvim")
-  use("nvim-lua/plenary.nvim")
-  use({
+  { "andymass/vim-matchup", event = "VimEnter" },
+  "nvim-lua/popup.nvim",
+  "nvim-lua/plenary.nvim",
+  {
     "nvim-telescope/telescope.nvim",
     config = function()
       require("plugins.telescope")
     end,
-  })
+  },
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
-  use({
+  {
     "nvim-telescope/telescope-fzf-native.nvim",
-    run = "make",
+    build = "make",
     cond = vim.fn.executable("make") == 1,
-  })
+  },
 
   -- support prisma schema
-  use({
+  {
     "pantharshit00/vim-prisma",
     ft = { "prisma" },
-  })
+  },
 
   -- This plugin provides f/t/F/T mappings that can be customized by your setting.
-  use({
+  {
     "hrsh7th/vim-eft",
-    opt = true,
+    lazy = true,
     config = function()
       vim.g.eft_ignorecase = true
     end,
-  })
+  },
 
-  use("godlygeek/tabular")
+  "godlygeek/tabular",
 
   --}}}
 
   -- Tig in vim
   -- {{{
-  use({
+  {
     "iberianpig/tig-explorer.vim",
-    opt = true,
+    lazy = true,
     cmd = { "Tig" },
-  })
+  },
   -- }}}
 
   -- Vimspector
@@ -600,7 +557,7 @@ require("packer").startup(function(use, use_rocks)
 
   -- Debugger
   -- {{{
-  use({
+  {
     "williamboman/mason.nvim",
     config = function()
       require("mason").setup({
@@ -657,246 +614,253 @@ require("packer").startup(function(use, use_rocks)
       --   }
     end,
     -- requires = { "WhoIsSethDaniel/mason-tool-installer" }
-  })
+  },
 
-  use("mfussenegger/nvim-dap")
-  use({
+  "mfussenegger/nvim-dap",
+  {
     "rcarriga/nvim-dap-ui",
-    requires = { "mfussenegger/nvim-dap" },
+    dependencies = { "mfussenegger/nvim-dap" },
     config = function()
       require("plugins.dap")
     end,
-  })
+  },
   -- persists breakpoints
   -- config is loaded in plugins.dap
-  use({ "Weissle/persistent-breakpoints.nvim" })
+  "Weissle/persistent-breakpoints.nvim",
   -- }}}
 
   -- Vim async dispatch
   -- {{{
-  use({
+  {
     "tpope/vim-dispatch",
-    opt = true,
+    lazy = true,
     cmd = { "Dispatch", "Make", "Focus", "Start" },
-  })
+  },
   -- }}}
 
   -- UI
   -- {{{
-  use({
+  {
     "NTBBloodbath/galaxyline.nvim",
     -- branch = 'main',
     -- event = { 'VimEnter' },
     config = function()
       require("plugins.lightline")
     end,
-    requires = { "kyazdani42/nvim-web-devicons", opt = true },
-  })
+    dependencies = { "kyazdani42/nvim-web-devicons", lazy = true },
+  },
 
-  use({
+  {
     "lukas-reineke/indent-blankline.nvim",
-    event = "BufEnter",
-    branch = "master",
+    main = "ibl",
+    opts = {},
     config = function()
-      vim.g.indent_blankline_char = "│"
-      vim.g.indent_blankline_show_first_indent_level = true
-      vim.g.show_trailing_blankline_indent = false
-      vim.g.indent_blankline_filetype_exclude = {
-        "startify",
-        "dashboard",
-        "dotooagenda",
-        "log",
-        "fugitive",
-        "gitcommit",
-        "packer",
-        "vimwiki",
-        "markdown",
-        "json",
-        "txt",
-        "vista",
-        "help",
-        "todoist",
-        "NvimTree",
-        "peekaboo",
-        "git",
-        "TelescopePrompt",
-        "undotree",
-        "flutterToolsOutline",
-        "dbui",
-        "dbout",
-        "sql",
-        "", -- for all buffers without a file type
-      }
-      vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
-      vim.g.indent_blankline_show_trailing_blankline_indent = false
-      vim.g.indent_blankline_show_current_context = true
-      vim.g.indent_blankline_context_patterns = {
-        "abstract_class_declaration",
-        "abstract_method_signature",
-        "accessibility_modifier",
-        "ambient_declaration",
-        "arguments",
-        "array",
-        "array_pattern",
-        "array_type",
-        "arrow_function",
-        "as_expression",
-        "asserts",
-        "assignment_expression",
-        "assignment_pattern",
-        "augmented_assignment_expression",
-        "await_expression",
-        "binary_expression",
-        "break_statement",
-        "call_expression",
-        "call_signature",
-        "catch_clause",
-        "class",
-        "class_body",
-        "class_declaration",
-        "class_heritage",
-        "computed_property_name",
-        "conditional_type",
-        "constraint",
-        "construct_signature",
-        "constructor_type",
-        "continue_statement",
-        "debugger_statement",
-        "declaration",
-        "decorator",
-        "default_type",
-        "do_statement",
-        "else_clause",
-        "empty_statement",
-        "enum_assignment",
-        "enum_body",
-        "enum_declaration",
-        "existential_type",
-        "export_clause",
-        "export_specifier",
-        "export_statement",
-        "expression",
-        "expression_statement",
-        "extends_clause",
-        "finally_clause",
-        "flow_maybe_type",
-        "for_in_statement",
-        "for_statement",
-        "formal_parameters",
-        "function",
-        "function_declaration",
-        "function_signature",
-        "function_type",
-        "generator_function",
-        "generator_function_declaration",
-        "generic_type",
-        "if_statement",
-        "implements_clause",
-        "import",
-        "import_alias",
-        "import_clause",
-        "import_require_clause",
-        "import_specifier",
-        "import_statement",
-        "index_signature",
-        "index_type_query",
-        "infer_type",
-        "interface_declaration",
-        "internal_module",
-        "intersection_type",
-        "jsx_attribute",
-        "jsx_closing_element",
-        "jsx_element",
-        "jsx_expression",
-        "jsx_fragment",
-        "jsx_namespace_name",
-        "jsx_opening_element",
-        "jsx_self_closing_element",
-        "labeled_statement",
-        "lexical_declaration",
-        "literal_type",
-        "lookup_type",
-        "mapped_type_clause",
-        "member_expression",
-        "meta_property",
-        "method_definition",
-        "method_signature",
-        "module",
-        "named_imports",
-        "namespace_import",
-        "nested_identifier",
-        "nested_type_identifier",
-        "new_expression",
-        "non_null_expression",
-        "object",
-        "object_assignment_pattern",
-        "object_pattern",
-        "object_type",
-        "omitting_type_annotation",
-        "opting_type_annotation",
-        "optional_parameter",
-        "optional_type",
-        "pair",
-        "pair_pattern",
-        "parenthesized_expression",
-        "parenthesized_type",
-        "pattern",
-        "predefined_type",
-        "primary_expression",
-        "program",
-        "property_signature",
-        "public_field_definition",
-        "readonly_type",
-        "regex",
-        "required_parameter",
-        "rest_pattern",
-        "rest_type",
-        "return_statement",
-        "sequence_expression",
-        "spread_element",
-        "statement",
-        "statement_block",
-        "string",
-        "subscript_expression",
-        "switch_body",
-        "switch_case",
-        "switch_default",
-        "switch_statement",
-        "template_string",
-        "template_substitution",
-        "ternary_expression",
-        "throw_statement",
-        "try_statement",
-        "tuple_type",
-        "type_alias_declaration",
-        "type_annotation",
-        "type_arguments",
-        "type_parameter",
-        "type_parameters",
-        "type_predicate",
-        "type_predicate_annotation",
-        "type_query",
-        "unary_expression",
-        "union_type",
-        "update_expression",
-        "variable_declaration",
-        "variable_declarator",
-        "while_statement",
-        "with_statement",
-        "yield_expression",
-      }
+      require("ibl").setup({
+        indent = { char = "│" },
+        whitespace = {
+          remove_blankline_trail = false,
+        },
+        scope = { enabled = false },
+      })
+      -- vim.g.indent_blankline_char = "│"
+      -- vim.g.indent_blankline_show_first_indent_level = true
+      -- vim.g.show_trailing_blankline_indent = false
+      -- vim.g.indent_blankline_filetype_exclude = {
+      --   "startify",
+      --   "dashboard",
+      --   "dotooagenda",
+      --   "log",
+      --   "fugitive",
+      --   "gitcommit",
+      --   "packer",
+      --   "vimwiki",
+      --   "markdown",
+      --   "json",
+      --   "txt",
+      --   "vista",
+      --   "help",
+      --   "todoist",
+      --   "NvimTree",
+      --   "peekaboo",
+      --   "git",
+      --   "TelescopePrompt",
+      --   "undotree",
+      --   "flutterToolsOutline",
+      --   "dbui",
+      --   "dbout",
+      --   "sql",
+      --   "", -- for all buffers without a file type
+      -- }
+      -- vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
+      -- vim.g.indent_blankline_show_trailing_blankline_indent = false
+      -- vim.g.indent_blankline_show_current_context = true
+      -- vim.g.indent_blankline_context_patterns = {
+      --   "abstract_class_declaration",
+      --   "abstract_method_signature",
+      --   "accessibility_modifier",
+      --   "ambient_declaration",
+      --   "arguments",
+      --   "array",
+      --   "array_pattern",
+      --   "array_type",
+      --   "arrow_function",
+      --   "as_expression",
+      --   "asserts",
+      --   "assignment_expression",
+      --   "assignment_pattern",
+      --   "augmented_assignment_expression",
+      --   "await_expression",
+      --   "binary_expression",
+      --   "break_statement",
+      --   "call_expression",
+      --   "call_signature",
+      --   "catch_clause",
+      --   "class",
+      --   "class_body",
+      --   "class_declaration",
+      --   "class_heritage",
+      --   "computed_property_name",
+      --   "conditional_type",
+      --   "constraint",
+      --   "construct_signature",
+      --   "constructor_type",
+      --   "continue_statement",
+      --   "debugger_statement",
+      --   "declaration",
+      --   "decorator",
+      --   "default_type",
+      --   "do_statement",
+      --   "else_clause",
+      --   "empty_statement",
+      --   "enum_assignment",
+      --   "enum_body",
+      --   "enum_declaration",
+      --   "existential_type",
+      --   "export_clause",
+      --   "export_specifier",
+      --   "export_statement",
+      --   "expression",
+      --   "expression_statement",
+      --   "extends_clause",
+      --   "finally_clause",
+      --   "flow_maybe_type",
+      --   "for_in_statement",
+      --   "for_statement",
+      --   "formal_parameters",
+      --   "function",
+      --   "function_declaration",
+      --   "function_signature",
+      --   "function_type",
+      --   "generator_function",
+      --   "generator_function_declaration",
+      --   "generic_type",
+      --   "if_statement",
+      --   "implements_clause",
+      --   "import",
+      --   "import_alias",
+      --   "import_clause",
+      --   "import_require_clause",
+      --   "import_specifier",
+      --   "import_statement",
+      --   "index_signature",
+      --   "index_type_query",
+      --   "infer_type",
+      --   "interface_declaration",
+      --   "internal_module",
+      --   "intersection_type",
+      --   "jsx_attribute",
+      --   "jsx_closing_element",
+      --   "jsx_element",
+      --   "jsx_expression",
+      --   "jsx_fragment",
+      --   "jsx_namespace_name",
+      --   "jsx_opening_element",
+      --   "jsx_self_closing_element",
+      --   "labeled_statement",
+      --   "lexical_declaration",
+      --   "literal_type",
+      --   "lookup_type",
+      --   "mapped_type_clause",
+      --   "member_expression",
+      --   "meta_property",
+      --   "method_definition",
+      --   "method_signature",
+      --   "module",
+      --   "named_imports",
+      --   "namespace_import",
+      --   "nested_identifier",
+      --   "nested_type_identifier",
+      --   "new_expression",
+      --   "non_null_expression",
+      --   "object",
+      --   "object_assignment_pattern",
+      --   "object_pattern",
+      --   "object_type",
+      --   "omitting_type_annotation",
+      --   "opting_type_annotation",
+      --   "optional_parameter",
+      --   "optional_type",
+      --   "pair",
+      --   "pair_pattern",
+      --   "parenthesized_expression",
+      --   "parenthesized_type",
+      --   "pattern",
+      --   "predefined_type",
+      --   "primary_expression",
+      --   "program",
+      --   "property_signature",
+      --   "public_field_definition",
+      --   "readonly_type",
+      --   "regex",
+      --   "required_parameter",
+      --   "rest_pattern",
+      --   "rest_type",
+      --   "return_statement",
+      --   "sequence_expression",
+      --   "spread_element",
+      --   "statement",
+      --   "statement_block",
+      --   "string",
+      --   "subscript_expression",
+      --   "switch_body",
+      --   "switch_case",
+      --   "switch_default",
+      --   "switch_statement",
+      --   "template_string",
+      --   "template_substitution",
+      --   "ternary_expression",
+      --   "throw_statement",
+      --   "try_statement",
+      --   "tuple_type",
+      --   "type_alias_declaration",
+      --   "type_annotation",
+      --   "type_arguments",
+      --   "type_parameter",
+      --   "type_parameters",
+      --   "type_predicate",
+      --   "type_predicate_annotation",
+      --   "type_query",
+      --   "unary_expression",
+      --   "union_type",
+      --   "update_expression",
+      --   "variable_declaration",
+      --   "variable_declarator",
+      --   "while_statement",
+      --   "with_statement",
+      --   "yield_expression",
+      -- }
       -- because lazy load indent-blankline so need readd this autocmd
-      vim.cmd("autocmd CursorMoved * IndentBlanklineRefresh")
+      -- vim.cmd("autocmd CursorMoved * IndentBlanklineRefresh")
     end,
-  })
+  },
 
-  use({ "mxsdev/nvim-dap-vscode-js", requires = { "mfussenegger/nvim-dap" } })
-  use({
+  { "mxsdev/nvim-dap-vscode-js", dependencies = { "mfussenegger/nvim-dap" } },
+  {
     "microsoft/vscode-js-debug",
-    opt = true,
-    run = "npm install --legacy-peer-deps && npm run compile",
-  })
-  use({ "jbyuki/one-small-step-for-vimkind" })
+    lazy = true,
+    build = "npm install --legacy-peer-deps && npm run compile",
+  },
+  { "jbyuki/one-small-step-for-vimkind" },
 
   -- replaced by vim illuminate
   -- use {
@@ -913,12 +877,12 @@ require("packer").startup(function(use, use_rocks)
   --   end,
   -- }
 
-  use({
+  {
     "RRethy/vim-illuminate",
     config = function()
       require("plugins.illuminate")
     end,
-  })
+  },
 
   -- -- Display the winbar/breadcrumb
   -- use({
@@ -939,7 +903,7 @@ require("packer").startup(function(use, use_rocks)
   -- })
 
   -- Display color for hex string
-  use({
+  {
     "norcalli/nvim-colorizer.lua",
     ft = { "html", "css", "sass", "vim", "typescript", "typescriptreact" },
     config = function()
@@ -959,7 +923,7 @@ require("packer").startup(function(use, use_rocks)
         },
       })
     end,
-  })
+  },
 
   -- use {
   --   'kdheepak/tabline.nvim',
@@ -1005,7 +969,7 @@ require("packer").startup(function(use, use_rocks)
 
   -- Note taking
   -- {{{
-  use({
+  {
     "mickael-menu/zk-nvim",
     config = function()
       require("zk").setup({
@@ -1020,7 +984,6 @@ require("packer").startup(function(use, use_rocks)
             -- on_attach = ...
             -- etc, see `:h vim.lsp.start_client()`
           },
-
           -- automatically attach buffers in a zk notebook that match the given filetypes
           auto_attach = {
             enabled = true,
@@ -1065,13 +1028,13 @@ require("packer").startup(function(use, use_rocks)
         opts
       )
     end,
-  })
+  },
   -- }}}
 
   -- SQL
   -- {{{
-  use("tpope/vim-dadbod")
-  use({
+  "tpope/vim-dadbod",
+  {
     "kristijanhusak/vim-dadbod-completion",
     config = function()
       vim.cmd([[
@@ -1088,8 +1051,8 @@ require("packer").startup(function(use, use_rocks)
         let g:completion_matching_ignore_case = 1
         ]])
     end,
-  })
-  use({ "kristijanhusak/vim-dadbod-ui" })
+  },
+  "kristijanhusak/vim-dadbod-ui",
   -- }}}
 
   -- Uncategorized
@@ -1118,20 +1081,20 @@ require("packer").startup(function(use, use_rocks)
 
   -- Developing Lua plugins
   --- {{{
-  use({ "rafcamlet/nvim-luapad", requires = "antoinemadec/FixCursorHold.nvim" })
-  use({
+  { "rafcamlet/nvim-luapad", dependencies = "antoinemadec/FixCursorHold.nvim" },
+  {
     "folke/neodev.nvim",
     config = function()
       --config in lsp
     end,
-  })
+  },
   --- }}}
   --- }}}
 
   -- Notify
   -- popup is already imported
-  -- use("nvim-lua/popup.nvim")
-  use("MunifTanjim/nui.nvim")
+  --"nvim-lua/popup.nvim",
+  "MunifTanjim/nui.nvim",
 
   -- Notify
   -- {{{
@@ -1268,23 +1231,26 @@ require("packer").startup(function(use, use_rocks)
 
   -- Greeter
   -- {{{
-  use({
+  {
     "goolord/alpha-nvim",
-    requires = { "kyazdani42/nvim-web-devicons" },
+    dependencies = { "kyazdani42/nvim-web-devicons" },
     config = function()
       require("alpha").setup(require("alpha.themes.startify").config)
     end,
-  })
+  },
 
-  use("kyazdani42/nvim-web-devicons")
+  "kyazdani42/nvim-web-devicons",
+
+  {
+    "khanghoang/dbx",
+    dir = "~/dotfiles/xdg_config/.config/nvim_plugins/dbx",
+  },
   -- }}}
-
-  use("~/dotfiles/xdg_config/.config/nvim_plugins/dbx")
   -- Test runner
   -- {{{
-  use({
+  {
     "nvim-neotest/neotest",
-    requires = {
+    dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       "antoinemadec/FixCursorHold.nvim",
@@ -1296,7 +1262,7 @@ require("packer").startup(function(use, use_rocks)
     config = function()
       require("plugins.neotest")
     end,
-  })
+  },
   -- }}}
 
   -- Test runners
@@ -1365,42 +1331,43 @@ require("packer").startup(function(use, use_rocks)
 
   -- Marks management
   -- {{{
-  use("MattesGroeger/vim-bookmarks")
-  use({
+  "MattesGroeger/vim-bookmarks",
+  {
     "khanghoang/telescope-vim-bookmarks.nvim",
+    dependencies = "nvim-telescope/telescope.nvim",
     config = function()
       require("plugins.vim_bookmark")
     end,
-  })
+  },
   -- }}}
 
   -- Fold
   -- {{{
-  use({
+  {
     "luukvbaal/statuscol.nvim",
     config = function()
       require("plugins.statuscol")
     end,
-  })
+  },
 
-  use({
+  {
     "kevinhwang91/nvim-ufo",
-    requires = { "kevinhwang91/promise-async" },
+    dependencies = { "kevinhwang91/promise-async" },
     config = function()
       require("plugins.fold")
     end,
-  })
+  },
   -- }}}
   --
 
   -- Starlark
   -- {{{
-  use({ "cappyzawa/starlark.vim" })
+  "cappyzawa/starlark.vim",
   -- }}}
 
   -- Copilot
   -- {{{
-  use({
+  {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = "InsertEnter",
@@ -1450,41 +1417,5 @@ require("packer").startup(function(use, use_rocks)
         server_opts_overrides = {},
       })
     end,
-  })
-
-  -- use({ "github/copilot.vim" })
-  -- use({
-  --   "zbirenbaum/copilot-cmp",
-  --   after = { "copilot.lua" },
-  --   config = function()
-  --     require("copilot_cmp").setup({
-  --       suggestion = { enabled = false },
-  --       panel = { enabled = false },
-  --     })
-  --   end,
-  -- })
-
-  -- }}}
-
-  -- Need to start nvim with flag
-  -- MACOSX_DEPLOYMENT_TARGET=10.15 nvim
-  -- then run "PackerUpdate"
-  use_rocks("luasocket")
-
-  if is_bootstrap then
-    require("packer").sync()
-  end
-end)
-
--- When we are bootstrapping a configuration, it doesn't
--- make sense to execute the rest of the init.lua.
---
--- You'll need to restart nvim, and then it will work.
-if is_bootstrap then
-  print("==================================")
-  print("    Plugins are being installed")
-  print("    Wait until Packer completes,")
-  print("       then restart nvim")
-  print("==================================")
-  return
-end
+  },
+})

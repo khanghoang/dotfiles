@@ -1,6 +1,3 @@
-if not packer_plugins["plenary.nvim"].loaded then
-  vim.cmd([[packadd plenary.nvim]])
-end
 local bar_icon = "▌"
 require("gitsigns").setup({
   signs = {
