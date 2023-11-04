@@ -110,7 +110,7 @@ local on_attach = function(client, bufnr)
   buf_set_keymap("n", "]d", "<cmd>lua vim.lsp.diagnostic.goto_next()<CR>", opts)
   buf_set_keymap("n", "gp", "<cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>", opts)
   buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-  buf_set_keymap("n", "gr", "<cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
+  -- buf_set_keymap("n", "gr", "<cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
   buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.definition({})<CR>", opts)
   buf_set_keymap("n", "cd", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
   buf_set_keymap("n", "cd", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
@@ -121,7 +121,15 @@ local on_attach = function(client, bufnr)
   -- split = '<C-c>i',
   -- tabe = '<C-c>t',
   -- quit = 'q',
-  buf_set_keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts)
+
+  -- buf_set_keymap("n", "gd", "<cmd>Lspsaga peek_definition<CR>", opts)
+  vim.keymap.set("n", "gd", function()
+    require("trouble").toggle("lsp_definitions")
+  end)
+  vim.keymap.set("n", "gr", function()
+    require("trouble").toggle("lsp_references")
+  end)
+
   -- buf_set_keymap("n", "<C-p>", "<cmd>lua require'telescope.builtin'.lsp_dynamic_workspace_symbols()<CR>", opts)
   buf_set_keymap("n", "<leader>b", "<cmd>Telescope buffers<CR>", opts)
   -- buf_set_keymap('n', 'll', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
@@ -215,10 +223,11 @@ nvim_lsp.pyright.setup({
   settings = {
     python = {
       analysis = {
+        typeCheckingMode = "off",
         autoSearchPaths = true,
-        useLibraryCodeForTypes = true,
-        diagnosticMode = "workspace",
-        logLevel = "Trace",
+        useLibraryCodeForTypes = false,
+        diagnosticMode = "openFilesOnly",
+        autoImportCompletions = true,
       },
     },
   },

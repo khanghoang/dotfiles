@@ -50,6 +50,15 @@ require("lazy").setup({
     },
   },
   {
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      -- calling `setup` is optional for customization
+      require("fzf-lua").setup({})
+    end,
+  },
+  {
     "alexghergh/nvim-tmux-navigation",
     config = function()
       require("nvim-tmux-navigation").setup({
@@ -186,6 +195,17 @@ require("lazy").setup({
     "sourcegraph/sg.nvim",
     build = "cargo build --workspace",
     dependencies = { "nvim-lua/plenary.nvim" },
+  },
+
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+      mode = "document_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+    },
   },
 
   --}}}
