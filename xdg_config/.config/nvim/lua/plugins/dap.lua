@@ -4,8 +4,8 @@ local is_port_available = require("plugins.check_port").is_port_available
 --
 local api = vim.api
 local installation_path = vim.fn.stdpath("data") .. "/mason/bin"
-local notify = require("plugins.notify")
 local job = require("plenary.job")
+local notify = require("plugins.notify")
 
 -- config for persistent-breakpoints
 require("persistent-breakpoints").setup({
@@ -52,6 +52,7 @@ dap.configurations.python = {
         -- { host = 'khang-dbx', port = 56234 }
         { host = "localhost", port = 56237 },
         { host = "localhost", port = 56234 },
+        -- { host = "localhost", port = 5678 },
       }
 
       local config = configs[config_index]

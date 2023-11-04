@@ -238,6 +238,7 @@ alias cat=bat
 alias gs="git status"
 alias gco="git checkout"
 alias log="lnav ~/temp/info.log"
+alias desktop-log="lnav ~/temp/desktop.log"
 
 if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khanghoang/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
@@ -263,3 +264,12 @@ fi
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Generated for envman. Do not edit.
+[ -s "$HOME/.config/envman/load.sh" ] && source "$HOME/.config/envman/load.sh"
+alias td="./td"
+eval "$(pyenv init -)"
+# From repo_setup:
+export PATH="$HOME/.pyenv/shims:$PATH"
+# From repo_setup:
+export JAVA_HOME="/Users/khang/.dbx_jdk/zulu17.42.19-ca-jdk17.0.7-macosx_aarch64"

@@ -78,6 +78,14 @@ require("packer").startup(function(use, use_rocks)
   })
   use("junegunn/fzf.vim")
   use({
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    requires = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("fzf-lua").setup({ "fzf-native" })
+    end,
+  })
+  use({
     "folke/which-key.nvim",
     config = function()
       require("which-key").setup({
@@ -137,6 +145,17 @@ require("packer").startup(function(use, use_rocks)
 
   -- LSP
   --- {{{
+  --- LSP process spinner
+  use({
+    "j-hui/fidget.nvim",
+    tag = "legacy",
+    config = function()
+      require("fidget").setup({
+        -- options
+      })
+    end,
+  })
+
   use({
     "nvim-lua/lsp-status.nvim",
     config = function()
@@ -190,9 +209,7 @@ require("packer").startup(function(use, use_rocks)
   use({
     "glepnir/lspsaga.nvim",
     -- branch = 'nvim6.0'
-    opt = true,
-    branch = "main",
-    event = "LspAttach",
+    after = "nvim-lspconfig",
     config = function()
       require("plugins.lsp_saga")
     end,
@@ -667,12 +684,15 @@ require("packer").startup(function(use, use_rocks)
       require("plugins.dap")
     end,
   })
-  use({
-    "theHamsta/nvim-dap-virtual-text",
-    config = function()
-      require("plugins.dap-virtual-text")
-    end,
-  })
+  -- Turned off because
+  -- - Quite annoying
+  -- - Virtual texts don't get removed since pyright isn't a full-fledged LSP
+  -- use({
+  --   "theHamsta/nvim-dap-virtual-text",
+  --   config = function()
+  --     require("plugins.dap-virtual-text")
+  --   end,
+  -- })
   -- persists breakpoints
   -- config is loaded in plugins.dap
   use({ "Weissle/persistent-breakpoints.nvim" })
