@@ -37,13 +37,13 @@ vim.cmd([[
   augroup end
 ]])
 
--- Automatically source and re-compile packer whenever you save this init.lua
-local packer_group = vim.api.nvim_create_augroup("Packer", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePost", {
-  command = "source % | PackerCompile",
-  group = packer_group,
-  pattern = "plugins.lua",
-})
+-- -- Automatically source and re-compile packer whenever you save this init.lua
+-- local packer_group = vim.api.nvim_create_augroup("Packer", { clear = true })
+-- vim.api.nvim_create_autocmd("BufWritePost", {
+--   command = "source % | PackerCompile",
+--   group = packer_group,
+--   pattern = "plugins.lua",
+-- })
 
 -- save and restore folds
 -- vim.cmd [[autocmd BufWinLeave *.* mkview]]
@@ -61,7 +61,8 @@ vim.api.nvim_create_autocmd("BufWrite", {
   group = group,
 })
 
-local save_dbx_pytest_plugin = vim.api.nvim_create_augroup("reload_dbx_pytest_module_on_write", { clear = true })
+local save_dbx_pytest_plugin =
+  vim.api.nvim_create_augroup("reload_dbx_pytest_module_on_write", { clear = true })
 vim.api.nvim_create_autocmd("BufWrite", {
   pattern = "dbx.lua",
   callback = function()
@@ -71,7 +72,7 @@ vim.api.nvim_create_autocmd("BufWrite", {
     -- require('plugins.neotest')
     require("neotest").setup({
       adapters = {
-        require('plugins.dbx'),
+        require("plugins.dbx"),
       },
       log_level = vim.log.levels.DEBUG,
       discovery = {
@@ -79,14 +80,14 @@ vim.api.nvim_create_autocmd("BufWrite", {
       },
       ["/Users/khang/src/server"] = {
         adapters = {
-          require('plugins.dbx'),
+          require("plugins.dbx"),
         },
         discovery = {
           enabled = false,
         },
       },
     })
-    print('Reloaded')
+    print("Reloaded")
   end,
   group = save_dbx_pytest_plugin,
 })

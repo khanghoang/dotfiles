@@ -358,14 +358,15 @@ nvim_lsp.ltex.setup({
   flags = { debounce_text_changes = 150 },
 })
 
-require("sg").setup({
-  -- Pass your own custom attach function
-  --    If you do not pass your own attach function, then the following maps are provide:
-  --        - gd -> goto definition
-  --        - gr -> goto references
-  on_attach = on_attach,
-  capabilities = capabilities,
-})
+-- require("sg").setup({
+--   filetypes = { "python", "typescript" },
+--   -- Pass your own custom attach function
+--   --    If you do not pass your own attach function, then the following maps are provide:
+--   --        - gd -> goto definition
+--   --        - gr -> goto references
+--   on_attach = on_attach,
+--   capabilities = capabilities,
+-- })
 --
 
 -- Markdown

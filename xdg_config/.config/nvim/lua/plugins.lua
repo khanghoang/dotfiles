@@ -54,8 +54,56 @@ require("lazy").setup({
     -- optional for icon support
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
+      local actions = require("fzf-lua.actions")
       -- calling `setup` is optional for customization
-      require("fzf-lua").setup({})
+      require("fzf-lua").setup({
+        actions = {
+          -- These override the default tables completely
+          -- no need to set to `false` to disable an action
+          -- delete or modify is sufficient
+          files = {
+            -- providers that inherit these actions:
+            --   files, git_files, git_status, grep, lsp
+            --   oldfiles, quickfix, loclist, tags, btags
+            --   args
+            -- default action opens a single selection
+            -- or sends multiple selection to quickfix
+            -- replace the default action with the below
+            -- to open all files whether single or multiple
+            -- ["default"]     = actions.file_edit,
+            ["default"] = actions.file_edit_or_qf,
+            ["ctrl-s"] = actions.file_split,
+            ["ctrl-v"] = actions.file_vsplit,
+            ["ctrl-t"] = actions.file_tabedit,
+            ["ctrl-q"] = actions.file_sel_to_qf,
+            ["ctrl-l"] = actions.file_sel_to_ll,
+          },
+          buffers = {
+            -- providers that inherit these actions:
+            --   buffers, tabs, lines, blines
+            ["default"] = actions.buf_edit,
+            ["ctrl-s"] = actions.buf_split,
+            ["ctrl-v"] = actions.buf_vsplit,
+            ["ctrl-t"] = actions.buf_tabedit,
+          },
+        },
+        fzf_opts = {
+          -- options are sent as `<left>=<right>`
+          -- set to `false` to remove a flag
+          -- set to '' for a non-value flag
+          -- for raw args use `fzf_args` instead
+          ["--ansi"] = "",
+          ["--layout"] = "reverse-list",
+          ["--border"] = "top",
+        },
+        grep = {
+          actions = {
+            -- actions inherit from 'actions.files' and merge
+            -- this action toggles between 'grep' and 'live_grep'
+            ["ctrl-f"] = { actions.grep_lgrep },
+          },
+        },
+      })
     end,
   },
   {

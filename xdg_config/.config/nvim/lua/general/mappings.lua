@@ -71,7 +71,7 @@ api.nvim_set_keymap(
 api.nvim_set_keymap("n", "tc", ":tabclose<CR>", { noremap = true })
 api.nvim_set_keymap("n", "tp", ":tabprevious<CR>", { noremap = true })
 api.nvim_set_keymap("n", "tn", ":tabnext<CR>", { noremap = true })
-api.nvim_set_keymap("n", "tN", ":tabnew<CR>", { noremap = true })
+api.nvim_set_keymap("n", "tm", ":tabnew<CR>", { noremap = true })
 
 -- testing
 vim.api.nvim_set_keymap(
@@ -134,12 +134,9 @@ vim.keymap.set(
   require("telescope.builtin").grep_string,
   { desc = "[S]earch current [W]ord" }
 )
-vim.keymap.set(
-  "n",
-  "<leader>lg",
-  require("telescope.builtin").live_grep,
-  { desc = "[S]earch by [G]rep" }
-)
+vim.keymap.set("n", "<leader>lg", function()
+  require("fzf-lua").live_grep()
+end, { desc = "[S]earch by [G]rep" })
 vim.keymap.set(
   "n",
   "<leader>sd",
