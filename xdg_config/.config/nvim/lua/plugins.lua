@@ -38,15 +38,17 @@ require("lazy").setup({
   "junegunn/fzf.vim",
   {
     "folke/which-key.nvim",
-    config = function()
-      require("which-key").setup({
-        -- your configuration comes here
-        -- or leave it empty to use the default settings
-        -- refer to the configuration section below
-      })
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
     end,
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
   },
-
   {
     "alexghergh/nvim-tmux-navigation",
     config = function()
@@ -164,6 +166,12 @@ require("lazy").setup({
 
   {
     "stevearc/aerial.nvim",
+    opts = {},
+    -- Optional dependencies
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons",
+    },
     config = function()
       require("plugins.aerial")
     end,
