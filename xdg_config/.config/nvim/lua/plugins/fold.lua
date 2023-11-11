@@ -74,7 +74,9 @@ require("ufo").setup({
 
     -- refer to ./doc/example.lua for detail
   end,
-  fold_virt_text_handler = handler,
+
+  -- disable this settings since there is the issue with missing font on italic
+  -- fold_virt_text_handler = handler,
 })
 
 -- buffer scope handler
