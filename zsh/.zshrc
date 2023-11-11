@@ -237,6 +237,7 @@ alias vi=nvim
 alias cat=bat
 alias gs="git status"
 alias gco="git checkout"
+alias gl="git log --oneline"
 alias log="lnav ~/temp/info.log"
 
 if [ -e /home/khanghoang/.nix-profile/etc/profile.d/nix.sh ]; then . /home/khanghoang/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
