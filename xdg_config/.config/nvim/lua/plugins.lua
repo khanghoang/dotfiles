@@ -57,6 +57,26 @@ require("lazy").setup({
       local actions = require("fzf-lua.actions")
       -- calling `setup` is optional for customization
       require("fzf-lua").setup({
+        winopts = {
+          -- split = "belowright 25new",
+          height = 0.4,
+          width = 1,
+          row = 1,
+          column = 0,
+          border = { " ", "─", " ", " ", " ", " ", " ", " " },
+          preview = {
+            hidden = "hidden",
+            border = "border",
+            title = false,
+            layout = "horizontal",
+            horizontal = "right:50%",
+          },
+        },
+        keymap = {
+          builtin = {
+            ["ctrl-/"] = "toggle-preview",
+          },
+        },
         actions = {
           -- These override the default tables completely
           -- no need to set to `false` to disable an action
