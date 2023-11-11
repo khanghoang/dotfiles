@@ -187,3 +187,23 @@ vim.keymap.set(
 vim.keymap.set("n", "gx", "<cmd>OpenAnything<CR>", { desc = "Open anything" })
 vim.keymap.set("n", "dvo", "<cmd>DiffviewOpen @..master<CR>", { desc = "[D]iff[View] [O]pen" })
 vim.keymap.set("n", "dvc", "<cmd>DiffviewClose<CR>", { desc = "[D]iff[View] [C]pen" })
+
+function get_sourcegraph_url()
+  local repo_root = vim.fn.finddir(".git/..", vim.fn.expand("%:p:h") .. ";"):gsub(".git/", "")
+  local file_path = vim.fn.expand("%:p")
+  local url = "https://sourcegraph.pp.dropbox.com/"
+    .. vim.fn.fnamemodify(repo_root, ":t") -- repo name
+    .. "/-/blob"
+    .. file_path:gsub(repo_root, "") -- relative file path
+    .. "?L"
+    .. vim.fn.line(".")
+
+  vim.cmd("silent !open " .. url)
+end
+
+vim.keymap.set(
+  "n",
+  "<leader>sg",
+  get_sourcegraph_url,
+  { desc = "Open current file in [S]ource[G]raph" }
+)
