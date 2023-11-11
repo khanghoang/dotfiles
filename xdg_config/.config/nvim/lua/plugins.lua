@@ -253,6 +253,7 @@ require("lazy").setup({
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
       mode = "document_diagnostics", -- "workspace_diagnostics", "document_diagnostics", "quickfix", "lsp_references", "loclist"
+      position = "right", -- position of the list can be: bottom, top, left, right
     },
   },
 
