@@ -1,19 +1,26 @@
-local g = vim.g
-local api = vim.api
+return {
+  {
+    "junegunn/fzf",
+    build = function()
+      vim.fn["fzf#install"]()
+    end,
+    config = function()
+      local g = vim.g
+      local api = vim.api
 
-g.fzf_history_dir = "~/.local/share/fzf-history"
+      g.fzf_history_dir = "~/.local/share/fzf-history"
 
-vim.cmd(
-	[[command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]]
-)
+      vim.cmd(
+        [[command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]]
+      )
 
--- api.nvim_set_keymap('n', '<leader><space>', ':FZFMru<CR>', { noremap = true })
--- api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
--- api.nvim_set_keymap('n', '<leader>fg', ':Rg!<CR>', {noremap = true})
--- api.nvim_set_keymap('n', '<leader>fb', ':Buffers!<CR>', {noremap = true})
--- api.nvim_set_keymap('n', '<leader>fw', ':Rg!<C-R><C-W><CR>', {noremap = true})
+      -- api.nvim_set_keymap('n', '<leader><space>', ':FZFMru<CR>', { noremap = true })
+      -- api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
+      -- api.nvim_set_keymap('n', '<leader>fg', ':Rg!<CR>', {noremap = true})
+      -- api.nvim_set_keymap('n', '<leader>fb', ':Buffers!<CR>', {noremap = true})
+      -- api.nvim_set_keymap('n', '<leader>fw', ':Rg!<C-R><C-W><CR>', {noremap = true})
 
-vim.cmd([[
+      vim.cmd([[
   command! FZFMru call fzf#run({
 \  'source':  v:oldfiles,
 \  'sink':    'e',
@@ -21,7 +28,7 @@ vim.cmd([[
 \  'down':    '40%'})
 ]])
 
-vim.cmd([[
+      vim.cmd([[
 function! s:tags_sink(line)
   let parts = split(a:line, '\t\zs')
   let excmd = matchstr(parts[2:], '^.*\ze;"\t')
@@ -50,7 +57,7 @@ endfunction
 command! Tags call s:tags()
 ]])
 
-vim.cmd([[
+      vim.cmd([[
 function! s:ag_to_qf(line)
   let parts = split(a:line, ':')
   return {'filename': parts[0], 'lnum': parts[1], 'col': parts[2],
@@ -88,7 +95,87 @@ command! -nargs=* Ag call fzf#run({
 \ })
 ]])
 
--- api.nvim_set_keymap('n', '<leader>p', '<leader>ff', {noremap = false})
--- api.nvim_set_keymap('n', '<leader>s', '<leader>fg', {noremap = false})
--- api.nvim_set_keymap('n', '<leader>b', '<leader>fb', {noremap = false})
--- api.nvim_set_keymap('n', '<leader>w', '<leader>fw', {noremap = false})
+      -- api.nvim_set_keymap('n', '<leader>p', '<leader>ff', {noremap = false})
+      -- api.nvim_set_keymap('n', '<leader>s', '<leader>fg', {noremap = false})
+      -- api.nvim_set_keymap('n', '<leader>b', '<leader>fb', {noremap = false})
+      -- api.nvim_set_keymap('n', '<leader>w', '<leader>fw', {noremap = false})
+    end,
+  },
+  {
+    "ibhagwan/fzf-lua",
+    -- optional for icon support
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      local actions = require("fzf-lua.actions")
+      -- calling `setup` is optional for customization
+      require("fzf-lua").setup({
+        winopts = {
+          -- split = "belowright 25new",
+          height = 0.4,
+          width = 1,
+          row = 1,
+          column = 0,
+          border = { " ", "─", " ", " ", " ", " ", " ", " " },
+          preview = {
+            hidden = "hidden",
+            border = "border",
+            title = false,
+            layout = "horizontal",
+            horizontal = "right:50%",
+          },
+        },
+        keymap = {
+          builtin = {
+            ["ctrl-/"] = "toggle-preview",
+          },
+        },
+        actions = {
+          -- These override the default tables completely
+          -- no need to set to `false` to disable an action
+          -- delete or modify is sufficient
+          files = {
+            -- providers that inherit these actions:
+            --   files, git_files, git_status, grep, lsp
+            --   oldfiles, quickfix, loclist, tags, btags
+            --   args
+            -- default action opens a single selection
+            -- or sends multiple selection to quickfix
+            -- replace the default action with the below
+            -- to open all files whether single or multiple
+            -- ["default"]     = actions.file_edit,
+            ["default"] = actions.file_edit_or_qf,
+            ["ctrl-s"] = actions.file_split,
+            ["ctrl-v"] = actions.file_vsplit,
+            ["ctrl-t"] = actions.file_tabedit,
+            ["ctrl-q"] = actions.file_sel_to_qf,
+            ["ctrl-l"] = actions.file_sel_to_ll,
+          },
+          buffers = {
+            -- providers that inherit these actions:
+            --   buffers, tabs, lines, blines
+            ["default"] = actions.buf_edit,
+            ["ctrl-s"] = actions.buf_split,
+            ["ctrl-v"] = actions.buf_vsplit,
+            ["ctrl-t"] = actions.buf_tabedit,
+          },
+        },
+        fzf_opts = {
+          -- options are sent as `<left>=<right>`
+          -- set to `false` to remove a flag
+          -- set to '' for a non-value flag
+          -- for raw args use `fzf_args` instead
+          ["--ansi"] = "",
+          ["--layout"] = "reverse-list",
+          ["--border"] = "top",
+        },
+        grep = {
+          actions = {
+            -- actions inherit from 'actions.files' and merge
+            -- this action toggles between 'grep' and 'live_grep'
+            ["ctrl-f"] = { actions.grep_lgrep },
+          },
+        },
+      })
+    end,
+  },
+}

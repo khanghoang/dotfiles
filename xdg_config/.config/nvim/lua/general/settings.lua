@@ -56,7 +56,7 @@ local group = vim.api.nvim_create_augroup("reload_module_on_write", { clear = tr
 vim.api.nvim_create_autocmd("BufWrite", {
   pattern = "aerial_extend.lua",
   callback = function()
-    require("plenary.reload").reload_module("plugins.aerial_extend")
+    require("plenary.reload").reload_module("plugins.libs.aerial_extend")
   end,
   group = group,
 })

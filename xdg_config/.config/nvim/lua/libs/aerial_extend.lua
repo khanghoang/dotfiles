@@ -226,7 +226,7 @@ end
 vim.api.nvim_set_keymap(
   "n",
   "<leader>ee",
-  ":lua require('plugins.aerial_extend').search('/Users/khanghoang/dotfiles/xdg_config/.config/nvim/lua/plugins/specs/dummy.py')",
+  ":lua require('plugins.libs.aerial_extend').search('/Users/khanghoang/dotfiles/xdg_config/.config/nvim/lua/plugins/specs/dummy.py')",
   {}
 )
 
@@ -373,7 +373,7 @@ local function get_current_test_function(bufnr)
 end
 
 vim.api.nvim_create_user_command("GetTestCommand", function()
-  require("plugins.aerial_extend").get_current_test_function()
+  require("plugins.libs.aerial_extend").get_current_test_function()
 end, { nargs = "*" })
 
 local function open_anything()
@@ -388,7 +388,7 @@ local function open_anything()
 end
 
 vim.api.nvim_create_user_command("OpenAnything", function()
-  require("plugins.aerial_extend").open_anything()
+  require("plugins.libs.aerial_extend").open_anything()
 end, { nargs = "*" })
 
 vim.api.nvim_create_user_command("EnableDevboxDebug", function()

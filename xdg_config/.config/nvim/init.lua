@@ -1,23 +1,4 @@
-require("general/settings")
-
-require("plugins")
-require("plugins/vifm")
-require("plugins/fzf")
-require("plugins/autopairs")
-require("plugins/gitgutter")
-require("plugins/easymotion")
-require("plugins/fugitive")
-require("plugins/gitlinker")
-require("plugins/telescope")
-require("plugins/find_dotfiles")
-require("plugins/lightline")
-require("plugins/query_sourcegraph")
-require("plugins/dap")
-
-require("colorschemes/lua/oceannext")
-require("general/mappings")
-
-require("plugins/aerial_extend")
+-- vim: set foldmethod=marker foldlevel=0 foldlevelstart=0 foldenable :
 
 -- Make the pane border thinner
 vim.cmd([[highlight WinSeparator guibg=None]])
@@ -55,3 +36,26 @@ vim.cmd(
 vim.cmd([[set cmdheight=0]])
 vim.cmd([[set laststatus=3]])
 vim.cmd([[highlight WinSeparator guibg=None]])
+
+-- Install lazy.vnim on fresh start
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+vim.g.mapleader = ","
+vim.g.maplocalleader = ","
+
+require("general/settings")
+require("colorschemes/lua/oceannext")
+
+require("lazy").setup("plugins")
+require("general/mappings")

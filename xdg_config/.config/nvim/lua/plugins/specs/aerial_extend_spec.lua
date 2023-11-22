@@ -1,4 +1,4 @@
-local m = require("plugins.aerial_extend")
+local m = require("plugins.libs.aerial_extend")
 local mock = require("luassert.mock")
 local spy = require("luassert.spy")
 

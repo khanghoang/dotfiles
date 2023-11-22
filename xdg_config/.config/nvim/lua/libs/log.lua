@@ -6,19 +6,13 @@
 -- This library is free software; you can redistribute it and/or modify it
 -- under the terms of the MIT license. See LICENSE for details.
 
-local p_debug = vim.fn.getenv("DEBUG_KHANG_LUA_CONFIG")
-if p_debug == vim.NIL then
-	p_debug = false
-end
-
 -- User configuration section
 local default_config = {
 	-- Name of the plugin. Prepended to log messages
-	plugin = "khang_dotfiles",
+	plugin = "khang-log",
 
 	-- Should print the output to neovim while running
-	-- values: 'sync','async',false
-	use_console = "async",
+	use_console = true,
 
 	-- Should highlighting be used in console (using echohl)
 	highlights = true,
@@ -26,11 +20,8 @@ local default_config = {
 	-- Should write to a file
 	use_file = true,
 
-	-- Should write to the quickfix list
-	use_quickfix = false,
-
 	-- Any messages above this level will be logged.
-	level = p_debug and "debug" or "info",
+	level = "trace",
 
 	-- Level configuration
 	modes = {
@@ -54,13 +45,13 @@ local unpack = unpack or table.unpack
 log.new = function(config, standalone)
 	config = vim.tbl_deep_extend("force", default_config, config)
 
-	local outfile = string.format("%s/%s.log", vim.api.nvim_call_function("stdpath", { "cache" }), config.plugin)
+	local outfile = string.format("%s/%s.log", vim.api.nvim_call_function("stdpath", { "data" }), config.plugin)
 
 	local obj
 	if standalone then
 		obj = log
 	else
-		obj = config
+		obj = {}
 	end
 
 	local levels = {}
@@ -100,73 +91,42 @@ log.new = function(config, standalone)
 		local nameupper = level_config.name:upper()
 
 		local msg = message_maker(...)
-		local info = debug.getinfo(config.info_level or 2, "Sl")
+		local info = debug.getinfo(2, "Sl")
 		local lineinfo = info.short_src .. ":" .. info.currentline
 
 		-- Output to console
 		if config.use_console then
-			local log_to_console = function()
-				local console_string = string.format("[%-6s%s] %s: %s", nameupper, os.date("%H:%M:%S"), lineinfo, msg)
+			local console_string = string.format("[%-6s%s] %s: %s", nameupper, os.date("%H:%M:%S"), lineinfo, msg)
 
-				if config.highlights and level_config.hl then
-					vim.cmd(string.format("echohl %s", level_config.hl))
-				end
-
-				local split_console = vim.split(console_string, "\n")
-				for _, v in ipairs(split_console) do
-					local formatted_msg = string.format("[%s] %s", config.plugin, vim.fn.escape(v, [["\]]))
-
-					local ok = pcall(vim.cmd, string.format([[echom "%s"]], formatted_msg))
-					if not ok then
-						vim.api.nvim_out_write(msg .. "\n")
-					end
-				end
-
-				if config.highlights and level_config.hl then
-					vim.cmd("echohl NONE")
-				end
+			if config.highlights and level_config.hl then
+				vim.cmd(string.format("echohl %s", level_config.hl))
 			end
-			if config.use_console == "sync" and not vim.in_fast_event() then
-				log_to_console()
-			else
-				vim.schedule(log_to_console)
+
+			local split_console = vim.split(console_string, "\n")
+			for _, v in ipairs(split_console) do
+				vim.cmd(string.format([[echom "[%s] %s"]], config.plugin, vim.fn.escape(v, '"')))
+			end
+
+			if config.highlights and level_config.hl then
+				vim.cmd("echohl NONE")
 			end
 		end
 
 		-- Output to log file
 		if config.use_file then
-			local outfile_parent_path = require("plenary.path"):new(outfile):parent()
-			if not outfile_parent_path:exists() then
-				outfile_parent_path:mkdir({ parent = true })
-			end
-			local fp = assert(io.open(outfile, "a"))
+			local fp = io.open(outfile, "a")
 			local str = string.format("[%-6s%s] %s: %s\n", nameupper, os.date(), lineinfo, msg)
 			fp:write(str)
 			fp:close()
 		end
-
-		-- Output to quickfix
-		if config.use_quickfix then
-			local formatted_msg = string.format("[%s] %s", nameupper, msg)
-			local qf_entry = {
-				-- remove the @ getinfo adds to the file path
-				filename = info.source:sub(2),
-				lnum = info.currentline,
-				col = 1,
-				text = formatted_msg,
-			}
-			vim.fn.setqflist({ qf_entry }, "a")
-		end
 	end
 
 	for i, x in ipairs(config.modes) do
-		-- log.info("these", "are", "separated")
 		obj[x.name] = function(...)
 			return log_at_level(i, x, make_string, ...)
 		end
 
-		-- log.fmt_info("These are %s strings", "formatted")
-		obj[("fmt_%s"):format(x.name)] = function(...)
+		obj[("fmt_%s"):format(x.name)] = function()
 			return log_at_level(i, x, function(...)
 				local passed = { ... }
 				local fmt = table.remove(passed, 1)
@@ -175,28 +135,9 @@ log.new = function(config, standalone)
 					table.insert(inspected, vim.inspect(v))
 				end
 				return string.format(fmt, unpack(inspected))
-			end, ...)
-		end
-
-		-- log.lazy_info(expensive_to_calculate)
-		obj[("lazy_%s"):format(x.name)] = function()
-			return log_at_level(i, x, function(f)
-				return f()
 			end)
 		end
-
-		-- log.file_info("do not print")
-		obj[("file_%s"):format(x.name)] = function(vals, override)
-			local original_console = config.use_console
-			config.use_console = false
-			config.info_level = override.info_level
-			log_at_level(i, x, make_string, unpack(vals))
-			config.use_console = original_console
-			config.info_level = nil
-		end
 	end
-
-	return obj
 end
 
 log.new(default_config, true)

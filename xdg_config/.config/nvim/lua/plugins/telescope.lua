@@ -1,18 +1,32 @@
-local action_layout = require("telescope.actions.layout")
-local actions = require("telescope.actions")
-require("telescope").setup({
-  defaults = {
-    mappings = {
-      n = {
-        ["<C-Q>"] = actions.send_to_qflist + actions.open_qflist,
-        ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        ["<C-/>"] = action_layout.toggle_preview,
-      },
-      i = {
-        ["<C-Q>"] = actions.send_to_qflist + actions.open_qflist,
-        ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
-        ["<C-/>"] = action_layout.toggle_preview,
-      },
-    },
+return {
+  {
+    "nvim-telescope/telescope.nvim",
+    config = function()
+      local action_layout = require("telescope.actions.layout")
+      local actions = require("telescope.actions")
+      require("telescope").setup({
+        defaults = {
+          mappings = {
+            n = {
+              ["<C-Q>"] = actions.send_to_qflist + actions.open_qflist,
+              ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+              ["<C-/>"] = action_layout.toggle_preview,
+            },
+            i = {
+              ["<C-Q>"] = actions.send_to_qflist + actions.open_qflist,
+              ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+              ["<C-/>"] = action_layout.toggle_preview,
+            },
+          },
+        },
+      })
+    end,
   },
-})
+
+  -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
+  {
+    "nvim-telescope/telescope-fzf-native.nvim",
+    build = "make",
+    cond = vim.fn.executable("make") == 1,
+  },
+}
