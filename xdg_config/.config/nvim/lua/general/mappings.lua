@@ -200,10 +200,3 @@ function get_sourcegraph_url()
 
   vim.cmd("silent !open " .. url)
 end
-
-vim.keymap.set(
-  "n",
-  "<leader>sg",
-  get_sourcegraph_url,
-  { desc = "Open current file in [S]ource[G]raph" }
-)

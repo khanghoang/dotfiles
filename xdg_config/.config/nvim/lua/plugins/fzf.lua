@@ -175,25 +175,6 @@ return {
           },
         },
       })
-
-      vim.keymap.set(
-        "n",
-        "gp",
-        "<cmd>FzfLua lsp_live_workspace_symbols<CR>",
-        { noremap = true, silent = true, desc = "Search all symbols" }
-      )
-      vim.keymap.set(
-        "n",
-        "lg",
-        "<cmd>FzfLua live_grep<CR>",
-        { noremap = true, silent = true, desc = "Grep search" }
-      )
-      vim.keymap.set(
-        "n",
-        "<C-p>",
-        "<cmd>FzfLua keymaps<CR>",
-        { noremap = true, silent = true, desc = "Search keymaps" }
-      )
     end,
   },
 }

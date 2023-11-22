@@ -162,8 +162,14 @@ return {
         buf_set_keymap(
           "n",
           "gp",
-          "<cmd>lua require'telescope.builtin'.lsp_document_symbols()<CR>",
-          opts
+          "<cmd>FzfLua lsp_live_workspace_symbols<CR>",
+          { noremap = true, silent = true, desc = "Search all symbols" }
+        )
+        buf_set_keymap(
+          "n",
+          "lg",
+          "<cmd>FzfLua live_grep<CR>",
+          { noremap = true, silent = true, desc = "Grep search" }
         )
         buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
         -- buf_set_keymap("n", "gr", "<cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
