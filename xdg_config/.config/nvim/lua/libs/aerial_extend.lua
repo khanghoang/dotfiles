@@ -1,16 +1,16 @@
 local Path = require("plenary.path")
 local entry_display = require("telescope.pickers.entry_display")
 local finders = require("telescope.finders")
-local fs_utils = require("plugins.fs_utils")
+local fs_utils = require("libs.fs_utils")
 local parsers = require("nvim-treesitter.parsers")
 local pickers = require("telescope.pickers")
 local reload = require("plenary.reload")
 local utils = require("telescope.utils")
 local path = Path.path
-local is_port_available = require("plugins.check_port").is_port_available
+local is_port_available = require("libs.check_port").is_port_available
 local job = require("plenary.job")
 local nio = require("nio")
-local notify = require("plugins.notify")
+local notify = require("libs.notify")
 local tasks = require("nio.tasks")
 
 local M = {}
@@ -373,7 +373,7 @@ local function get_current_test_function(bufnr)
 end
 
 vim.api.nvim_create_user_command("GetTestCommand", function()
-  require("plugins.libs.aerial_extend").get_current_test_function()
+  require("libs.aerial_extend").get_current_test_function()
 end, { nargs = "*" })
 
 local function open_anything()
@@ -388,7 +388,7 @@ local function open_anything()
 end
 
 vim.api.nvim_create_user_command("OpenAnything", function()
-  require("plugins.libs.aerial_extend").open_anything()
+  require("libs.aerial_extend").open_anything()
 end, { nargs = "*" })
 
 vim.api.nvim_create_user_command("EnableDevboxDebug", function()

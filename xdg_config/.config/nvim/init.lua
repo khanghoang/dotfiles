@@ -59,3 +59,6 @@ require("colorschemes/lua/oceannext")
 
 require("lazy").setup("plugins")
 require("general/mappings")
+
+-- for DBX's test command
+require("libs.aerial_extend")
