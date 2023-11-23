@@ -206,12 +206,18 @@ vim.keymap.set(
   { desc = "Open current file in [S]ource[G]raph" }
 )
 
-vim.keymap.set("n", "ss", function()
-  require("fzf-lua").lsp_live_workspace_symbols({
-    regex_filter = "Function",
-    file_ignore_patterns = { "node_modules" },
-  })
-end, { desc = "[S]earch [S]ymbols" })
-
 vim.keymap.set("n", "st", "<cmd>FzfLua tabs<CR>", { desc = "[S]earch [T]abs" })
 vim.keymap.set("n", "sb", "<cmd>FzfLua buffers<CR>", { desc = "[S]earch [B]uffers" })
+
+-- vim.keymap.set("n", "ss", function()
+--   require("fzf-lua").lsp_live_workspace_symbols({
+--     regex_filter = "Function",
+--     file_ignore_patterns = { "node_modules" },
+--   })
+-- end, { desc = "[S]earch [S]ymbols" })
+vim.keymap.set(
+  "n",
+  "ss",
+  '<cmd>Telescope lsp_dynamic_workspace_symbols theme=ivy previewer=false winblend=10 symbols="Function" pattern="^!node_modules" <cr>',
+  { desc = "[S]earch [S]ymbols" }
+)
