@@ -185,8 +185,6 @@ vim.keymap.set(
 
 -- open anything
 vim.keymap.set("n", "gx", "<cmd>OpenAnything<CR>", { desc = "Open anything" })
-vim.keymap.set("n", "dvo", "<cmd>DiffviewOpen @..master<CR>", { desc = "[D]iff[View] [O]pen" })
-vim.keymap.set("n", "dvc", "<cmd>DiffviewClose<CR>", { desc = "[D]iff[View] [C]pen" })
 
 local function get_sourcegraph_url()
   local repo_root = vim.fn.finddir(".git/..", vim.fn.expand("%:p:h") .. ";"):gsub(".git/", "")
@@ -208,9 +206,12 @@ vim.keymap.set(
   { desc = "Open current file in [S]ource[G]raph" }
 )
 
-vim.keymap.set("n", "<leader>ss", function()
+vim.keymap.set("n", "ss", function()
   require("fzf-lua").lsp_live_workspace_symbols({
     regex_filter = "Function",
     file_ignore_patterns = { "node_modules" },
   })
 end, { desc = "[S]earch [S]ymbols" })
+
+vim.keymap.set("n", "st", "<cmd>FzfLua tabs<CR>", { desc = "[S]earch [T]abs" })
+vim.keymap.set("n", "sb", "<cmd>FzfLua buffers<CR>", { desc = "[S]earch [B]uffers" })

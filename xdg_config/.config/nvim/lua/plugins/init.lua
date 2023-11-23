@@ -316,7 +316,7 @@ return {
   -- Notify
   -- popup is already imported
   --"nvim-lua/popup.nvim",
-  "MunifTanjim/nui.nvim",
+  { "MunifTanjim/nui.nvim", lazy = true },
 
   -- Greeter
   -- {{{

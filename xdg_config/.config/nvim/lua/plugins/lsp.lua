@@ -165,14 +165,7 @@ return {
           "<cmd>FzfLua lsp_live_workspace_symbols<CR>",
           { noremap = true, silent = true, desc = "Search all symbols" }
         )
-        buf_set_keymap(
-          "n",
-          "lg",
-          "<cmd>FzfLua live_grep<CR>",
-          { noremap = true, silent = true, desc = "Grep search" }
-        )
         buf_set_keymap("n", "gi", "<cmd>lua vim.lsp.buf.implementation()<CR>", opts)
-        -- buf_set_keymap("n", "gr", "<cmd>lua require'telescope.builtin'.lsp_references()<CR>", opts)
         buf_set_keymap("n", "gD", "<cmd>lua vim.lsp.buf.definition({})<CR>", opts)
         buf_set_keymap("n", "cd", "<cmd>Lspsaga show_cursor_diagnostics<CR>", opts)
         buf_set_keymap("n", "cd", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
