@@ -177,4 +177,21 @@ return {
       })
     end,
   },
+  keys = {
+    {
+      "st",
+      "<cmd>FzfLua tabs<CR>",
+      desc = "[S]earch [T]abs",
+    },
+    {
+      "sb",
+      "<cmd>FzfLua buffers<CR>",
+      desc = "[S]earch [B]uffers",
+    },
+    {
+      "gw",
+      "<cmd>FzfLua grep_cword<CR>",
+      desc = "[G]rep [W]ord",
+    },
+  },
 }

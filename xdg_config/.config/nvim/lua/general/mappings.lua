@@ -206,9 +206,6 @@ vim.keymap.set(
   { desc = "Open current file in [S]ource[G]raph" }
 )
 
-vim.keymap.set("n", "st", "<cmd>FzfLua tabs<CR>", { desc = "[S]earch [T]abs" })
-vim.keymap.set("n", "sb", "<cmd>FzfLua buffers<CR>", { desc = "[S]earch [B]uffers" })
-
 -- vim.keymap.set("n", "ss", function()
 --   require("fzf-lua").lsp_live_workspace_symbols({
 --     regex_filter = "Function",
