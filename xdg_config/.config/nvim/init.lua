@@ -55,9 +55,10 @@ vim.g.mapleader = ","
 vim.g.maplocalleader = ","
 
 require("general/settings")
-require("colorschemes/lua/oceannext")
-
 require("lazy").setup("plugins")
+
+-- order is important
+require("colorschemes/lua/oceannext")
 require("general/mappings")
 
 -- for DBX's test command
