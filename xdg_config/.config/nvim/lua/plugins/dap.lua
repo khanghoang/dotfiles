@@ -7,6 +7,10 @@ return {
       local dap = require("dap")
       local dapui = require("dapui")
       local is_port_available = require("libs.check_port").is_port_available
+
+      -- This has to be "." in order to have the buffer path opened
+      -- correctly when debugging (ie. lsp and treesitter work)
+      local dbx_remote_dir = "."
       --
       local api = vim.api
       local installation_path = vim.fn.stdpath("data") .. "/mason/bin"
@@ -90,8 +94,7 @@ return {
           pathMappings = {
             {
               localRoot = vim.fn.getcwd(),
-              -- Same as WORKDIR on your devbox
-              remoteRoot = "/home/khang/src/server-mirror",
+              remoteRoot = dbx_remote_dir,
             },
           },
         },
