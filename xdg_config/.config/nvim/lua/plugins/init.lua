@@ -335,6 +335,11 @@ return {
     dir = "~/dotfiles/xdg_config/.config/nvim_plugins/dbx",
   },
 
+  {
+    "khanghoang/bazel-debug-checkhealth",
+    dir = "~/dotfiles/xdg_config/.config/nvim_plugins/bzl_remote_debug_checker",
+  },
+
   -- Starlark
   -- {{{
   "cappyzawa/starlark.vim",
