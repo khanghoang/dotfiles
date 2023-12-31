@@ -176,9 +176,32 @@ return {
         },
       })
 
+      local nio = require("nio")
+      local run_async = nio.wrap(function(cmd, options, cb)
+        local loop = vim.loop
+        -- local stdout = options.stdio.stdout
+        -- local stderr = options.stdio.stderr
+        ---@diagnostic disable-next-line: unused-local
+        handle = loop.spawn(cmd, options, function()
+          -- if stdout then
+          --   stdout:read_stop()
+          --   stdout:close()
+          -- end
+          -- if stderr then
+          --   stderr:read_stop()
+          --   stderr:close()
+          -- end
+          ---@diagnostic disable-next-line: undefined-global
+          handle:close()
+          if cb then
+            cb()
+          end
+        end)
+      end, 3)
+
+      local fzf_lua = require("fzf-lua")
       -- NOTE: need `fd`, `fre` installed
       local function fzf_mru(opts)
-        local fzf_lua = require("fzf-lua")
         local git_root = fzf_lua.path.git_root(opts)
         -- Replace "/" with "\/"
         local modified_git_root = git_root:gsub("/", "\\/")
@@ -199,16 +222,7 @@ return {
             ["--tiebreak"] = "index", -- make sure that items towards top are from history
           }),
           actions = {
-            ["default"] = function(selected, o)
-              local file = require("fzf-lua").path.entry_to_file(selected[1], o)
-              if modified_git_root then
-                local save_open_file_cmd =
-                  string.format("fre --add --store_name '%s' %s", modified_git_root, file.path)
-                os.execute(save_open_file_cmd)
-              end
-              local open_file = string.format("edit %s", file.path)
-              vim.cmd(open_file)
-            end,
+            ["default"] = actions.file_edit_or_qf,
             ["ctrl-s"] = actions.file_split,
             ["ctrl-v"] = actions.file_vsplit,
             ["ctrl-t"] = actions.file_tabedit,
@@ -239,6 +253,36 @@ return {
           -- end),
         })
       end
+
+      local save_entry_autocmd_group = vim.api.nvim_create_augroup("save_entry_autocmd_group", {
+        clear = true,
+      })
+
+      vim.api.nvim_create_autocmd({ "BufEnter" }, {
+        pattern = { "*.*" },
+        callback = function(ev)
+          local file_path = vim.fn.expand("<afile>:p")
+          local parent_path = fzf_lua.path.parent(file_path, true)
+          local git_root = fzf_lua.path.git_root(parent_path)
+          local relative = fzf_lua.path.relative(file_path, git_root)
+          -- Replace "/" with "\/"
+          local modified_git_root = git_root:gsub("/", "\\/")
+          if modified_git_root then
+            -- local save_open_file_cmd =
+            -- string.format("fre --add --store_name '%s' %s", modified_git_root, relative)
+            -- os.execute(save_open_file_cmd)
+            run_async("fre", {
+              args = {
+                "--delete",
+                "--store_name",
+                string.format("'%s'", modified_git_root),
+                file_path,
+              },
+            })
+          end
+        end,
+        group = save_entry_autocmd_group,
+      })
 
       vim.api.nvim_create_user_command("FzfMru", fzf_mru, {})
       vim.api.nvim_set_keymap(
