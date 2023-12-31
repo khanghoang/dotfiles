@@ -178,8 +178,22 @@ return {
 
       -- NOTE: need `fd`, `fre` installed
       local function fzf_mru(opts)
+        local fzf_lua = require("fzf-lua")
+        local git_root = fzf_lua.path.git_root(opts)
+        -- Replace "/" with "\/"
+        local modified_git_root = git_root:gsub("/", "\\/")
+        -- local relative = fzf_lua.path.relative(vim.loop.cwd(), git_root)
+
         -- awk '!x[$0]++' to remove duplicated entries
-        require("fzf-lua").fzf_exec("(fre --sorted;rg --files) | awk '!x[$0]++'", {
+        local cmd = string.format(
+          "(fre --sorted --store_name '%s';rg --files) | awk '!x[$0]++'",
+          modified_git_root
+        )
+        if not modified_git_root then
+          cmd = string.format("rg --files")
+        end
+
+        require("fzf-lua").fzf_exec(cmd, {
           prompt = opts.args .. "> ",
           fzf_opts = vim.tbl_extend("force", {}, {
             ["--tiebreak"] = "index", -- make sure that items towards top are from history
@@ -187,8 +201,11 @@ return {
           actions = {
             ["default"] = function(selected, o)
               local file = require("fzf-lua").path.entry_to_file(selected[1], o)
-              local cmd = string.format("fre --add %s", file.path)
-              os.execute(cmd)
+              if modified_git_root then
+                local save_open_file_cmd =
+                  string.format("fre --add --store_name '%s' %s", modified_git_root, file.path)
+                os.execute(save_open_file_cmd)
+              end
               local open_file = string.format("edit %s", file.path)
               vim.cmd(open_file)
             end,
@@ -197,6 +214,17 @@ return {
             ["ctrl-t"] = actions.file_tabedit,
             ["ctrl-q"] = actions.file_sel_to_qf,
             ["ctrl-l"] = actions.file_sel_to_ll,
+            ["ctrl-d"] = {
+              fn = function(selected, o)
+                local file = require("fzf-lua").path.entry_to_file(selected[1], o)
+                if modified_git_root then
+                  local save_open_file_cmd =
+                    string.format("fre --delete --store_name '%s' %s", modified_git_root, file.path)
+                  os.execute(save_open_file_cmd)
+                end
+              end,
+              reload = true,
+            },
             -- ["ctrl-s"] = false,
             -- ["ctrl-v"] = function(selected, o)
             --   local file = require("fzf-lua").path.entry_to_file(selected[1], o)
