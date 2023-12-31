@@ -175,6 +175,50 @@ return {
           },
         },
       })
+
+      -- NOTE: need `fd`, `fre` installed
+      local function fzf_mru(opts)
+        -- awk '!x[$0]++' to remove duplicated entries
+        require("fzf-lua").fzf_exec("(fre --sorted;rg --files) | awk '!x[$0]++'", {
+          prompt = opts.args .. "> ",
+          fzf_opts = vim.tbl_extend("force", {}, {
+            ["--tiebreak"] = "index", -- make sure that items towards top are from history
+          }),
+          actions = {
+            ["default"] = function(selected, o)
+              local file = require("fzf-lua").path.entry_to_file(selected[1], o)
+              local cmd = string.format("fre --add %s", file.path)
+              os.execute(cmd)
+              local open_file = string.format("edit %s", file.path)
+              vim.cmd(open_file)
+            end,
+            ["ctrl-s"] = actions.file_split,
+            ["ctrl-v"] = actions.file_vsplit,
+            ["ctrl-t"] = actions.file_tabedit,
+            ["ctrl-q"] = actions.file_sel_to_qf,
+            ["ctrl-l"] = actions.file_sel_to_ll,
+            -- ["ctrl-s"] = false,
+            -- ["ctrl-v"] = function(selected, o)
+            --   local file = require("fzf-lua").path.entry_to_file(selected[1], o)
+            --   local cmd = string.format("Gvsplit %s:%s", opts.args, file.path)
+            --   vim.cmd(cmd)
+            -- end,
+          },
+          -- previewer = false,
+          -- preview = require("fzf-lua").shell.raw_preview_action_cmd(function(items)
+          --   local file = require("fzf-lua").path.entry_to_file(items[1])
+          --   return string.format("git diff %s HEAD -- %s | delta", opts.args, file.path)
+          -- end),
+        })
+      end
+
+      vim.api.nvim_create_user_command("FzfMru", fzf_mru, {})
+      vim.api.nvim_set_keymap(
+        "n",
+        "<leader><space>",
+        ":FzfMru<CR>",
+        { noremap = true, silent = true, desc = "Git files" }
+      )
     end,
   },
   keys = {
