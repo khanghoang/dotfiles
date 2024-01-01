@@ -207,6 +207,10 @@ return {
         local modified_git_root = git_root:gsub("/", "\\/")
         -- local relative = fzf_lua.path.relative(vim.loop.cwd(), git_root)
 
+        -- TODO: consider making the list of orders:
+        -- 1. current git branch
+        -- 2. current git repo
+        --
         -- awk '!x[$0]++' to remove duplicated entries
         local cmd = string.format(
           "(fre --sorted --store_name '%s';rg --files) | awk '!x[$0]++'",
