@@ -1,3 +1,4 @@
+local log = require("libs.log")
 return {
   "junegunn/fzf",
   {
@@ -210,7 +211,6 @@ return {
         -- TODO: consider making the list of orders:
         -- 1. current git branch
         -- 2. current git repo
-        --
         -- awk '!x[$0]++' to remove duplicated entries
         local cmd = string.format(
           "(fre --sorted --store_name '%s';rg --files) | awk '!x[$0]++'",
@@ -219,6 +219,8 @@ return {
         if not modified_git_root then
           cmd = string.format("rg --files")
         end
+
+        log.debug("cmd: " .. cmd)
 
         require("fzf-lua").fzf_exec(cmd, {
           prompt = opts.args .. "> ",
@@ -277,10 +279,10 @@ return {
             -- os.execute(save_open_file_cmd)
             run_async("fre", {
               args = {
-                "--delete",
+                "--add",
                 "--store_name",
-                string.format("'%s'", modified_git_root),
-                file_path,
+                modified_git_root,
+                relative,
               },
             })
           end
