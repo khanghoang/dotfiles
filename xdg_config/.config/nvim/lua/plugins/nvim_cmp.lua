@@ -16,7 +16,11 @@ return {
           ["<C-b>"] = cmp.mapping.scroll_docs(-4),
           ["<C-f>"] = cmp.mapping.scroll_docs(4),
           ["<C-Space>"] = cmp.mapping.complete(),
-          ["<C-e>"] = cmp.mapping.abort(),
+          ["<C-i>"] = cmp.mapping(cmp.mapping.complete(), { "i", "c" }),
+          ["<C-e>"] = cmp.mapping({
+            i = cmp.mapping.abort(),
+            c = cmp.mapping.close(),
+          }),
           ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
           ["<Tab>"] = function(fallback)
             if cmp.visible() then
@@ -28,15 +32,16 @@ return {
         }),
         sources = {
           -- Copilot Source
+          -- Copilot Source
           { name = "copilot", group_index = 2 },
           -- other sources
-          { name = "nvim_lsp_signature_help" },
-          { name = "luasnip" },
-          { name = "nvim_lsp" },
+          { name = "nvim_lsp_signature_help", group_index = 2 },
+          { name = "luasnip", group_index = 2 },
+          { name = "nvim_lsp", group_index = 2 },
           -- For vsnip user.
-          { name = "path" },
-          { name = "vsnip" },
-          { name = "buffer" },
+          { name = "path", group_index = 2 },
+          { name = "vsnip", group_index = 2 },
+          { name = "buffer", group_index = 2 },
         },
         formatting = {
           format = function(entry, vim_item)
