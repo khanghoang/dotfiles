@@ -16,6 +16,18 @@ return {
         [[command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --color=always --smart-case --hidden -- '.shellescape(<q-args>), 1, fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)]]
       )
 
+      -- search tags by Lang > Type > Tag name > file path
+      --
+      -- get tags by `ctags -a -R --fields=+l --languages=python,typescript metaserver/* dropbox/*`
+      -- note "+l" adds language column
+      --
+      -- command search looks like 'f authenticate authenticate.py'
+      -- f -> function
+      vim.cmd([[
+          command! CustomTags call fzf#vim#tags('', { 'options': ['--nth', '4,1,2,..', '--with-nth', '4,1,2', '--tiebreak', 'begin'] })
+          " [Tags] Command to generate tags file
+      ]])
+      api.nvim_set_keymap("n", "<space><space>", ":CustomTags<CR>", { noremap = false })
       -- api.nvim_set_keymap('n', '<leader><space>', ':FZFMru<CR>', { noremap = true })
       -- api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
       -- api.nvim_set_keymap('n', '<leader>fg', ':Rg!<CR>', {noremap = true})
