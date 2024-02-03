@@ -28,6 +28,13 @@ o.lazyredraw = true
 o.termguicolors = true
 o.background = "dark"
 
+-- fix "'redrawtime' exceeded, syntax highlighting disabled"
+-- https://github.com/prabirshrestha/vim-lsp/issues/786
+vim.cmd([[
+  syntax on
+  set re=0
+]])
+
 g.mapleader = ","
 
 vim.cmd([[
@@ -91,3 +98,4 @@ vim.api.nvim_create_autocmd("BufWrite", {
   end,
   group = save_dbx_pytest_plugin,
 })
+
