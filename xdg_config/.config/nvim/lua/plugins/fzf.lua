@@ -23,11 +23,10 @@ return {
       --
       -- command search looks like 'f authenticate authenticate.py'
       -- f -> function
-      vim.cmd([[
-          command! CustomTags call fzf#vim#tags('', { 'options': ['--nth', '4,1,2,..', '--with-nth', '4,1,2', '--tiebreak', 'begin'] })
-          " [Tags] Command to generate tags file
-      ]])
+      -- \ '--nth', '4,1,2,..',
+      -- \ '--with-nth', '4,1,2,..',
       api.nvim_set_keymap("n", "<space><space>", ":CustomTags<CR>", { noremap = false })
+
       -- api.nvim_set_keymap('n', '<leader><space>', ':FZFMru<CR>', { noremap = true })
       -- api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
       -- api.nvim_set_keymap('n', '<leader>fg', ':Rg!<CR>', {noremap = true})
@@ -69,6 +68,23 @@ return {
 
         command! Tags call s:tags()
         ]])
+
+      vim.cmd([[
+          command! CustomTags call fzf#run({
+          \ 'source': 'cat python_tags typescript_tags',
+          \ 'sink': function('s:tags_sink'),
+          \ 'options': [
+          \ '--with-nth', '1,2',
+          \ '--multi',
+          \ '+i',
+          \ '--tiebreak', 'begin',
+          \ '--header', 'CTRL-F: TypeScript / CTRL-L: Python',
+          \ '--bind', 'ctrl-F:change-prompt(TS> )+reload(cat typescript_tags)',
+          \ '--bind', 'ctrl-L:change-prompt(PY> )+reload(cat python_tags)'
+          \ ]
+          })
+      ]])
+
       vim.cmd([[
       function! s:ag_to_qf(line)
         let parts = split(a:line, ':')
@@ -119,6 +135,9 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
       local actions = require("fzf-lua.actions")
+      local async = require("plenary.async")
+      local Job = require("plenary.job")
+
       -- calling `setup` is optional for customization
       require("fzf-lua").setup({
         winopts = {
@@ -276,31 +295,50 @@ return {
         clear = true,
       })
 
-      vim.api.nvim_create_autocmd({ "BufEnter" }, {
-        pattern = { "*.*" },
-        callback = function(ev)
-          local file_path = vim.fn.expand("<afile>:p")
-          local parent_path = fzf_lua.path.parent(file_path, true)
-          local git_root = fzf_lua.path.git_root(parent_path)
-          local relative = fzf_lua.path.relative(file_path, git_root)
-          -- Replace "/" with "\/"
-          local modified_git_root = git_root:gsub("/", "\\/")
-          if modified_git_root then
-            -- local save_open_file_cmd =
-            -- string.format("fre --add --store_name '%s' %s", modified_git_root, relative)
-            -- os.execute(save_open_file_cmd)
-            run_async("fre", {
-              args = {
-                "--add",
-                "--store_name",
-                modified_git_root,
-                relative,
-              },
-            })
-          end
-        end,
-        group = save_entry_autocmd_group,
-      })
+      -- this causes slowliness when changing tabs
+      -- vim.api.nvim_create_autocmd({ "BufEnter" }, {
+      --   pattern = { "*.*" },
+      --   callback = function(ev)
+      --     local file_path = vim.fn.expand("<afile>:p")
+      --     local parent_path = fzf_lua.path.parent(file_path, true)
+      --     local git_root = fzf_lua.path.git_root(parent_path)
+      --     local relative = fzf_lua.path.relative(file_path, git_root)
+      --     -- Replace "/" with "\/"
+      --     local modified_git_root = git_root:gsub("/", "\\/")
+      --     if modified_git_root then
+      --       -- local save_open_file_cmd =
+      --       -- string.format("fre --add --store_name '%s' %s", modified_git_root, relative)
+      --       -- os.execute(save_open_file_cmd)
+      --       local job = Job:new({
+      --         command = "fre",
+      --         args = {
+      --           "--add",
+      --           "--store_name",
+      --           modified_git_root,
+      --           relative,
+      --         },
+      --         on_exit = function(_, code, _)
+      --           if code == 0 then
+      --             -- print('Async task executed successfully!')
+      --           else
+      --             -- print('Async task failed!')
+      --           end
+      --         end,
+      --       })
+      --
+      --       job:start()
+      --       -- run_async("fre", {
+      --       --   args = {
+      --       --     "--add",
+      --       --     "--store_name",
+      --       --     modified_git_root,
+      --       --     relative,
+      --       --   },
+      --       -- })
+      --     end
+      --   end,
+      --   group = save_entry_autocmd_group,
+      -- })
 
       vim.api.nvim_create_user_command("FzfMru", fzf_mru, {})
       vim.api.nvim_set_keymap(
