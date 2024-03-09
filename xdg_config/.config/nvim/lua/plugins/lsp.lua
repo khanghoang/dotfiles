@@ -319,6 +319,18 @@ return {
         capabilities = capabilities,
       })
 
+      -- brew install bufbuild/buf/buf
+      -- local protobuf_lsp = "pls"
+      -- nvim_lsp.bufls.setup({
+      --   cmd = { protobuf_lsp },
+      --   filetypes = { "proto" },
+      --   handlers = {
+      --     ["textDocument/publishDiagnostics"] = function() end,
+      --   },
+      --   on_attach = on_attach,
+      --   capabilities = capabilities,
+      -- })
+
       -- unfinished config
       local gopls = lsp_install_path
       local gopls_path = gopls .. "/gopls"
@@ -336,17 +348,17 @@ return {
         capabilities = capabilities,
       })
 
-      local clangd = lsp_install_path
-      local clangd_path = clangd .. "/clangd"
-
-      capabilities =
-        require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-      require("lspconfig").clangd.setup({
-        cmd = { clangd_path },
-        on_attach = on_attach,
-        capabilities = capabilities,
-      })
+      -- local clangd = lsp_install_path
+      -- local clangd_path = clangd .. "/clangd"
+      --
+      -- capabilities =
+      --   require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+      --
+      -- require("lspconfig").clangd.setup({
+      --   cmd = { clangd_path },
+      --   on_attach = on_attach,
+      --   capabilities = capabilities,
+      -- })
 
       -- JSON
       -- LspInstall json
