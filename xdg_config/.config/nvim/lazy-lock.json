@@ -64,6 +64,7 @@
   "rainbow-delimiters.nvim": { "branch": "master", "commit": "b510fd445b6ee0b621e910e4b3e123e48d6bb436" },
   "starlark.vim": { "branch": "master", "commit": "e30e3de6c791a05cdc08f5346c9be56adf17f1fe" },
   "statuscol.nvim": { "branch": "main", "commit": "7d593a285d83c1a865219e4e7e1e5aedf4e0dd9c" },
+  "stickybuf.nvim": { "branch": "master", "commit": "2160fcd536d81f5fa43f7167dba6634e814e3154" },
   "tabular": { "branch": "master", "commit": "339091ac4dd1f17e225fe7d57b48aff55f99b23a" },
   "telescope-fzf-native.nvim": { "branch": "main", "commit": "6c921ca12321edaa773e324ef64ea301a1d0da62" },
   "telescope-vim-bookmarks.nvim": { "branch": "main", "commit": "6ad3bd545f8d04976bdbd3cc10d52b144c4943af" },
