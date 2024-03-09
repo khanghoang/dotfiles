@@ -69,10 +69,10 @@ api.nvim_set_keymap(
 -- Tabs
 -- Go to tab number x -> xgt
 -- Go to last accessed tab x -> g<Tab>
-api.nvim_set_keymap("n", "tc", ":tabclose<CR>", { noremap = true })
-api.nvim_set_keymap("n", "tp", ":tabprevious<CR>", { noremap = true })
-api.nvim_set_keymap("n", "tn", ":tabnext<CR>", { noremap = true })
-api.nvim_set_keymap("n", "tm", ":tabnew<CR>", { noremap = true })
+-- api.nvim_set_keymap("n", "tc", ":tabclose<CR>", { noremap = true })
+-- api.nvim_set_keymap("n", "tp", ":tabprevious<CR>", { noremap = true })
+-- api.nvim_set_keymap("n", "tn", ":tabnext<CR>", { noremap = true })
+-- api.nvim_set_keymap("n", "tm", ":tabnew<CR>", { noremap = true })
 
 -- testing
 vim.api.nvim_set_keymap(
@@ -136,8 +136,15 @@ vim.keymap.set(
   { desc = "[S]earch current [W]ord" }
 )
 vim.keymap.set("n", "<leader>lg", function()
-  require("fzf-lua").live_grep()
+  require("fzf-lua").live_grep_glob()
 end, { desc = "[S]earch by [G]rep" })
+
+vim.keymap.set("v", "<leader>lg", function()
+  local utils = require("fzf-lua.utils")
+  local search = utils.get_visual_selection()
+  require("fzf-lua").live_grep_glob({ search = search })
+end, { desc = "[S]earch visual selected by [G]rep" })
+
 vim.keymap.set(
   "n",
   "<leader>sd",
@@ -213,9 +220,9 @@ vim.keymap.set(
 --     file_ignore_patterns = { "node_modules" },
 --   })
 -- end, { desc = "[S]earch [S]ymbols" })
-vim.keymap.set(
-  "n",
-  "ss",
-  '<cmd>Telescope lsp_dynamic_workspace_symbols theme=ivy previewer=false winblend=10 symbols="Function" pattern="^!node_modules" <cr>',
-  { desc = "[S]earch [S]ymbols" }
-)
+-- vim.keymap.set(
+--   "n",
+--   "ss",
+--   '<cmd>Telescope lsp_dynamic_workspace_symbols theme=ivy previewer=false winblend=10 symbols="Function" pattern="^!node_modules" <cr>',
+--   { desc = "[S]earch [S]ymbols" }
+-- )
