@@ -58,9 +58,12 @@ return {
         whitespace = "  ",
       },
       backends = {
-        ["_"] = { "treesitter" },
-        python = { "treesitter" },
-        lua = { "treesitter" },
+        ["_"] = { "treesitter", "lsp" },
+        -- python = { "treesitter" },
+        -- lua = { "treesitter" },
+        -- typescript = { "treesitter", "lsp" },
+        -- typescriptreact = { "treesitter", "lsp" },
+        -- javascript = { "treesitter", "lsp" },
       },
     })
 
