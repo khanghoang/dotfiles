@@ -25,7 +25,7 @@ return {
       -- f -> function
       -- \ '--nth', '4,1,2,..',
       -- \ '--with-nth', '4,1,2,..',
-      api.nvim_set_keymap("n", "<space><space>", ":CustomTags<CR>", { noremap = false })
+      api.nvim_set_keymap("n", "<space><space>", ":Tags<CR>", { noremap = false })
 
       -- api.nvim_set_keymap('n', '<leader><space>', ':FZFMru<CR>', { noremap = true })
       -- api.nvim_set_keymap('n', '<leader>f', ':History<CR>', { noremap = true })
@@ -69,21 +69,28 @@ return {
         command! Tags call s:tags()
         ]])
 
-      vim.cmd([[
-          command! CustomTags call fzf#run({
-          \ 'source': 'cat python_tags typescript_tags',
-          \ 'sink': function('s:tags_sink'),
-          \ 'options': [
-          \ '--with-nth', '1,2',
-          \ '--multi',
-          \ '+i',
-          \ '--tiebreak', 'begin',
-          \ '--header', 'CTRL-F: TypeScript / CTRL-L: Python',
-          \ '--bind', 'ctrl-F:change-prompt(TS> )+reload(cat typescript_tags)',
-          \ '--bind', 'ctrl-L:change-prompt(PY> )+reload(cat python_tags)'
-          \ ]
-          })
-      ]])
+      -- vim.cmd([[
+      --     command! CustomTags call fzf#run({
+      --     \ 'source': 'cat python_tags typescript_tags',
+      --     \ 'sink': function('s:tags_sink'),
+      --     \ 'options': [
+      --     \ '--with-nth', '1,2',
+      --     \ '--multi',
+      --     \ '+i',
+      --     \ '--tiebreak', 'begin',
+      --     \ '--header', 'CTRL-F: TypeScript / CTRL-L: Python',
+      --     \ '--bind', 'ctrl-F:change-prompt(TS> )+reload(cat typescript_tags)',
+      --     \ '--bind', 'ctrl-L:change-prompt(PY> )+reload(cat python_tags)'
+      --     \ ]
+      --     })
+      -- ]])
+
+      -- vim.cmd([[
+      --     command! CustomTags call fzf#run({
+      --     \ 'source': 'cat python_tags typescript_tags',
+      --     \ 'sink': function('s:tags_sink')
+      --     })
+      -- ]])
 
       vim.cmd([[
       function! s:ag_to_qf(line)
