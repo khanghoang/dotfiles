@@ -6,6 +6,7 @@ o.modeline = false
 o.swapfile = false
 o.hlsearch = true
 o.incsearch = true
+
 o.ignorecase = true
 o.smartcase = true
 o.ruler = true
@@ -13,8 +14,11 @@ o.number = true
 o.relativenumber = true
 o.splitright = true
 o.splitbelow = true
-o.tabstop = 2
-o.shiftwidth = 2
+
+-- Disabled since it causes neovim 0.10.5 to crash
+-- o.tabstop = 2
+-- o.shiftwidth = 2
+
 o.softtabstop = 2
 o.expandtab = true
 -- o.colorcolumn = '80'
@@ -57,45 +61,45 @@ vim.cmd([[
 -- vim.cmd [[autocmd BufWinEnter *.* silent loadview]]
 
 -- slow git-fugitive
-vim.cmd([[set shell=bash]])
+-- vim.cmd([[set shell=bash]])
 
-local group = vim.api.nvim_create_augroup("reload_module_on_write", { clear = true })
-vim.api.nvim_create_autocmd("BufWrite", {
-  pattern = "aerial_extend.lua",
-  callback = function()
-    require("plenary.reload").reload_module("plugins.libs.aerial_extend")
-  end,
-  group = group,
-})
+-- local group = vim.api.nvim_create_augroup("reload_module_on_write", { clear = true })
+-- vim.api.nvim_create_autocmd("BufWrite", {
+--   pattern = "aerial_extend.lua",
+--   callback = function()
+--     require("plenary.reload").reload_module("plugins.libs.aerial_extend")
+--   end,
+--   group = group,
+-- })
 
-local save_dbx_pytest_plugin =
-  vim.api.nvim_create_augroup("reload_dbx_pytest_module_on_write", { clear = true })
-vim.api.nvim_create_autocmd("BufWrite", {
-  pattern = "dbx.lua",
-  callback = function()
-    vim.fn.execute("source %", true)
-    require("plenary.reload").reload_module("plugins.dbx")
-    -- require("plenary.reload").reload_module("plugins.neotest")
-    -- require('plugins.neotest')
-    require("neotest").setup({
-      adapters = {
-        require("plugins.dbx"),
-      },
-      log_level = vim.log.levels.DEBUG,
-      discovery = {
-        enabled = false,
-      },
-      ["/Users/khang/src/server"] = {
-        adapters = {
-          require("plugins.dbx"),
-        },
-        discovery = {
-          enabled = false,
-        },
-      },
-    })
-    print("Reloaded")
-  end,
-  group = save_dbx_pytest_plugin,
-})
+-- local save_dbx_pytest_plugin =
+--   vim.api.nvim_create_augroup("reload_dbx_pytest_module_on_write", { clear = true })
+-- vim.api.nvim_create_autocmd("BufWrite", {
+--   pattern = "dbx.lua",
+--   callback = function()
+--     vim.fn.execute("source %", true)
+--     require("plenary.reload").reload_module("plugins.dbx")
+--     -- require("plenary.reload").reload_module("plugins.neotest")
+--     -- require('plugins.neotest')
+--     require("neotest").setup({
+--       adapters = {
+--         require("plugins.dbx"),
+--       },
+--       log_level = vim.log.levels.DEBUG,
+--       discovery = {
+--         enabled = false,
+--       },
+--       ["/Users/khang/src/server"] = {
+--         adapters = {
+--           require("plugins.dbx"),
+--         },
+--         discovery = {
+--           enabled = false,
+--         },
+--       },
+--     })
+--     print("Reloaded")
+--   end,
+--   group = save_dbx_pytest_plugin,
+-- })
 

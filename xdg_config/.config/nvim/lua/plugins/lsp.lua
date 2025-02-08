@@ -256,8 +256,19 @@ return {
       -- TypeScript
       -- LspInstall typescript
       local typescript_bin = lsp_install_path .. "/typescript-language-server"
-      nvim_lsp.tsserver.setup({
+      nvim_lsp.ts_ls.setup({
         cmd = { typescript_bin, "--stdio" },
+        on_attach = on_attach,
+        flags = {
+          debounce_text_changes = 150,
+        },
+        capabilities = capabilities,
+      })
+
+      -- CSS
+      local css_bin = lsp_install_path .. "/vscode-css-language-server"
+      nvim_lsp.cssls.setup({
+        cmd = { css_bin, "--stdio" },
         on_attach = on_attach,
         flags = {
           debounce_text_changes = 150,

@@ -198,7 +198,7 @@ export HISTFILE=~/.zsh_history
 export HISTSIZE=1000   # the number of items for the internal history list
 export SAVEHIST=1000   # maximum number of items for the history file
 
-export DOTFILES=$HOME/.config/nvim
+export DOTFILES=$HOME/xdg_config/.config/nvim
 
 # The meaning of these options can be found in man page of `zshoptions`.
 # setopt HIST_IGNORE_ALL_DUPS  # do not put duplicated command into history list
@@ -264,3 +264,6 @@ fi
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# https://minikube.sigs.k8s.io/docs/handbook/kubectl/
+alias k8="minikube kubectl --"

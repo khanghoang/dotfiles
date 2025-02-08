@@ -1,6 +1,7 @@
 return {
   "nvim-neotest/neotest",
   dependencies = {
+    "nvim-neotest/nvim-nio",
     "nvim-lua/plenary.nvim",
     "nvim-treesitter/nvim-treesitter",
     "antoinemadec/FixCursorHold.nvim",
@@ -40,14 +41,14 @@ return {
       },
     })
 
-    require("neotest").setup_project("/Users/khang/code/server", {
-      adapters = {
-        require("dbx"),
-      },
-      discovery = {
-        enabled = false,
-      },
-    })
+    -- require("neotest").setup_project("/Users/khang/code/server", {
+    --   adapters = {
+    --     require("dbx"),
+    --   },
+    --   discovery = {
+    --     enabled = false,
+    --   },
+    -- })
 
     vim.api.nvim_set_keymap(
       "n",

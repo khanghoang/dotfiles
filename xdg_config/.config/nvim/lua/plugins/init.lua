@@ -178,7 +178,10 @@ return {
 
   -- find the matching characters for {}, [], etc
   -- https://github.com/andymass/vim-matchup#a2-jump-to-open-and-close-words
-  { "andymass/vim-matchup", event = "VimEnter" },
+
+  -- investigate neovim 0.10.4 crash
+  -- { "andymass/vim-matchup", event = "VimEnter" },
+  
   "nvim-lua/popup.nvim",
   "nvim-lua/plenary.nvim",
 
@@ -332,13 +335,13 @@ return {
 
   {
     "khanghoang/dbx",
-    dir = "~/dotfiles/xdg_config/.config/nvim_plugins/dbx",
+    dir = "~/code/dotfiles/xdg_config/.config/nvim_plugins/dbx",
   },
 
-  {
-    "khanghoang/bazel-debug-checkhealth",
-    dir = "~/dotfiles/xdg_config/.config/nvim_plugins/bzl_remote_debug_checker",
-  },
+  -- {
+  --   "khanghoang/bazel-debug-checkhealth",
+  --   dir = "~/dotfiles/xdg_config/.config/nvim_plugins/bzl_remote_debug_checker",
+  -- },
 
   -- Starlark
   -- {{{

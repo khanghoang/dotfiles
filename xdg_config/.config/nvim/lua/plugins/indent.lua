@@ -13,7 +13,7 @@ return {
   main = "ibl",
   dependencies = { "HiPhish/rainbow-delimiters.nvim" },
   event = { "BufReadPost", "BufNewFile" },
-  config = function(_, opts)
+  config = function()
     -- require("ibl").setup({
     --   indent = { char = "│" },
     --   whitespace = {
@@ -35,13 +35,17 @@ return {
     end)
 
     vim.g.rainbow_delimiters = { highlight = indent_highlight }
-    require("ibl").setup(opts)
+
+    require("ibl").setup {
+      scope = {
+        highlight = indent_highlight,
+      },
+    }
 
     hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
   end,
   opts = {
-    -- indent = { highlight = indent_highlight, char = "│" },
-    indent = { char = "│" },
+    indent = { highlight = indent_highlight, char = "│" },
     scope = {
       highlight = indent_highlight,
     },
