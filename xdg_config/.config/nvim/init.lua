@@ -61,5 +61,10 @@ require("lazy").setup("plugins")
 require("colorschemes/lua/oceannext")
 require("general/mappings")
 
+-- change background color of the StatusLine
+vim.cmd([[
+  highlight StatusLine guibg=#352f2d
+]])
+
 -- for DBX's test command
 -- require("libs.aerial_extend")

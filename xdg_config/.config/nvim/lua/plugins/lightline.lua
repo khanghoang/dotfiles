@@ -222,8 +222,6 @@ return {
         icon_highlight = { "NONE", "#352f2d" },
       },
     }
-
-    vim.cmd([[hi StatusLine guibg=#352f2d guifg=#352f2d]])
   end,
   dependencies = { "kyazdani42/nvim-web-devicons", lazy = true },
 }
