@@ -212,7 +212,7 @@ return {
           vim.lsp.buf.format({
             filter = function(client)
               -- apply whatever logic you want (in this example, we'll only use null-ls)
-              return client.name == "null-ls"
+              return client.name == "none-ls"
             end,
             bufnr = bufnr,
           })
@@ -484,7 +484,7 @@ return {
         capabilities = capabilities,
       })
 
-      local null_ls_status_ok, null_ls = pcall(require, "null-ls")
+      local null_ls_status_ok, null_ls = pcall(require, "none-ls")
       if not null_ls_status_ok then
         return
       end
@@ -521,11 +521,11 @@ return {
         },
       })
     end,
-    dependencies = { "williamboman/nvim-lsp-installer" },
+    dependencies = { "nvimtools/none-ls.nvim" },
   },
 
   {
-    "jose-elias-alvarez/null-ls.nvim",
+    "nvimtools/none-ls.nvim",
     config = function() end,
   },
 
